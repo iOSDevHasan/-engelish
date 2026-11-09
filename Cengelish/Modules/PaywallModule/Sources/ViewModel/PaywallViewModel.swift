@@ -24,7 +24,7 @@ final class PaywallViewModel: ObservableObject {
 
   /// Çengelish+ avantajları.
   let benefits = [
-    "Tüm seviyeler ve 500+ bulmaca",
+    "Tüm seviyeler ve 300+ bulmaca",
     "YDS, YÖKDİL, LGS, IELTS ve TOEFL paketleri",
     "Sınırsız ipucu ve seri dondurma",
     "Tüm bulmaca temaları ve özel avatar parçaları",

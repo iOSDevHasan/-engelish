@@ -57,6 +57,9 @@ final class AppShellModel: ObservableObject {
 
   /// İlk açılışta veriyi okur, ürünleri ve uzak içeriği yükler.
   func start() async {
+    #if DEBUG
+    await ScreenshotDemoSeeder().seedIfRequested()
+    #endif
     reload()
     guard !didStart else { return }
     didStart = true
