@@ -60,6 +60,8 @@ struct DrawingCanvas: UIViewRepresentable {
   let onTap: (CGPoint) -> Void
   /// Bir çizgi bitince, çizginin merkezi.
   let onStroke: (CGPoint) -> Void
+  /// Yakınlaştırma ya da kaydırma değişince görünen bölge (isteğe bağlı).
+  var onViewport: ((CanvasViewport) -> Void)?
 
   // MARK: - UIViewRepresentable
 
@@ -167,6 +169,29 @@ struct DrawingCanvas: UIViewRepresentable {
       renderedScale = 0
       renderUnderlay(in: canvas)
       center(canvas)
+      // Yerleşim SwiftUI güncellemesi sırasında olabilir; durum değişikliği bir sonraki tura
+      // bırakılır.
+      Task { @MainActor [weak self, weak canvas] in
+        guard let self, let canvas else { return }
+        self.reportViewport(canvas)
+      }
+    }
+
+    /// Görünen bölgeyi üst görünüme bildirir.
+    func reportViewport(_ canvas: PKCanvasView) {
+      guard let onViewport = parent.onViewport, canvas.minimumZoomScale > 0,
+        canvas.contentSize.width > 0, canvas.contentSize.height > 0
+      else { return }
+      let size = canvas.contentSize
+      let visible = CGRect(
+        x: canvas.contentOffset.x / size.width, y: canvas.contentOffset.y / size.height,
+        width: canvas.bounds.width / size.width, height: canvas.bounds.height / size.height
+      )
+      .intersection(CGRect(x: 0, y: 0, width: 1, height: 1))
+      onViewport(
+        CanvasViewport(
+          zoom: canvas.zoomScale / canvas.minimumZoomScale,
+          visible: visible.isNull ? CanvasViewport.fit.visible : visible))
     }
 
     /// Alttaki içeriği güncel yakınlaştırma ölçeğinde yeniden çizer.
@@ -192,6 +217,12 @@ struct DrawingCanvas: UIViewRepresentable {
       host.view.transform = CGAffineTransform(scaleX: ratio, y: ratio)
       host.view.frame.origin = .zero
       center(canvas)
+      reportViewport(canvas)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+      guard let canvas = scrollView as? PKCanvasView, didFit else { return }
+      reportViewport(canvas)
     }
 
     func scrollViewDidEndZooming(
@@ -200,6 +231,7 @@ struct DrawingCanvas: UIViewRepresentable {
       guard let canvas = scrollView as? PKCanvasView else { return }
       renderUnderlay(in: canvas)
       center(canvas)
+      reportViewport(canvas)
     }
 
     func canvasViewDrawingDidChange(_ canvasView: PKCanvasView) {

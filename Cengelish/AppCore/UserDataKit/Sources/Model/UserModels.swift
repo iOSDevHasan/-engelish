@@ -92,6 +92,8 @@ public struct AppSettings: Equatable, Sendable {
   public var reminderHour: Int = 20
   /// Hatırlatıcı dakikası.
   public var reminderMinute: Int = 0
+  /// Son yedekleme / dışa aktarma zamanı.
+  public var lastBackupAt: Date?
 
   /// Varsayılan ayarları oluşturur.
   public init() {}
@@ -141,16 +143,22 @@ public struct NotebookItem: Equatable, Identifiable, Sendable {
   public var learned: Bool
   /// Eklendiği tarih.
   public var addedAt: Date
+  /// Kelimenin ilk görüldüğü yer: bulmaca kimliği ya da `manual`.
+  public var source: String
 
   public var id: String { wordId }
 
   /// Defter kaydını oluşturur.
-  public init(wordId: String, box: Int, nextReviewAt: Date, learned: Bool, addedAt: Date) {
+  public init(
+    wordId: String, box: Int, nextReviewAt: Date, learned: Bool, addedAt: Date,
+    source: String = "manual"
+  ) {
     self.wordId = wordId
     self.box = box
     self.nextReviewAt = nextReviewAt
     self.learned = learned
     self.addedAt = addedAt
+    self.source = source
   }
 
   /// Tekrar zamanı gelmiş mi.
@@ -175,6 +183,8 @@ public struct UserStats: Equatable, Sendable {
   public var hintsUsedToday: Int = 0
   /// Bulmaca çözülen günler (`yyyy-MM-dd`).
   public var solvedDays: [String] = []
+  /// Bu ay kullanılan seri dondurma hakkı.
+  public var freezesUsed: Int = 0
 
   /// Boş sayaçlar oluşturur.
   public init() {}

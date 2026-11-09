@@ -16,6 +16,7 @@ let package = Package(
     .package(path: "../../AppCore/UserDataKit"),
     .package(path: "../../AppCore/PurchaseKit"),
     .package(path: "../../Kits/PuzzleKit"),
+    .package(path: "../../Kits/WordKit"),
     .package(path: "../PuzzleModule"),
     .package(path: "../PaywallModule"),
     // jarvis:packages
@@ -36,6 +37,7 @@ let package = Package(
         .product(name: "UserDataKit", package: "UserDataKit"),
         .product(name: "PurchaseKit", package: "PurchaseKit"),
         .product(name: "PuzzleKit", package: "PuzzleKit"),
+        .product(name: "WordKit", package: "WordKit"),
         .product(name: "PuzzleModuleInterface", package: "PuzzleModule"),
         .product(name: "PaywallModuleInterface", package: "PaywallModule"),
         // jarvis:products
@@ -57,6 +59,7 @@ let package = Package(
         .product(name: "UserDataKit", package: "UserDataKit"),
         .product(name: "PurchaseKit", package: "PurchaseKit"),
         .product(name: "PuzzleKit", package: "PuzzleKit"),
+        .product(name: "WordKit", package: "WordKit"),
         .product(name: "PuzzleModuleInterface", package: "PuzzleModule"),
         .product(name: "PaywallModuleInterface", package: "PaywallModule"),
       ],

@@ -23,6 +23,11 @@ struct HomeView: View {
     }
     .screenBackground()
     .task { await viewModel.load() }
+    .sheet(isPresented: $viewModel.isReminderSheetOpen) {
+      ReminderSheet(viewModel: viewModel)
+        .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+    }
   }
 
   private var header: some View {
@@ -30,13 +35,15 @@ struct HomeView: View {
       AvatarView(viewModel.avatar, size: 52)
       VStack(alignment: .leading, spacing: 2) {
         Text(viewModel.greeting).font(AppFont.caption).foregroundStyle(Palette.muted)
-        Text(viewModel.name).font(AppFont.headline).foregroundStyle(Palette.ink)
+        Text(viewModel.goalText).font(AppFont.headline).foregroundStyle(Palette.ink)
+          .fixedSize(horizontal: false, vertical: true)
       }
-      Spacer()
-      Pill(viewModel.level, tone: .accent)
-      if viewModel.dueCount > 0 {
-        Pill("\(viewModel.dueCount) tekrar", systemImage: "book.closed.fill", tone: .bad)
+      Spacer(minLength: 8)
+      Button(action: viewModel.openReminders) {
+        IconCircle(viewModel.reminderOn ? "bell.fill" : "bell")
       }
+      .buttonStyle(.plain)
+      .accessibilityLabel("Hatırlatıcı")
     }
     .padding(.top, 8)
   }
@@ -78,6 +85,15 @@ struct HomeView: View {
           .accessibilityElement(children: .ignore)
           .accessibilityLabel("\(day.label) \(day.isSolved ? "çözüldü" : "çözülmedi")")
         }
+      }
+      if let hint = viewModel.freezeHint {
+        Label(hint, systemImage: "snowflake")
+          .font(AppFont.caption)
+          .foregroundStyle(Palette.accent)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.horizontal, 12)
+          .padding(.vertical, 8)
+          .background(RoundedRectangle(cornerRadius: 12).fill(Palette.surface))
       }
     }
     .card(fill: Palette.streakBackground)
@@ -170,5 +186,70 @@ struct HomeView: View {
       clue: .white.opacity(0.35), clueInk: .white, line: .clear, pen: .white, pencil: .white,
       blank: .clear, stripedBlanks: false, highlight: Color(hex: 0xFFE7A0), active: .white,
       activeRing: nil, arrow: .white, gap: 2, border: 0, cornerRatio: 0.2, keyInk: .white)
+  }
+}
+
+/// Zil butonuyla açılan hatırlatıcı paneli.
+private struct ReminderSheet: View {
+  @ObservedObject var viewModel: HomeViewModel
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 14) {
+      Text("Hatırlatıcı").font(AppFont.headline).foregroundStyle(Palette.ink)
+      VStack(spacing: 12) {
+        Toggle(
+          isOn: Binding(
+            get: { viewModel.reminderOn },
+            set: { on in Task { await viewModel.setReminder(on) } })
+        ) {
+          Label {
+            VStack(alignment: .leading, spacing: 2) {
+              Text("Günlük hatırlatıcı").font(AppFont.bodyBold).foregroundStyle(Palette.ink)
+              Text(viewModel.reminderDetail).font(AppFont.caption)
+                .foregroundStyle(Palette.muted)
+            }
+          } icon: {
+            Image(systemName: "bell.fill").foregroundStyle(Palette.accent)
+          }
+        }
+        .tint(Palette.good)
+        if viewModel.reminderOn {
+          DatePicker("Saat", selection: time, displayedComponents: .hourAndMinute)
+            .font(AppFont.bodyBold)
+            .foregroundStyle(Palette.ink)
+        }
+      }
+      .card(padding: 14)
+      Text("Serin bozulmak üzereyse akşam bir kez daha haber veririz.")
+        .font(AppFont.caption)
+        .foregroundStyle(Palette.muted)
+      Spacer(minLength: 0)
+    }
+    .padding(Metrics.gutter)
+    .padding(.top, 10)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    .background(Palette.background)
+    .alert(
+      "Bilgi",
+      isPresented: Binding(get: { viewModel.notice != nil }, set: { _ in viewModel.notice = nil })
+    ) {
+      Button("Tamam", role: .cancel) {}
+    } message: {
+      Text(viewModel.notice ?? "")
+    }
+  }
+
+  /// Hatırlatıcı saatini `Date` olarak bağlar.
+  private var time: Binding<Date> {
+    Binding(
+      get: {
+        Calendar.current.date(
+          from: DateComponents(
+            hour: viewModel.reminderTime.hour, minute: viewModel.reminderTime.minute)) ?? .now
+      },
+      set: { date in
+        let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+        viewModel.setReminderTime(hour: parts.hour ?? 20, minute: parts.minute ?? 0)
+      })
   }
 }

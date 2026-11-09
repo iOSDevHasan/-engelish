@@ -37,7 +37,7 @@ struct PaywallView: View {
         .buttonStyle(.chunky)
         .disabled(viewModel.isWorking)
         Text(
-          "Deneme bitmeden 24 saat önce iptal edilmezse abonelik başlar. Aboneliği App Store hesabından yönetebilirsin."
+          "Deneme bitmeden 24 saat önce iptal edilmezse yıllık plan başlar. Aboneliği App Store hesabından yönetebilirsin."
         )
         .font(AppFont.tiny)
         .foregroundStyle(Palette.muted)
@@ -128,7 +128,7 @@ enum LegalLinks {
   // Sabit, geçerli URL metinleri; çözümleme başarısız olamaz.
   // swiftlint:disable force_unwrapping
   /// Gizlilik politikası.
-  static let privacy = URL(string: "https://cengelish.app/gizlilik")!
+  static let privacy = URL(string: "https://iosdevhasan.github.io/-engelish/gizlilik.html")!
   /// Apple standart kullanım koşulları (EULA).
   static let terms = URL(
     string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!

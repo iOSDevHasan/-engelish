@@ -45,8 +45,10 @@ public protocol UserDataStoring: AnyObject {
 
   /// Defterdeki kelimeler.
   var notebook: [NotebookItem] { get }
-  /// Kelimeyi deftere ekler (zaten varsa dokunmaz).
-  func addToNotebook(wordId: String)
+  /// Kelimeyi deftere ekler (zaten varsa tekrara alır). `source`: bulmaca kimliği ya da `manual`.
+  func addToNotebook(wordId: String, source: String)
+  /// Kelimeyi öğrenildi olarak işaretler ya da tekrara geri alır.
+  func setLearned(wordId: String, learned: Bool)
   /// Kelimeyi defterden çıkarır.
   func removeFromNotebook(wordId: String)
   /// Tekrar sonucunu işler.

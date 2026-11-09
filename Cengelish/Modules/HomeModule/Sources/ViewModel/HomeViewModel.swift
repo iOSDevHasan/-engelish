@@ -2,6 +2,7 @@ import Combine
 import ContentKit
 import DesignKit
 import Foundation
+import PurchaseKit
 import UserDataKit
 import WordKit
 
@@ -28,7 +29,6 @@ final class HomeViewModel: ObservableObject {
 
   @Published private(set) var name = "Kalemci"
   @Published private(set) var avatar = AvatarConfig()
-  @Published private(set) var level = "A1"
   @Published private(set) var streak = 0
   @Published private(set) var longestStreak = 0
   @Published private(set) var week: [WeekDay] = []
@@ -38,25 +38,41 @@ final class HomeViewModel: ObservableObject {
   @Published private(set) var dailyDone = false
   @Published private(set) var continueItem: ContinueItem?
   @Published private(set) var wordOfDay: Word?
-  @Published private(set) var dueCount = 0
+  /// Seri kartındaki seri dondurma ipucu (premium ve hak varsa).
+  @Published private(set) var freezeHint: String?
+  /// Günlük hatırlatıcı açık mı.
+  @Published private(set) var reminderOn = false
+  /// Hatırlatıcı saati (saat, dakika).
+  @Published private(set) var reminderTime = (hour: 20, minute: 0)
+  /// Hatırlatıcı paneli açık mı.
+  @Published var isReminderSheetOpen = false
+  /// Kısa bilgi mesajı.
+  @Published var notice: String?
   private let coordinator: HomeCoordinator
   private let content: any ContentProviding
   private let userData: any UserDataStoring
+  private let entitlements: any EntitlementProviding
   private let pronouncer: any Pronouncing
+  private let reminders: ReminderActions
   private let calendar = Calendar.current
+  private let now: () -> Date
   private var cancellables: Set<AnyCancellable> = []
 
   // MARK: - Init
 
   init(
     coordinator: HomeCoordinator, content: any ContentProviding, userData: any UserDataStoring,
-    pronouncer: any Pronouncing
+    entitlements: any EntitlementProviding, pronouncer: any Pronouncing,
+    reminders: ReminderActions = .live, now: @escaping () -> Date = { .now }
   ) {
     self.coordinator = coordinator
     self.content = content
     self.userData = userData
+    self.entitlements = entitlements
     self.pronouncer = pronouncer
-    userData.changes
+    self.reminders = reminders
+    self.now = now
+    userData.changes.merge(with: entitlements.changes)
       .sink { [weak self] in Task { await self?.load() } }
       .store(in: &cancellables)
   }
@@ -68,11 +84,14 @@ final class HomeViewModel: ObservableObject {
     if let profile = userData.profile {
       name = profile.displayName
       avatar = profile.avatar
-      level = profile.level
       dailyGoal = profile.dailyGoal
     }
     let stats = userData.stats
-    streak = stats.streak
+    let settings = userData.settings
+    reminderOn = settings.reminderEnabled
+    reminderTime = (settings.reminderHour, settings.reminderMinute)
+    loadStreak(stats)
+    reminders.refreshStreakWarning(settings, stats)
     longestStreak = stats.longestStreak
     week = makeWeek(solvedDays: Set(stats.solvedDays))
     let progress = userData.allProgress()
@@ -82,7 +101,6 @@ final class HomeViewModel: ObservableObject {
       }.count
     daily = await content.dailyPuzzle(for: .now)
     dailyDone = daily.map { progress[$0.id]?.status == .finished } ?? false
-    dueCount = userData.notebook.filter { $0.isDue() }.count
     await loadContinue(progress)
     if let daily {
       let words = await content.words(ids: daily.wordIds)
@@ -109,16 +127,71 @@ final class HomeViewModel: ObservableObject {
     pronouncer.speak(wordOfDay.en, language: userData.settings.accent.languageCode)
   }
 
-  /// Saate göre selamlama.
-  var greeting: String {
-    switch calendar.component(.hour, from: .now) {
-    case 5..<12: "Günaydın"
-    case 12..<18: "İyi günler"
-    default: "İyi akşamlar"
+  /// Üst başlıktaki selamlama ("Merhaba Deniz!").
+  var greeting: String { "Merhaba \(name)!" }
+
+  /// Günlük hedef cümlesi ("Bugün 2 bulmaca hedefin var").
+  var goalText: String { "Bugün \(dailyGoal) bulmaca hedefin var" }
+
+  // MARK: - Reminder
+
+  /// Hatırlatıcı panelini açar.
+  func openReminders() {
+    isReminderSheetOpen = true
+  }
+
+  /// Hatırlatıcıyı açar (izin ister) ya da kapatır.
+  func setReminder(_ on: Bool) async {
+    let granted = on ? await reminders.requestPermission() : false
+    updateReminder { $0.reminderEnabled = on && granted }
+    if on, !granted { notice = "Bildirim izni kapalı. iOS Ayarlar → Çengelish'ten açabilirsin." }
+  }
+
+  /// Hatırlatıcı saatini değiştirir.
+  func setReminderTime(hour: Int, minute: Int) {
+    updateReminder {
+      $0.reminderHour = hour
+      $0.reminderMinute = minute
     }
   }
 
+  /// Hatırlatıcı açıklaması ("Her gün 20:00 · Günün bulmacası hazır").
+  var reminderDetail: String {
+    String(
+      format: "Her gün %02d:%02d · Günün bulmacası hazır", reminderTime.hour, reminderTime.minute)
+  }
+
   // MARK: - Private
+
+  /// Görünen seriyi ve seri dondurma ipucunu hesaplar.
+  ///
+  /// `UserDataStoring.stats` seriyi dün oynanmadıysa 0 olarak verir; Çengelish+ dondurma hakkı
+  /// dünkü boşluğu affettiği için bu durumda kullanıcıya serinin korunduğu söylenir.
+  private func loadStreak(_ stats: UserStats) {
+    streak = StreakRules.visibleStreak(
+      stats.streak, lastDay: stats.lastPlayedDay, today: dayKey(offset: 0),
+      yesterday: dayKey(offset: -1))
+    let canFreeze = entitlements.isPremium && stats.freezesUsed < StreakRules.monthlyFreezes
+    if canFreeze, stats.lastPlayedDay == dayKey(offset: -2) {
+      freezeHint = "Dün kaçırdın ama seri dondurma serini koruyor · bugün çöz, seri devam etsin"
+    } else if canFreeze {
+      let left = StreakRules.monthlyFreezes - stats.freezesUsed
+      freezeHint = "Seri dondurma hazır (\(left) hak) · bir gün kaçırsan da serin bozulmaz"
+    } else {
+      freezeHint = nil
+    }
+  }
+
+  /// Bugünden `offset` gün uzaktaki günün anahtarı.
+  private func dayKey(offset: Int) -> String {
+    DayKey.string(from: calendar.date(byAdding: .day, value: offset, to: now()) ?? now())
+  }
+
+  /// Hatırlatıcı ayarını kaydedip bildirimleri yeniden kurar.
+  private func updateReminder(_ change: (inout AppSettings) -> Void) {
+    userData.updateSettings(change)
+    reminders.apply(userData.settings, userData.stats)
+  }
 
   private func makeWeek(solvedDays: Set<String>) -> [WeekDay] {
     let labels = ["Pt", "Sa", "Ça", "Pe", "Cu", "Ct", "Pz"]
@@ -136,6 +209,7 @@ final class HomeViewModel: ObservableObject {
     guard
       let item = progress.values.first(where: {
         $0.status == .inProgress && $0.puzzleId != daily?.id
+          && !$0.puzzleId.hasPrefix(ReviewPuzzleBuilder.idPrefix)
       }),
       let puzzle = await content.puzzle(id: item.puzzleId)
     else {

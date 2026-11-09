@@ -227,20 +227,31 @@ public struct MiniGridView: View {
   private let layout: CrosswordLayout
   private let theme: PuzzleTheme
   private let cellSize: CGFloat
-  private let highlightedEntry: PuzzleEntry?
+  private let highlighted: Set<GridPoint>
+  private let active: GridPoint?
 
   /// Bulmaca, tema ve kutu boyuyla önizleme oluşturur.
-  public init(puzzle: Puzzle, theme: PuzzleTheme, cellSize: CGFloat = 12) {
+  ///
+  /// `highlighted` verilmezse ilk soldan sağa kelime vurgulanır; `active` etkin kutuyu işaretler.
+  public init(
+    puzzle: Puzzle,
+    theme: PuzzleTheme,
+    cellSize: CGFloat = 12,
+    highlighted: Set<GridPoint>? = nil,
+    active: GridPoint? = nil
+  ) {
     self.layout = CrosswordLayout(puzzle: puzzle)
     self.theme = theme
     self.cellSize = cellSize
-    self.highlightedEntry = puzzle.entries.first { $0.dir == .across }
+    self.highlighted =
+      highlighted ?? Set(puzzle.entries.first { $0.dir == .across }?.cells ?? [])
+    self.active = active
   }
 
   public var body: some View {
     PuzzleGridView(
       layout: layout, theme: theme, cellSize: cellSize,
-      highlighted: Set(highlightedEntry?.cells ?? []), showsClueText: false
+      highlighted: highlighted, active: active, showsClueText: false
     )
     .accessibilityHidden(true)
   }

@@ -12,14 +12,19 @@ public final class EntitlementStore: ObservableObject, EntitlementProviding {
   @Published public private(set) var isPremium = false
   @Published public private(set) var ownedProductIds: Set<String> = []
   @Published public private(set) var products: [StoreProduct] = []
+  /// Aktif aboneliğin planı ve yenilenme tarihi.
+  @Published public private(set) var activeSubscription: ActiveSubscription?
   private var storeProducts: [String: Product] = [:]
   private var updatesTask: Task<Void, Never>?
   private let logger = Logger(subsystem: "com.hasangurbuz.cengelish", category: "store")
 
   public var changes: AnyPublisher<Void, Never> {
-    Publishers.Merge($isPremium.map { _ in () }, $ownedProductIds.map { _ in () })
-      .dropFirst(2)
-      .eraseToAnyPublisher()
+    Publishers.Merge3(
+      $isPremium.map { _ in () }, $ownedProductIds.map { _ in () },
+      $activeSubscription.map { _ in () }
+    )
+    .dropFirst(3)
+    .eraseToAnyPublisher()
   }
 
   // MARK: - Init
@@ -90,18 +95,41 @@ public final class EntitlementStore: ObservableObject, EntitlementProviding {
   private func refreshEntitlements() async {
     var premium = false
     var owned: Set<String> = []
+    var subscription: ActiveSubscription?
     for await result in Transaction.currentEntitlements {
       guard case .verified(let transaction) = result, transaction.revocationDate == nil else {
         continue
       }
       if ProductID.subscriptions.contains(transaction.productID) {
         premium = true
+        subscription = await Self.makeSubscription(transaction)
       } else {
         owned.insert(transaction.productID)
       }
     }
     isPremium = premium
     ownedProductIds = owned
+    activeSubscription = subscription
+  }
+
+  /// Abonelik işleminden plan ve yenilenme bilgisini okur (`SubscriptionInfo.Status`).
+  private static func makeSubscription(_ transaction: Transaction) async -> ActiveSubscription {
+    var renewalDate = transaction.expirationDate
+    var willAutoRenew = true
+    if let groupId = transaction.subscriptionGroupID,
+      let statuses = try? await Product.SubscriptionInfo.status(for: groupId)
+    {
+      let current = statuses.first { status in
+        guard case .verified(let renewal) = status.renewalInfo else { return false }
+        return renewal.currentProductID == transaction.productID
+      }
+      if let current, case .verified(let renewal) = current.renewalInfo {
+        willAutoRenew = renewal.willAutoRenew
+        renewalDate = renewal.renewalDate ?? renewalDate
+      }
+    }
+    return ActiveSubscription(
+      productId: transaction.productID, renewalDate: renewalDate, willAutoRenew: willAutoRenew)
   }
 
   /// StoreKit ürününü ekran modeline çevirir.

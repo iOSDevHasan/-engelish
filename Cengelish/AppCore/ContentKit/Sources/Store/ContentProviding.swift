@@ -16,6 +16,24 @@ public protocol ContentProviding: Sendable {
   func dailyPuzzle(for date: Date) async -> Puzzle?
   /// Uzak kaynaktan yeni paketleri ve günlük bulmacaları indirir.
   func refreshFromRemote(entitledPackIds: Set<String>) async
+  /// Cihazdaki tüm kelimeler (elle ekleme araması ve tekrar bulmacası dolgusu için).
+  func wordPool() async -> [Word]
+  /// Cihazda üretilen geçici bulmacayı (ör. tekrar bulmacası) bellekte kaydeder; böylece
+  /// `puzzle(id:)` ve `words(ids:)` onu da bulur. Uygulama kapanınca silinir.
+  func registerTransient(_ puzzle: Puzzle, words: [Word]) async
+}
+
+extension ContentProviding {
+  /// Varsayılan: kelime havuzu yok.
+  public func wordPool() async -> [Word] { [] }
+
+  /// Varsayılan: geçici bulmaca desteklenmez.
+  public func registerTransient(_ puzzle: Puzzle, words: [Word]) async {}
+
+  /// Geçici bulmacayı ek kelime olmadan kaydeder (kelimeler zaten havuzdaysa).
+  public func registerTransient(_ puzzle: Puzzle) async {
+    await registerTransient(puzzle, words: [])
+  }
 }
 
 /// Firebase gibi uzak bir içerik kaynağı. Uygulama bunu sadece varsa kullanır.

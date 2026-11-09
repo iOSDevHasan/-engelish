@@ -16,6 +16,8 @@ public actor ContentStore: ContentProviding {
   private var puzzlesById: [String: Puzzle] = [:]
   private var wordsById: [String: Word] = [:]
   private var dailies: [String: String] = [:]
+  private var transientPuzzles: [String: Puzzle] = [:]
+  private var transientWords: [String: Word] = [:]
   private var isLoaded = false
 
   // MARK: - Init
@@ -42,7 +44,7 @@ public actor ContentStore: ContentProviding {
 
   public func puzzle(id: String) async -> Puzzle? {
     loadIfNeeded()
-    return puzzlesById[id]
+    return puzzlesById[id] ?? transientPuzzles[id]
   }
 
   public func puzzles(inPack packId: String) async -> [Puzzle] {
@@ -56,7 +58,7 @@ public actor ContentStore: ContentProviding {
     var seen = Set<String>()
     return ids.compactMap { id in
       guard seen.insert(id).inserted else { return nil }
-      return wordsById[id]
+      return wordsById[id] ?? transientWords[id]
     }
   }
 
@@ -94,6 +96,17 @@ public actor ContentStore: ContentProviding {
     } catch {
       logger.error("Uzak içerik yenilenemedi: \(error.localizedDescription)")
     }
+  }
+
+  public func wordPool() async -> [Word] {
+    loadIfNeeded()
+    return wordsById.values.sorted { $0.id < $1.id }
+  }
+
+  public func registerTransient(_ puzzle: Puzzle, words: [Word]) async {
+    loadIfNeeded()
+    transientPuzzles[puzzle.id] = puzzle
+    words.forEach { transientWords[$0.id] = $0 }
   }
 
   // MARK: - Loading

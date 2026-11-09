@@ -76,6 +76,7 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     s.reminderEnabled = r.reminderEnabled
     s.reminderHour = r.reminderHour
     s.reminderMinute = r.reminderMinute
+    s.lastBackupAt = r.lastBackupAt
     return s
   }
 
@@ -96,6 +97,7 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     r.reminderEnabled = s.reminderEnabled
     r.reminderHour = s.reminderHour
     r.reminderMinute = s.reminderMinute
+    r.lastBackupAt = s.lastBackupAt
     commit()
   }
 
@@ -137,6 +139,9 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     commit()
   }
 
+  /// Defterden üretilen tekrar bulmacalarının kimlik öneki (ContentKit `ReviewPuzzleBuilder`).
+  static let reviewPrefix = "review_"
+
   public func finish(
     puzzleId: String, marks: [String: Bool], wordIdsByEntry: [String: String],
     isPremium: Bool, now: Date
@@ -158,21 +163,39 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
       stats.wordsSeen += correct
       if correct == marks.count, !marks.isEmpty { stats.perfectCount += 1 }
     }
+    let dayBefore = DayMath.key(now, calendar, offset: -2)
+    let month = String(today.prefix(7))
+    if stats.freezeMonth != month {
+      stats.freezeMonth = month
+      stats.freezesUsed = 0
+    }
+    let canFreeze = isPremium && stats.freezesUsed < StreakRules.monthlyFreezes
+    if canFreeze, stats.lastPlayedDay == dayBefore, stats.streak > 0 {
+      stats.freezesUsed += 1
+    }
     stats.streak = StreakRules.next(
       current: stats.streak, lastDay: stats.lastPlayedDay, today: today,
-      yesterday: DayMath.key(now, calendar, offset: -1),
-      dayBefore: DayMath.key(now, calendar, offset: -2), canFreeze: isPremium)
+      yesterday: DayMath.key(now, calendar, offset: -1), dayBefore: dayBefore,
+      canFreeze: canFreeze)
     stats.longestStreak = max(stats.longestStreak, stats.streak)
     stats.lastPlayedDay = today
     if !stats.solvedDays.contains(today) { stats.solvedDays.append(today) }
 
     var added: [String] = []
-    for (entryId, isCorrect) in marks where !isCorrect {
+    let isReview = puzzleId.hasPrefix(Self.reviewPrefix)
+    for (entryId, isCorrect) in marks {
       guard let wordId = wordIdsByEntry[entryId] else { continue }
-      if insertNotebook(wordId: wordId) { added.append(wordId) }
+      if isReview, let note = notebookRecords(wordId).first, !wasFinished {
+        // Tekrar bulmacası: defterdeki kelime Leitner kutusunda ilerler ya da başa döner.
+        let result = LeitnerRules.review(box: note.box, knew: isCorrect, now: now)
+        note.box = result.box
+        note.nextReviewAt = result.next
+        note.learned = result.learned
+      } else if !isCorrect, insertNotebook(wordId: wordId, source: puzzleId) {
+        added.append(wordId)
+      }
     }
-    let newBadges = awardBadges(
-      before: before, after: snapshot(stats), durationSec: record.durationSec, now: now)
+    let newBadges = awardBadges(before: before, after: snapshot(stats), record: record, now: now)
     commit()
     return FinishResult(
       stars: stars, correct: correct, total: marks.count, streak: stats.streak,
@@ -192,12 +215,20 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     return ((try? context.fetch(descriptor)) ?? []).map {
       NotebookItem(
         wordId: $0.wordId, box: $0.box, nextReviewAt: $0.nextReviewAt, learned: $0.learned,
-        addedAt: $0.addedAt)
+        addedAt: $0.addedAt, source: $0.source)
     }
   }
 
-  public func addToNotebook(wordId: String) {
-    if insertNotebook(wordId: wordId) { commit() }
+  public func addToNotebook(wordId: String, source: String) {
+    if insertNotebook(wordId: wordId, source: source) { commit() }
+  }
+
+  public func setLearned(wordId: String, learned: Bool) {
+    guard let record = notebookRecords(wordId).first else { return }
+    record.learned = learned
+    record.box = learned ? LeitnerRules.maxBox : max(1, min(record.box, LeitnerRules.maxBox - 1))
+    record.nextReviewAt = learned ? .distantFuture : .now
+    commit()
   }
 
   public func removeFromNotebook(wordId: String) {
@@ -352,14 +383,16 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
   }
 
   /// Kelimeyi deftere ekler; eklendiyse true döner.
-  private func insertNotebook(wordId: String) -> Bool {
+  private func insertNotebook(wordId: String, source: String) -> Bool {
     if let existing = notebookRecords(wordId).first {
       existing.box = 1
       existing.learned = false
       existing.nextReviewAt = .now
       return false
     }
-    insert(NotebookRecord(wordId: wordId))
+    let record = NotebookRecord(wordId: wordId)
+    record.source = source
+    insert(record)
     return true
   }
 
@@ -384,6 +417,8 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     s.hintsUsedToday =
       record.hintDay == DayMath.key(.now, calendar) ? record.hintsUsedToday : 0
     s.solvedDays = record.solvedDays
+    let month = String(DayMath.key(.now, calendar).prefix(7))
+    s.freezesUsed = record.freezeMonth == month ? record.freezesUsed : 0
     return s
   }
 
@@ -403,32 +438,35 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
   }
 
   /// Koşulu yeni sağlanan rozetleri ekler ve döner.
+  ///
+  /// Sayaçlı rozetler (bulmaca, seri, kelime, YDS, günlük, defter) güncel sayaçlardan; anlık
+  /// rozetler (hatasız, gece, sabah, hız) bitirilen bulmacanın koşullarından değerlendirilir.
   private func awardBadges(
-    before: UserStats, after: UserStats, durationSec: Int, now: Date
-  )
-    -> [BadgeKind]
-  {
+    before: UserStats, after: UserStats, record: PuzzleProgressRecord, now: Date
+  ) -> [BadgeKind] {
     let owned = Set(badges.keys)
-    let hour = calendar.component(.hour, from: now)
+    let snapshot = achievementSnapshot(stats: after)
+    let event = FinishEvent(
+      hour: calendar.component(.hour, from: now), durationSec: record.durationSec,
+      isFlawless: after.perfectCount > before.perfectCount && record.hintsUsed == 0)
     var earned: [BadgeKind] = []
-    for kind in BadgeKind.allCases where !owned.contains(kind) {
-      let unlocked: Bool =
-        switch kind {
-        case .firstPuzzle: after.puzzlesSolved >= 1
-        case .streak7: after.longestStreak >= 7
-        case .streak30: after.longestStreak >= 30
-        case .words100: after.wordsSeen >= 100
-        case .words500: after.wordsSeen >= 500
-        case .perfect: after.perfectCount > before.perfectCount
-        case .nightOwl: hour >= 22 || hour < 5
-        case .speed: durationSec > 0 && durationSec < 180
-        }
-      if unlocked {
-        insert(BadgeRecord(badgeId: kind.rawValue))
-        earned.append(kind)
-      }
+    for kind in BadgeKind.allCases
+    where !owned.contains(kind) && kind.isEarned(snapshot, event: event) {
+      insert(BadgeRecord(badgeId: kind.rawValue))
+      earned.append(kind)
     }
     return earned
+  }
+
+  /// Rozet sayaçlarını (bitirilen bulmacalar, öğrenilen kelimeler) kayıtlardan toplar.
+  private func achievementSnapshot(stats: UserStats) -> AchievementSnapshot {
+    let finished = FetchDescriptor<PuzzleProgressRecord>(
+      predicate: #Predicate { $0.status == "finished" })
+    let learned = FetchDescriptor<NotebookRecord>(predicate: #Predicate { $0.learned == true })
+    return AchievementSnapshot(
+      stats: stats,
+      finishedPuzzleIds: ((try? context.fetch(finished)) ?? []).map(\.puzzleId),
+      learnedWords: (try? context.fetchCount(learned)) ?? 0)
   }
 }
 

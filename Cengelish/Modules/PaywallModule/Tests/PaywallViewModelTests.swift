@@ -16,6 +16,37 @@ struct PaywallViewModelTests {
     #expect(
       sut.plans.map(\.id) == [ProductID.plusYearly, ProductID.plusMonthly, ProductID.packYDS])
     #expect(sut.ctaTitle == "7 gün ücretsiz dene")
+    #expect(sut.plans.last?.title == "Sadece YDS Paketi")
+    #expect(sut.plans.map(\.price) == ["37,50 ₺", "74,99 ₺", "199,99 ₺"])
+  }
+
+  @Test(
+    "Sınav paketiyle açılınca o paketin tek seferlik seçeneği gösterilir",
+    arguments: [
+      (ProductID.packYOKDIL, "Sadece YÖKDİL Paketi", "199,99 ₺"),
+      (ProductID.packLGS, "Sadece LGS Paketi", "129,99 ₺"),
+      (ProductID.packIELTS, "Sadece IELTS Paketi", "199,99 ₺"),
+      (ProductID.packTOEFL, "Sadece TOEFL Paketi", "199,99 ₺"),
+    ])
+  func examPackOption(productId: String, title: String, price: String) {
+    let sut = makeSUT(store: StoreSpy(), selected: productId)
+    #expect(sut.plans.map(\.id) == [ProductID.plusYearly, ProductID.plusMonthly, productId])
+    #expect(sut.plans.last?.title == title)
+    #expect(sut.plans.last?.price == price)
+    #expect(sut.selected == productId)
+    #expect(sut.ctaTitle == "Devam et")
+  }
+
+  @Test("Mağaza fiyatı varsa örnek fiyatın yerine geçer")
+  func storePrice() {
+    let store = StoreSpy()
+    store.products = [
+      StoreProduct(
+        id: ProductID.packLGS, title: "LGS Paketi", displayPrice: "99,99 ₺",
+        monthlyEquivalent: nil, trialText: nil, isSubscription: false)
+    ]
+    let sut = makeSUT(store: store, selected: ProductID.packLGS)
+    #expect(sut.plans.last?.price == "99,99 ₺")
   }
 
   @Test("Satın alma başarılı olunca ekran kapanır")
@@ -26,10 +57,12 @@ struct PaywallViewModelTests {
     #expect(nav.popCount == 1)
   }
 
-  private func makeSUT(store: StoreSpy, nav: NavSpy = NavSpy()) -> PaywallViewModel {
+  private func makeSUT(
+    store: StoreSpy, nav: NavSpy = NavSpy(), selected: String = ProductID.plusYearly
+  ) -> PaywallViewModel {
     Injector.override(Routing.self, with: nav)
     return PaywallViewModel(
-      coordinator: PaywallCoordinator(), entitlements: store, selected: ProductID.plusYearly)
+      coordinator: PaywallCoordinator(), entitlements: store, selected: selected)
   }
 }
 

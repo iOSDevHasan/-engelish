@@ -24,12 +24,14 @@ final class PaywallViewModel: ObservableObject {
 
   /// Çengelish+ avantajları.
   let benefits = [
-    "Tüm seviyeler ve tüm bulmacalar",
-    "YDS, YÖKDİL, LGS ve IELTS paketleri",
+    "Tüm seviyeler ve 500+ bulmaca",
+    "YDS, YÖKDİL, LGS, IELTS ve TOEFL paketleri",
     "Sınırsız ipucu ve seri dondurma",
     "Tüm bulmaca temaları ve özel avatar parçaları",
-    "Taç aksesuarı ve Gece / Mercan arka planları",
+    "Tekrar bulmacası, çevrimdışı oyun",
   ]
+  /// Tek seferlik seçenekte gösterilen sınav paketi (açılışta seçili paket, yoksa YDS).
+  let packProductId: String
   private let coordinator: PaywallCoordinator
   private let entitlements: any EntitlementProviding
 
@@ -39,6 +41,7 @@ final class PaywallViewModel: ObservableObject {
     self.coordinator = coordinator
     self.entitlements = entitlements
     self.selected = selected
+    packProductId = ProductID.examPacks.contains(selected) ? selected : ProductID.packYDS
     rebuildPlans()
   }
 
@@ -88,6 +91,18 @@ final class PaywallViewModel: ObservableObject {
     selected == ProductID.plusYearly ? "7 gün ücretsiz dene" : "Devam et"
   }
 
+  // MARK: - Fallback prices
+
+  /// StoreKit ürünleri yüklenemediğinde gösterilen örnek fiyatlar.
+  static func fallbackPrice(for productId: String) -> String {
+    switch productId {
+    case ProductID.plusMonthly: "74,99 ₺"
+    case ProductID.plusYearly: "449,99 ₺"
+    case ProductID.packLGS: "129,99 ₺"
+    default: "199,99 ₺"
+    }
+  }
+
   // MARK: - Private
 
   /// Mağaza ürünlerinden plan satırlarını üretir; yüklenmediyse örnek fiyatları gösterir.
@@ -95,19 +110,22 @@ final class PaywallViewModel: ObservableObject {
     let products = Dictionary(uniqueKeysWithValues: entitlements.products.map { ($0.id, $0) })
     let yearly = products[ProductID.plusYearly]
     let monthly = products[ProductID.plusMonthly]
-    let yds = products[ProductID.packYDS]
+    let pack = products[packProductId]
+    let examTitle = ProductID.examTitle(for: packProductId) ?? "YDS"
+    let yearlyPrice = yearly?.displayPrice ?? Self.fallbackPrice(for: ProductID.plusYearly)
     plans = [
       PlanOption(
         id: ProductID.plusYearly, title: "Yıllık",
         detail:
-          "\(yearly?.trialText ?? "7 gün ücretsiz"), sonra \(yearly?.displayPrice ?? "449,99 ₺")/yıl",
+          "\(yearly?.trialText ?? "7 gün ücretsiz"), sonra \(yearlyPrice)/yıl",
         price: yearly?.monthlyEquivalent ?? "37,50 ₺", unit: "/ay", badge: "%50 tasarruf"),
       PlanOption(
         id: ProductID.plusMonthly, title: "Aylık", detail: "İstediğin zaman iptal et",
-        price: monthly?.displayPrice ?? "74,99 ₺", unit: "/ay", badge: nil),
+        price: monthly?.displayPrice ?? Self.fallbackPrice(for: ProductID.plusMonthly), unit: "/ay",
+        badge: nil),
       PlanOption(
-        id: ProductID.packYDS, title: "Sadece YDS Paketi", detail: "Tek seferlik · ömür boyu",
-        price: yds?.displayPrice ?? "199,99 ₺", unit: nil, badge: nil),
+        id: packProductId, title: "Sadece \(examTitle) Paketi", detail: "Tek seferlik · ömür boyu",
+        price: pack?.displayPrice ?? Self.fallbackPrice(for: packProductId), unit: nil, badge: nil),
     ]
   }
 }

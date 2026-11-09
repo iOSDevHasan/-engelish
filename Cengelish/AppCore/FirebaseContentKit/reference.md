@@ -1,7 +1,7 @@
 # FirebaseContentKit
 
 **Layer**: AppCore
-**Purpose**: Firebase (Firestore + Storage + App Check) ile `RemoteContentSource`. GoogleService-Info.plist yoksa devre dışı.
+**Purpose**: Firebase (Firestore + App Check; paket içerikleri Firestore `packContents` belgelerinde gzip'li) ile `RemoteContentSource`. GoogleService-Info.plist yoksa devre dışı.
 
 ## Public API
 
@@ -16,4 +16,4 @@ Sources/FirebaseContentKit.swift
 
 ## Dependencies
 
-- ContentKit, firebase-ios-sdk (FirebaseCore, FirebaseFirestore, FirebaseStorage, FirebaseAppCheck)
+- ContentKit, firebase-ios-sdk (FirebaseCore, FirebaseFirestore, FirebaseAppCheck)

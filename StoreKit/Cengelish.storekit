@@ -7,10 +7,54 @@
       "familyShareable" : false,
       "internalID" : "6A0000001",
       "localizations" : [
-        { "description" : "YDS'de sık çıkan akademik kelimelerle 10 bulmaca.", "displayName" : "YDS Paketi", "locale" : "tr" }
+        { "description" : "YDS'de sık çıkan akademik kelimelerle bulmacalar.", "displayName" : "YDS Paketi", "locale" : "tr" }
       ],
       "productID" : "com.hasangurbuz.cengelish.pack.yds",
       "referenceName" : "YDS Paketi",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "199.99",
+      "familyShareable" : false,
+      "internalID" : "6A0000005",
+      "localizations" : [
+        { "description" : "YÖKDİL'de sık çıkan akademik kelimelerle bulmacalar.", "displayName" : "YÖKDİL Paketi", "locale" : "tr" }
+      ],
+      "productID" : "com.hasangurbuz.cengelish.pack.yokdil",
+      "referenceName" : "YÖKDİL Paketi",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "129.99",
+      "familyShareable" : false,
+      "internalID" : "6A0000006",
+      "localizations" : [
+        { "description" : "LGS'de sık çıkan kelimelerle bulmacalar.", "displayName" : "LGS Paketi", "locale" : "tr" }
+      ],
+      "productID" : "com.hasangurbuz.cengelish.pack.lgs",
+      "referenceName" : "LGS Paketi",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "199.99",
+      "familyShareable" : false,
+      "internalID" : "6A0000007",
+      "localizations" : [
+        { "description" : "IELTS'te sık çıkan kelimelerle bulmacalar.", "displayName" : "IELTS Paketi", "locale" : "tr" }
+      ],
+      "productID" : "com.hasangurbuz.cengelish.pack.ielts",
+      "referenceName" : "IELTS Paketi",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "199.99",
+      "familyShareable" : false,
+      "internalID" : "6A0000008",
+      "localizations" : [
+        { "description" : "TOEFL'da sık çıkan kelimelerle bulmacalar.", "displayName" : "TOEFL Paketi", "locale" : "tr" }
+      ],
+      "productID" : "com.hasangurbuz.cengelish.pack.toefl",
+      "referenceName" : "TOEFL Paketi",
       "type" : "NonConsumable"
     }
   ],

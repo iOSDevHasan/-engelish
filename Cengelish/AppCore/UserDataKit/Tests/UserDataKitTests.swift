@@ -45,6 +45,40 @@ struct UserDataKitTests {
     #expect(store.progress(for: "a1_01").status == .finished)
   }
 
+  @Test("Tekrar bulmacası: doğru kelime kutu atlar, yanlış kelime 1. kutuya döner")
+  func reviewPuzzleMovesBoxes() {
+    let store = UserDataStore(inMemory: true)
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
+    store.addToNotebook(wordId: "w_house", source: "manual")
+    store.addToNotebook(wordId: "w_racer", source: "manual")
+    let result = store.finish(
+      puzzleId: "review_1", marks: ["e1": true, "e2": false],
+      wordIdsByEntry: ["e1": "w_house", "e2": "w_racer"], isPremium: true, now: .now)
+    let boxes = Dictionary(uniqueKeysWithValues: store.notebook.map { ($0.wordId, $0.box) })
+    #expect(boxes["w_house"] == 2)
+    #expect(boxes["w_racer"] == 1)
+    #expect(result.addedToNotebook.isEmpty)
+  }
+
+  @Test("Seri dondurma: Çengelish+ ile bir günlük boşluk ayda iki kez affedilir")
+  func streakFreezeLimit() {
+    let store = UserDataStore(inMemory: true)
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
+    let calendar = Calendar.current
+    let start = calendar.date(from: DateComponents(year: 2026, month: 11, day: 2, hour: 12))!
+    let day = { (offset: Int) in calendar.date(byAdding: .day, value: offset, to: start)! }
+    let play = { (offset: Int) in
+      store.finish(
+        puzzleId: "p\(offset)", marks: ["e": true], wordIdsByEntry: ["e": "w_house"],
+        isPremium: true, now: day(offset)
+      ).streak
+    }
+    #expect(play(0) == 1)
+    #expect(play(2) == 2)  // 1. dondurma
+    #expect(play(4) == 3)  // 2. dondurma
+    #expect(play(6) == 1)  // bu ay hak kalmadı
+  }
+
   @Test("İpucu: ücretsiz kullanıcının günde 3 hakkı var")
   func hintQuota() {
     let store = UserDataStore(inMemory: true)
@@ -58,7 +92,7 @@ struct UserDataKitTests {
   func backupRoundTrip() throws {
     let store = UserDataStore(inMemory: true)
     store.createProfile(UserProfile(nickname: "Ece", avatar: AvatarConfig(body: .pink)))
-    store.addToNotebook(wordId: "w_heron")
+    store.addToNotebook(wordId: "w_heron", source: "manual")
     let data = try store.exportData()
     store.deleteAll()
     #expect(store.profile == nil)

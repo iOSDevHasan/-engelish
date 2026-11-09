@@ -2,7 +2,6 @@ import ContentKit
 import FirebaseAppCheck
 import FirebaseCore
 import FirebaseFirestore
-import FirebaseStorage
 import Foundation
 
 /// Firebase kurulumu. `GoogleService-Info.plist` uygulamada yoksa hiçbir şey yapmaz.
@@ -36,32 +35,38 @@ private final class AttestProviderFactory: NSObject, AppCheckProviderFactory {
   }
 }
 
-/// Firestore'dan paket listesi ve günlük bulmacalar, Storage'dan paket dosyaları.
+/// Firestore'dan paket listesi, paket içerikleri ve günlük bulmacalar.
 ///
-/// Firestore düzeni (`tools/content/upload_firebase.py` ile yüklenir):
+/// Firestore düzeni (`tools/content/upload_firebase.py` ile yüklenir; ücretsiz Spark planında çalışır):
 /// - `packs/{packId}`: `Pack` alanları + `contentPath`, `contentVersion`
+/// - `packContents/{packId}_v{n}`: `data` alanında gzip'li `PackPayload` JSON'u (Bytes)
 /// - `dailies/{yyyy-MM-dd}`: `date`, `puzzleId`, `puzzle`, `words`
-/// - Storage `packs/{packId}_v{n}.json.gz`: `PackPayload`
 public struct FirebaseContentSource: RemoteContentSource {
 
-  /// Paket dosyası için en büyük boyut (5 MB).
-  private let maxPackBytes: Int64 = 5 * 1024 * 1024
+  /// Paket içeriklerinin koleksiyonu.
+  private static let contentCollection = "packContents"
 
   /// Kaynağı oluşturur. Firebase önceden yapılandırılmış olmalıdır.
   public init() {}
 
+  /// Firestore'daki paket listesini getirir.
   public func fetchManifest() async throws -> [Pack] {
     let snapshot = try await Firestore.firestore().collection("packs").getDocuments()
     return snapshot.documents.compactMap { try? $0.data(as: Pack.self) }
   }
 
+  /// Paketin gzip'li içerik belgesini indirip çözer.
   public func downloadPack(_ pack: Pack) async throws -> PackPayload {
-    guard let path = pack.contentPath else { throw ContentError.missingStarterContent }
-    let data = try await Storage.storage().reference(withPath: path).data(maxSize: maxPackBytes)
-    let json = path.hasSuffix(".gz") ? try Gzip.decompress(data) : data
+    guard let path = pack.contentPath, path.hasPrefix(Self.contentCollection + "/") else {
+      throw ContentError.missingStarterContent
+    }
+    let document = try await Firestore.firestore().document(path).getDocument()
+    guard let data = document.get("data") as? Data else { throw ContentError.missingStarterContent }
+    let json = try Gzip.decompress(data)
     return try JSONDecoder().decode(PackPayload.self, from: json)
   }
 
+  /// Başlangıç tarihinden itibaren günlük bulmacaları getirir.
   public func fetchDailies(from date: String, limit: Int) async throws -> [DailyPayload] {
     let snapshot = try await Firestore.firestore().collection("dailies")
       .whereField("date", isGreaterThanOrEqualTo: date)

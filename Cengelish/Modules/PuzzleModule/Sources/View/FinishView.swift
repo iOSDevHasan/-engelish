@@ -1,6 +1,5 @@
 import ContentKit
 import DesignKit
-import PuzzleKit
 import SwiftUI
 import UserDataKit
 import WordKit
@@ -8,11 +7,21 @@ import WordKit
 /// Bitiş ekranı.
 struct FinishView: View {
   @StateObject var viewModel: FinishViewModel
-  let theme: (ColorScheme) -> PuzzleTheme
-  @Environment(\.colorScheme) private var scheme
-  @State private var shareImage: Image?
 
   var body: some View {
+    VStack(spacing: 0) {
+      NavHeader("", leadingSymbol: "xmark", onLeading: viewModel.home) {
+        Button(action: viewModel.share) { IconCircle("square.and.arrow.up") }
+          .buttonStyle(.plain)
+          .accessibilityLabel("Paylaş")
+      }
+      scroll
+    }
+    .safeAreaInset(edge: .bottom) { bottomBar }
+    .screenBackground()
+  }
+
+  private var scroll: some View {
     ScrollView {
       VStack(spacing: 16) {
         hero
@@ -44,31 +53,26 @@ struct FinishView: View {
         .card()
       }
       .padding(.horizontal, Metrics.gutter)
-      .padding(.vertical, 12)
+      .padding(.bottom, 12)
       .frame(maxWidth: 640)
       .frame(maxWidth: .infinity)
     }
-    .safeAreaInset(edge: .bottom) {
-      HStack(spacing: 10) {
-        if let shareImage {
-          ShareLink(
-            item: shareImage,
-            preview: SharePreview("Çengelish sonucum", image: shareImage)
-          ) {
-            Label("Paylaş", systemImage: "square.and.arrow.up")
-          }
-          .buttonStyle(.chunkySecondary)
-        }
-        Button(viewModel.hasNext ? "Sonraki bulmaca" : "Ana sayfaya dön", action: viewModel.next)
-          .buttonStyle(.chunky)
+  }
+
+  private var bottomBar: some View {
+    HStack(spacing: 10) {
+      Button(action: viewModel.share) {
+        Label("Paylaş", systemImage: "square.and.arrow.up")
       }
-      .padding(.horizontal, Metrics.gutter)
-      .padding(.vertical, 8)
-      .frame(maxWidth: 640)
-      .background(Palette.background)
+      .buttonStyle(.chunkySecondary)
+      Button(viewModel.hasNext ? "Sonraki bulmaca" : "Ana sayfaya dön", action: viewModel.next)
+        .buttonStyle(.chunky)
     }
-    .screenBackground()
-    .task { renderShareCard() }
+    .padding(.horizontal, Metrics.gutter)
+    .padding(.vertical, 8)
+    .frame(maxWidth: 640)
+    .frame(maxWidth: .infinity)
+    .background(Palette.background)
   }
 
   private var hero: some View {
@@ -120,71 +124,5 @@ struct FinishView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .card()
-  }
-
-  /// Paylaşım kartını resme çevirir (cevaplar görünmez).
-  @MainActor
-  private func renderShareCard() {
-    let card = ShareCardView(
-      layout: viewModel.session.layout, title: viewModel.session.title, avatar: viewModel.avatar,
-      name: viewModel.name, result: viewModel.result, duration: viewModel.durationText)
-    let renderer = ImageRenderer(content: card)
-    renderer.scale = 3
-    if let image = renderer.uiImage {
-      shareImage = Image(uiImage: image)
-    }
-  }
-}
-
-/// Paylaşım kartı: dolu kutular, avatar ve sonuç; cevaplar gösterilmez.
-struct ShareCardView: View {
-  let layout: CrosswordLayout
-  let title: String
-  let avatar: AvatarConfig
-  let name: String
-  let result: FinishResult
-  let duration: String
-
-  var body: some View {
-    VStack(spacing: 14) {
-      HStack(spacing: 10) {
-        AvatarView(avatar, size: 48)
-        VStack(alignment: .leading, spacing: 2) {
-          Text(name).font(AppFont.bodyBold)
-          Text(title).font(AppFont.caption).opacity(0.85)
-        }
-        Spacer()
-        Text(String(repeating: "★", count: result.stars)).font(AppFont.headline)
-          .foregroundStyle(Color(hex: 0xFFC93C))
-      }
-      PuzzleGridView(
-        layout: layout, theme: shareTheme, cellSize: 22,
-        letters: Dictionary(uniqueKeysWithValues: layout.letterCells.map { ($0, ("·", .filled)) }),
-        showsClueText: false)
-      HStack {
-        Text("\(result.correct)/\(result.total) doğru · \(duration) · \(result.streak) gün seri")
-          .font(AppFont.caption)
-        Spacer()
-      }
-      Text("Sen de çöz → Çengelish").font(AppFont.bodyBold)
-    }
-    .foregroundStyle(.white)
-    .padding(22)
-    .frame(width: 340)
-    .background(
-      LinearGradient(
-        colors: [Color(hex: 0x6C5CE7), Color(hex: 0x8E7BFF)], startPoint: .topLeading,
-        endPoint: .bottomTrailing)
-    )
-    .environment(\.colorScheme, .light)
-  }
-
-  private var shareTheme: PuzzleTheme {
-    PuzzleTheme(
-      id: "share", name: "", detail: "", isPremium: false, cell: .white.opacity(0.25),
-      clue: .white.opacity(0.15), clueInk: .white, line: .clear, pen: Color(hex: 0xFFC93C),
-      pencil: .white, blank: .clear, stripedBlanks: false, highlight: .white.opacity(0.25),
-      active: .white, activeRing: nil, arrow: .white, gap: 3, border: 0, cornerRatio: 0.2,
-      keyInk: .white)
   }
 }

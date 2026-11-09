@@ -19,8 +19,14 @@
 	</array>
 	<key>ENABLE_NETWORK_LOGS</key>
 	<string>$(ENABLE_NETWORK_LOGS)</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Paylaşım kartını fotoğraflarına kaydetmek için.</string>
 	<key>PREVENT_SCREENSHOT</key>
 	<string>$(PREVENT_SCREENSHOT)</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

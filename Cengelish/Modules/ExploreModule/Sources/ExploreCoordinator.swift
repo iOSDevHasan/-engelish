@@ -8,6 +8,7 @@ import PuzzleModuleInterface
 import RouterKitInterface
 import SwiftUI
 import UserDataKit
+import WordKit
 
 /// Keşfet ve paket ekranlarını kurar.
 @MainActor
@@ -18,8 +19,12 @@ public final class ExploreCoordinator: ExploreModuleInterface {
   @Inject private var entitlements: any EntitlementProviding
   @Inject private var puzzle: PuzzleModuleInterface
   @Inject private var paywall: PaywallModuleInterface
+  @Inject private var pronouncer: any Pronouncing
 
+  /// Koordinatörü oluşturur; bağımlılıklar `Injector` ile çözülür.
   public init() {}
+
+  // MARK: - ExploreModuleInterface
 
   public func createExploreView() -> AnyView {
     let viewModel = ExploreViewModel(
@@ -32,6 +37,21 @@ public final class ExploreCoordinator: ExploreModuleInterface {
       packId: packId, coordinator: self, content: content, userData: userData,
       entitlements: entitlements)
     return AnyView(PackView(viewModel: viewModel).chromeless())
+  }
+
+  // MARK: - Navigation
+
+  /// Arama ekranını açar.
+  func showSearch() {
+    let viewModel = SearchViewModel(
+      coordinator: self, content: content, userData: userData, entitlements: entitlements,
+      pronouncer: pronouncer)
+    nav.push(SearchView(viewModel: viewModel).chromeless())
+  }
+
+  /// Tüm tema paketleri listesini açar (Keşfet ekranının durumunu paylaşır).
+  func showThemes(viewModel: ExploreViewModel) {
+    nav.push(ThemeListView(viewModel: viewModel).chromeless())
   }
 
   /// Paket detayını açar.

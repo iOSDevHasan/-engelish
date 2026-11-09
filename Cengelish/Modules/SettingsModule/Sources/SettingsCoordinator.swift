@@ -18,7 +18,11 @@ public final class SettingsCoordinator: SettingsModuleInterface {
   public init() {}
 
   public func createSettingsView() -> AnyView {
-    AnyView(SettingsView(viewModel: self.makeViewModel()).chromeless())
+    createSettingsView(onEditProfile: nil)
+  }
+
+  public func createSettingsView(onEditProfile: (@MainActor () -> Void)?) -> AnyView {
+    AnyView(SettingsView(viewModel: self.makeViewModel(onEditProfile: onEditProfile)).chromeless())
   }
 
   public func createPuzzleThemeView() -> AnyView {
@@ -50,7 +54,9 @@ public final class SettingsCoordinator: SettingsModuleInterface {
     nav.pop()
   }
 
-  private func makeViewModel() -> SettingsViewModel {
-    SettingsViewModel(coordinator: self, userData: userData, entitlements: entitlements)
+  private func makeViewModel(onEditProfile: (@MainActor () -> Void)? = nil) -> SettingsViewModel {
+    SettingsViewModel(
+      coordinator: self, userData: userData, entitlements: entitlements,
+      onEditProfile: onEditProfile)
   }
 }

@@ -67,7 +67,7 @@ final class AnswerKeyViewModel: ObservableObject {
     let result = userData.finish(
       puzzleId: session.puzzle.id, marks: marks, wordIdsByEntry: wordIds,
       isPremium: entitlements.isPremium, now: .now)
-    coordinator.showFinish(session: session, result: result, drawing: drawing)
+    coordinator.showFinish(session: session, result: result, marks: marks)
   }
 
   /// Geri gider.
@@ -79,6 +79,9 @@ final class AnswerKeyViewModel: ObservableObject {
 
   /// İşaretlenen kelime sayısı.
   var markedCount: Int { marks.count }
+
+  /// "{x} doğru · {y} yanlış" özeti.
+  var summaryText: String { MarkSummary.text(marks) }
 
   /// Izgarada gösterilecek harfler (moda göre).
   var letters: [GridPoint: (Character, GridLetterStyle)] {

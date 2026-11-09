@@ -20,10 +20,15 @@ struct AnswerKeyView: View {
           }
           .pickerStyle(.segmented)
           grid
+          if viewModel.mode == .compare {
+            Text("Köşedeki küçük harfler doğru cevap. Kendi yazdığınla karşılaştır.")
+              .font(AppFont.caption).foregroundStyle(Palette.muted)
+              .multilineTextAlignment(.center)
+          }
           HStack {
-            Text("Kendini kontrol et").font(AppFont.section).foregroundStyle(Palette.ink)
+            Text("Kelimelerini işaretle").font(AppFont.section).foregroundStyle(Palette.ink)
             Spacer()
-            Text("\(viewModel.markedCount)/\(viewModel.session.puzzle.entries.count) işaretli")
+            Text(viewModel.summaryText)
               .font(AppFont.caption).foregroundStyle(Palette.muted)
           }
           VStack(spacing: 8) {
@@ -33,15 +38,13 @@ struct AnswerKeyView: View {
                 onMark: { viewModel.mark(entry, correct: $0) })
             }
           }
-          Text("Doğru yazdıklarına ✓, yanlışlara ✗ koy. Yanlışlar Kelime Defterine eklenir.")
-            .font(AppFont.tiny).foregroundStyle(Palette.muted)
         }
         .padding(.horizontal, Metrics.gutter)
         .padding(.bottom, 16)
         .frame(maxWidth: 640)
         .frame(maxWidth: .infinity)
       }
-      Button("Sonuçları kaydet", action: viewModel.finish)
+      Button("Sonuçları gör", action: viewModel.finish)
         .buttonStyle(.chunky)
         .padding(.horizontal, Metrics.gutter)
         .padding(.bottom, 10)

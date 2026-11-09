@@ -19,7 +19,6 @@ let package = Package(
         .product(name: "ContentKit", package: "ContentKit"),
         .product(name: "FirebaseCore", package: "firebase-ios-sdk"),
         .product(name: "FirebaseFirestore", package: "firebase-ios-sdk"),
-        .product(name: "FirebaseStorage", package: "firebase-ios-sdk"),
         .product(name: "FirebaseAppCheck", package: "firebase-ios-sdk"),
         // jarvis:products
       ],

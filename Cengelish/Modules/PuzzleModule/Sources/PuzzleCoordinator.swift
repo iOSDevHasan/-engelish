@@ -2,7 +2,6 @@ import ContentKit
 import DesignKit
 import InjectionKit
 import PaywallModuleInterface
-import PencilKit
 import PurchaseKit
 import PuzzleKit
 import PuzzleModuleInterface
@@ -40,11 +39,17 @@ public final class PuzzleCoordinator: PuzzleModuleInterface {
   }
 
   /// Bitiş ekranını açar.
-  func showFinish(session: PuzzleSession, result: FinishResult, drawing: PKDrawing) {
+  func showFinish(session: PuzzleSession, result: FinishResult, marks: [String: Bool]) {
     let viewModel = FinishViewModel(
-      session: session, result: result, coordinator: self, userData: userData,
+      session: session, result: result, marks: marks, coordinator: self, userData: userData,
       pronouncer: pronouncer)
-    nav.push(FinishView(viewModel: viewModel, theme: theme(for:)).chromeless())
+    nav.push(FinishView(viewModel: viewModel).chromeless())
+  }
+
+  /// Paylaş ekranını açar.
+  func showShare(card: ShareCard) {
+    let viewModel = ShareViewModel(card: card, coordinator: self, photoSaver: PhotoLibrarySaver())
+    nav.push(ShareView(viewModel: viewModel).chromeless())
   }
 
   /// Paketteki sonraki bulmacayı açar.

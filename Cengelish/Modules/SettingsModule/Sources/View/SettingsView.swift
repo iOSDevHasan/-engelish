@@ -1,10 +1,12 @@
 import DesignKit
+import StoreKit
 import SwiftUI
 import UserDataKit
 
 /// Ayarlar listesi.
 struct SettingsView: View {
   @StateObject var viewModel: SettingsViewModel
+  @State private var isManagingSubscription = false
 
   var body: some View {
     VStack(spacing: 0) {
@@ -12,6 +14,10 @@ struct SettingsView: View {
       ScrollView {
         VStack(spacing: 16) {
           SettingsGroup("Profil ve veriler") {
+            Button(action: viewModel.openEditProfile) {
+              SettingsRow("person", "Profili düzenle") { DisclosureValue(viewModel.nickname) }
+            }
+            .buttonStyle(.plain)
             SettingsRow("icloud", "iCloud yedekleme") {
               Toggle("", isOn: Binding(get: { viewModel.iCloudOn }, set: viewModel.setICloud))
                 .labelsHidden().tint(Palette.good)
@@ -50,7 +56,7 @@ struct SettingsView: View {
             }
           }
           SettingsGroup("Bildirimler") {
-            SettingsRow("bell", "Günün Bulmacası hatırlatıcısı") {
+            SettingsRow("bell", "Günün bulmacası") {
               Toggle(
                 "",
                 isOn: Binding(
@@ -67,9 +73,15 @@ struct SettingsView: View {
             }
           }
           SettingsGroup("Abonelik") {
-            Button(action: viewModel.openPaywall) {
-              SettingsRow("crown", viewModel.isPremium ? "Çengelish+ aktif" : "Çengelish+'a geç") {
-                DisclosureValue(viewModel.isPremium ? "Yönet" : "")
+            Button {
+              if viewModel.isPremium {
+                isManagingSubscription = true
+              } else {
+                viewModel.openPaywall()
+              }
+            } label: {
+              SettingsRow("crown", viewModel.subscriptionTitle) {
+                DisclosureValue(viewModel.subscriptionDetail)
               }
             }
             .buttonStyle(.plain)
@@ -86,6 +98,22 @@ struct SettingsView: View {
     }
     .screenBackground()
     .noticeAlert($viewModel.notice)
+    .manageSubscriptionsSheet(isPresented: $isManagingSubscription)
+    .alert("Takma adın", isPresented: $viewModel.isEditingNickname) {
+      TextField("Örn. Deniz", text: nicknameDraft)
+        .textInputAutocapitalization(.words)
+      Button("Kaydet", action: viewModel.saveNickname)
+      Button("Vazgeç", role: .cancel) {}
+    } message: {
+      Text("Boş bırakırsan \"Kalemci\" olarak görünürsün.")
+    }
+  }
+
+  /// Takma ad taslağını sınırla bağlar.
+  private var nicknameDraft: Binding<String> {
+    Binding(
+      get: { viewModel.nicknameDraft },
+      set: { viewModel.nicknameDraft = String($0.prefix(viewModel.nicknameLimit)) })
   }
 
   private var reminderTime: Binding<Date> {

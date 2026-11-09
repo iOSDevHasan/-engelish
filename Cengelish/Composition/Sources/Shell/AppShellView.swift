@@ -14,6 +14,7 @@ import UserDataKit
 /// Uygulamanın kök görünümü: profil yoksa onboarding, varsa sekmeli ana yapı.
 public struct AppShellView: View {
   @StateObject private var model = AppShellModel()
+  @Environment(\.scenePhase) private var scenePhase
 
   /// Kök görünümü oluşturur.
   public init() {}
@@ -29,6 +30,9 @@ public struct AppShellView: View {
     .preferredColorScheme(model.colorScheme)
     .chromeless()
     .task { await model.start() }
+    .onChange(of: scenePhase) { _, phase in
+      if phase == .background { model.publishWidgets() }
+    }
   }
 }
 
@@ -43,6 +47,8 @@ final class AppShellModel: ObservableObject {
   @Inject private var onboarding: OnboardingModuleInterface
   private var cancellables: Set<AnyCancellable> = []
   private var didStart = false
+  /// Widget anlık görüntüsünü yazan yardımcı.
+  private let widgets = WidgetPublisher()
 
   /// Onboarding akışı; bitince kök yeniden değerlendirilir.
   var onboardingView: AnyView {
@@ -57,12 +63,24 @@ final class AppShellModel: ObservableObject {
     userData.changes
       .sink { [weak self] in self?.reload() }
       .store(in: &cancellables)
+    userData.changes
+      .debounce(for: .seconds(1), scheduler: RunLoop.main)
+      .sink { [weak self] in self?.publishWidgets() }
+      .store(in: &cancellables)
+    publishWidgets()
     await entitlements.loadProducts()
     let owned = entitlements.ownedProductIds
     let packs = await content.packs()
     let entitled = Set(
       packs.filter { entitlements.isPremium || owned.contains($0.productId ?? "-") }.map(\.id))
     await content.refreshFromRemote(entitledPackIds: entitled)
+    publishWidgets()
+  }
+
+  /// Widget'ların verisini ve seri uyarısı bildirimini günceller.
+  func publishWidgets() {
+    ReminderScheduler.refreshStreakWarning(settings: userData.settings, stats: userData.stats)
+    Task { await widgets.publish() }
   }
 
   /// Profil ve görünüm tercihini yeniden okur.

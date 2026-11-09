@@ -10,7 +10,7 @@ Izgara düzeni (çengel / İsveç tipi):
 
 Çıktılar:
   - ../../Cengelish/AppCore/ContentKit/Sources/Resources/starter.json  (uygulamaya gömülü)
-  - out/firestore/*.json ve out/storage/packs/*.json.gz (Firebase'e yükleme için)
+  - out/firestore/*.json ve out/firestore/packContents/*.json.gz (Firebase'e yükleme için)
 
 Kullanım: python3 generate.py [--seed 7] [--start 2026-11-09] [--days 30]
 """
@@ -42,7 +42,9 @@ class Word:
     clue: str
     meaning: str
     ipa: str
+    ipa_uk: str
     example: str
+    example_tr: str
     tags: tuple[str, ...]
 
     @property
@@ -61,16 +63,19 @@ def load_words() -> list[Word]:
         if not raw.strip() or raw.startswith("#"):
             continue
         parts = raw.split("|")
-        if len(parts) != 8:
+        if len(parts) != 10:
             raise SystemExit(f"Bozuk satır: {raw}")
-        en, level, pos, clue, meaning, ipa, example, tags = parts
+        en, level, pos, clue, meaning, ipa, ipa_uk, example, example_tr, tags = parts
         if not en.isalpha() or not en.isascii():
             raise SystemExit(f"Cevap sadece A-Z olmalı: {en}")
         if en.lower() in seen:
             raise SystemExit(f"Tekrar eden kelime: {en}")
         seen.add(en.lower())
         words.append(
-            Word(en, level, pos, clue, meaning, ipa, example, tuple(t for t in tags.split(",") if t))
+            Word(
+                en, level, pos, clue, meaning, ipa, ipa_uk, example, example_tr,
+                tuple(t for t in tags.split(",") if t),
+            )
         )
     return words
 
@@ -160,9 +165,13 @@ def template_is_valid(t: Template) -> bool:
 
 
 class Filler:
-    def __init__(self, pool: list[Word], usage: dict[str, int], rng: random.Random):
+    def __init__(
+        self, pool: list[Word], usage: dict[str, int], rng: random.Random,
+        prefer: set[str] | None = None,
+    ):
         self.rng = rng
         self.usage = usage
+        self.prefer = prefer or set()
         self.by_len: dict[int, list[Word]] = {}
         for w in pool:
             self.by_len.setdefault(len(w.answer), []).append(w)
@@ -177,7 +186,8 @@ class Filler:
             if all(p is None or p == ch for p, ch in zip(pattern, w.answer)):
                 out.append(w)
         self.rng.shuffle(out)
-        out.sort(key=lambda w: self.usage.get(w.en, 0))
+        # Paketin kendi kelimeleri (etiketli) önce, sonra az kullanılanlar.
+        out.sort(key=lambda w: (w.en not in self.prefer, self.usage.get(w.en, 0)))
         return out
 
     def fill(self, t: Template) -> dict[int, Word] | None:
@@ -218,10 +228,13 @@ class Filler:
         return False
 
 
-def make_puzzle(pid, pack_id, level, kind, size, pool, usage, rng, prefer_long) -> dict:
+def make_puzzle(pid, pack_id, level, kind, size, pool, usage, rng, prefer_long, prefer=None) -> dict:
     width, height = size
-    filler = Filler(pool, usage, rng)
+    filler = Filler(pool, usage, rng, prefer)
     lengths = {n: len(ws) for n, ws in filler.by_len.items()}
+    # Etiketli paketlerde birkaç aday üretip paketin kendi kelimesi en çok olanı seç.
+    wanted = 12 if prefer and len(prefer) < len(pool) else 1
+    best = None
     for _ in range(3000):
         t = build_template(width, height, rng, prefer_long, lengths)
         if not template_is_valid(t):
@@ -229,6 +242,14 @@ def make_puzzle(pid, pack_id, level, kind, size, pool, usage, rng, prefer_long) 
         result = filler.fill(t)
         if result is None:
             continue
+        score = sum(1 for w in result.values() if w.en in (prefer or ()))
+        ratio = score / max(len(result), 1)
+        if best is None or ratio > best[0]:
+            best = (ratio, t, result)
+        wanted -= 1
+        if wanted > 0:
+            continue
+        _, t, result = best
         entries = []
         for i, slot in enumerate(t.slots):
             w = result[i]
@@ -263,22 +284,49 @@ def make_puzzle(pid, pack_id, level, kind, size, pool, usage, rng, prefer_long) 
 # MARK: - Packs
 
 PACKS = [
-    # id, başlık, alt başlık, tür, seviye, adet, ücretsiz adet, boyut, ürün kimliği
-    ("a1", "A1 · Başlangıç", "Renkler, sayılar, aile, ev", "level", "A1", 12, 8, (7, 7), None),
-    ("a2", "A2 · Temel", "Günlük hayat, seyahat, hava", "level", "A2", 12, 6, (7, 9), None),
-    ("b1", "B1 · Orta", "Duygular, iş, toplum", "level", "B1", 12, 0, (7, 9), None),
-    ("b2", "B2 · İleri-orta", "Soyut kavramlar, sınav kelimeleri", "level", "B2", 10, 0, (7, 9), None),
-    ("yds", "YDS Kelime Paketi", "YDS'de sık çıkan akademik kelimeler", "exam", "C1", 10, 0, (7, 9),
-     "com.hasangurbuz.cengelish.pack.yds"),
+    # id, başlık, alt başlık, tür, seviye, adet, ücretsiz adet, boyut, ürün kimliği, etiket
+    ("a1", "A1 · Başlangıç", "Renkler, sayılar, aile, ev", "level", "A1", 12, 8, (7, 7), None, None),
+    ("a2", "A2 · Temel", "Günlük hayat, seyahat, hava", "level", "A2", 12, 6, (7, 9), None, None),
+    ("b1", "B1 · Orta", "Duygular, iş, toplum", "level", "B1", 12, 0, (7, 9), None, None),
+    ("b2", "B2 · İleri-orta", "Soyut kavramlar, sınav kelimeleri", "level", "B2", 12, 0, (7, 9), None, None),
+    ("c1", "C1 · İleri", "Akademik ve nadir kelimeler", "level", "C1", 10, 0, (7, 9), None, None),
+    ("yds", "YDS Kelime Paketi", "YDS'de sık çıkan akademik kelimeler", "exam", "C1", 20, 0, (7, 9),
+     "com.hasangurbuz.cengelish.pack.yds", "yds"),
+    ("yokdil", "YÖKDİL Kelime Paketi", "Fen, sağlık ve sosyal bilimler kelimeleri", "exam", "C1", 20,
+     0, (7, 9), "com.hasangurbuz.cengelish.pack.yokdil", "yokdil"),
+    ("lgs", "LGS Kelime Paketi", "8. sınıf müfredatından kelimeler", "exam", "A2", 20, 0, (7, 9),
+     "com.hasangurbuz.cengelish.pack.lgs", "lgs"),
+    ("ielts", "IELTS Kelime Paketi", "Akademik ve günlük konular", "exam", "B2", 20, 0, (7, 9),
+     "com.hasangurbuz.cengelish.pack.ielts", "ielts"),
+    ("toefl", "TOEFL Kelime Paketi", "Akademik dersler ve kampüs hayatı", "exam", "B2", 20, 0, (7, 9),
+     "com.hasangurbuz.cengelish.pack.toefl", "toefl"),
+    ("mutfak", "Mutfak", "Yemek, malzemeler, tarifler", "theme", "A2", 20, 20, (7, 9), None, "mutfak"),
+    ("seyahat", "Seyahat", "Havalimanı, otel, gezi", "theme", "A2", 20, 20, (7, 9), None, "seyahat"),
+    ("is", "İş", "Ofis, toplantı, kariyer", "theme", "B1", 20, 0, (7, 9), None, "is"),
+    ("futbol", "Futbol", "Maç, gol, taktik", "theme", "A2", 20, 0, (7, 9), None, "futbol"),
+    ("doga", "Doğa", "Hayvanlar, bitkiler, hava", "theme", "A2", 20, 0, (7, 9), None, "doga"),
+    ("teknoloji", "Teknoloji", "Bilgisayar, internet, cihazlar", "theme", "B1", 20, 0, (7, 9), None,
+     "teknoloji"),
 ]
 
 
-def pool_for(level: str, words: list[Word], exam_tag: str | None = None) -> list[Word]:
+def pool_for(level: str, words: list[Word], tag: str | None = None) -> tuple[list[Word], set[str]]:
+    """Paketin havuzu ve öncelikli (etiketli) kelimeleri.
+
+    Seviye paketlerinde ana seviye + bir alt seviye dolgu. Sınav ve tema paketlerinde etiketli
+    kelimeler (her seviyeden) önce gelir; ızgara dolsun diye yakın seviyelerden dolgu eklenir.
+    """
     idx = LEVELS.index(level)
-    main = [w for w in words if w.level == level and (exam_tag is None or exam_tag in w.tags)]
-    lower = [w for w in words if LEVELS.index(w.level) == idx - 1]
-    # Ana seviye kelimeleri öne, bir alt seviye dolgu olarak.
-    return main + lower
+    if tag is None:
+        main = [w for w in words if w.level == level]
+        lower = [w for w in words if LEVELS.index(w.level) == idx - 1]
+        return main + lower, {w.en for w in main}
+    tagged = [w for w in words if tag in w.tags]
+    near = [
+        w for w in words
+        if tag not in w.tags and abs(LEVELS.index(w.level) - idx) <= 1
+    ]
+    return tagged + near, {w.en for w in tagged}
 
 
 def main() -> None:
@@ -292,12 +340,15 @@ def main() -> None:
     usage: dict[str, int] = {}
 
     packs, puzzles = [], []
-    for order, (pid, title, subtitle, kind, level, count, free, size, product) in enumerate(PACKS):
-        pool = pool_for(level, words, "yds" if pid == "yds" else None)
+    for order, (pid, title, subtitle, kind, level, count, free, size, product, tag) in enumerate(
+        PACKS
+    ):
+        pool, prefer = pool_for(level, words, tag)
         ids = []
         for n in range(1, count + 1):
             pz = make_puzzle(
-                f"{pid}_{n:02d}", pid, level, "pack", size, pool, usage, rng, prefer_long=level != "A1"
+                f"{pid}_{n:02d}", pid, level, "pack", size, pool, usage, rng, prefer_long=level != "A1",
+                prefer=prefer,
             )
             puzzles.append(pz)
             ids.append(pz["id"])
@@ -318,7 +369,10 @@ def main() -> None:
 
     dailies = []
     start = dt.date.fromisoformat(args.start)
-    daily_pool = pool_for("A2", words) + [w for w in words if w.level == "B1"]
+    exam_tags = {"yds", "yokdil", "lgs", "ielts", "toefl", "c1"}
+    daily_pool = [
+        w for w in words if w.level in ("A1", "A2", "B1") and not exam_tags & set(w.tags)
+    ]
     for d in range(args.days):
         day = start + dt.timedelta(days=d)
         pz = make_puzzle(
@@ -338,7 +392,9 @@ def main() -> None:
             "clue": w.clue,
             "meaning": w.meaning,
             "ipa": w.ipa,
+            "ipaUK": w.ipa_uk,
             "example": w.example,
+            "exampleTr": w.example_tr,
             "tags": list(w.tags),
         }
         for w in words
@@ -360,7 +416,7 @@ def main() -> None:
 
     # Firebase çıktıları: Firestore manifest + Storage paket dosyaları.
     fs = OUT / "firestore"
-    st = OUT / "storage" / "packs"
+    st = fs / "packContents"
     fs.mkdir(parents=True, exist_ok=True)
     st.mkdir(parents=True, exist_ok=True)
     word_by_id = {w["id"]: w for w in word_json}
@@ -369,8 +425,8 @@ def main() -> None:
         pz = [x for x in puzzles if x["packId"] == p["id"]]
         wids = {e["wordId"] for x in pz for e in x["entries"]}
         payload = {"pack": p, "puzzles": pz, "words": [word_by_id[i] for i in sorted(wids)]}
-        path = f"packs/{p['id']}_v{CONTENT_VERSION}.json.gz"
-        (OUT / "storage" / path).write_bytes(
+        path = f"packContents/{p['id']}_v{CONTENT_VERSION}"
+        (fs / f"{path}.json.gz").write_bytes(
             gzip.compress(json.dumps(payload, ensure_ascii=False).encode("utf-8"))
         )
         manifest.append({**p, "contentPath": path, "contentVersion": CONTENT_VERSION})

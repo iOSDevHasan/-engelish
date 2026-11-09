@@ -12,6 +12,8 @@ public protocol EntitlementProviding: AnyObject {
   var ownedProductIds: Set<String> { get }
   /// Paywall ürünleri (yüklenmediyse boş).
   var products: [StoreProduct] { get }
+  /// Aktif Çengelish+ aboneliği (plan ve yenilenme tarihi); yoksa nil.
+  var activeSubscription: ActiveSubscription? { get }
   /// Ürünleri App Store'dan yükler.
   func loadProducts() async
   /// Ürünü satın alır.
@@ -21,6 +23,9 @@ public protocol EntitlementProviding: AnyObject {
 }
 
 extension EntitlementProviding {
+  /// Varsayılan: abonelik bilgisi yok (önizleme ve test sahteleri için).
+  public var activeSubscription: ActiveSubscription? { nil }
+
   /// Paketin açık olup olmadığı (premium ya da paket satın alınmış).
   public func canAccess(productId: String?) -> Bool {
     isPremium || productId.map { ownedProductIds.contains($0) } ?? false

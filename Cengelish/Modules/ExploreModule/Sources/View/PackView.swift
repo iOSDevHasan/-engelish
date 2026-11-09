@@ -9,7 +9,7 @@ struct PackView: View {
   var body: some View {
     VStack(spacing: 0) {
       NavHeader("", onLeading: viewModel.back) {
-        if viewModel.tiles.contains(where: { $0.state == .locked }) {
+        if viewModel.hasLockedTiles {
           Pill("Premium", systemImage: "crown.fill", tone: .gold)
         }
       }
@@ -17,21 +17,20 @@ struct PackView: View {
         ScrollView {
           VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 6) {
-              Eyebrow(pack.kind == .exam ? "Sınav paketi" : "Seviye paketi")
+              Eyebrow(PackRules.eyebrow(for: pack.kind))
               Text(pack.title).font(AppFont.title).foregroundStyle(Palette.ink)
-              Text("\(pack.puzzleIds.count) bulmaca · \(pack.wordCount) kelime · \(pack.subtitle)")
+              Text(viewModel.summary)
                 .font(AppFont.caption).foregroundStyle(Palette.muted)
+                .fixedSize(horizontal: false, vertical: true)
               HStack {
-                Text("\(viewModel.solved) / \(pack.puzzleIds.count) tamamlandı").font(
-                  AppFont.caption)
+                Text("\(viewModel.solved) / \(pack.puzzleIds.count) tamamlandı")
+                  .font(AppFont.caption).foregroundStyle(Palette.ink)
                 Spacer()
-                Text(
-                  "%\(Int(Double(viewModel.solved) / Double(max(pack.puzzleIds.count, 1)) * 100))"
-                )
-                .font(AppFont.caption).foregroundStyle(Palette.muted)
+                Text("%\(Int((viewModel.progress * 100).rounded()))")
+                  .font(AppFont.caption).foregroundStyle(Palette.muted)
               }
               .padding(.top, 6)
-              ProgressBar(value: Double(viewModel.solved) / Double(max(pack.puzzleIds.count, 1)))
+              ProgressBar(value: viewModel.progress)
             }
             LazyVGrid(
               columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 5), spacing: 10
@@ -50,8 +49,8 @@ struct PackView: View {
           .frame(maxWidth: 640)
           .frame(maxWidth: .infinity)
         }
-        if let current = viewModel.currentTile {
-          Button(current.state == .locked ? "Kilidi aç" : "Bulmaca \(current.number)'i çöz") {
+        if let current = viewModel.currentTile, let title = viewModel.primaryTitle {
+          Button(title) {
             viewModel.open(current)
           }
           .buttonStyle(.chunky)
@@ -68,55 +67,60 @@ struct PackView: View {
   }
 }
 
-/// Bulmaca karesi.
+/// Bulmaca karesi: bitti (yıldızlar), sıradaki, açık ya da kilitli.
 private struct TileView: View {
   let tile: PuzzleTile
 
   var body: some View {
     VStack(spacing: 2) {
-      Text("\(tile.number)").font(AppFont.headline)
+      Text("\(tile.number)").font(AppFont.rounded(18, weight: .black))
       switch tile.state {
       case .done(let stars):
-        HStack(spacing: 0) {
+        HStack(spacing: 1) {
           ForEach(0..<3, id: \.self) { index in
-            Image(systemName: "star.fill").font(.system(size: 8))
-              .foregroundStyle(index < stars ? Palette.gold : Palette.lineStrong)
+            Image(systemName: "star.fill").font(.system(size: 8, weight: .bold))
+              .foregroundStyle(Palette.streak.opacity(index < stars ? 1 : 0.25))
           }
         }
       case .current:
-        Text("Sıradaki").font(.system(size: 9, weight: .heavy, design: .rounded))
+        Text("Sıradaki").font(.system(size: 9, weight: .black, design: .rounded))
           .lineLimit(1).minimumScaleFactor(0.7)
       case .open:
         EmptyView()
       case .locked:
-        Image(systemName: "lock.fill").font(.system(size: 10, weight: .bold))
+        Image(systemName: "lock.fill").font(.system(size: 11, weight: .bold))
       }
     }
-    .foregroundStyle(foreground)
-    .frame(maxWidth: .infinity, minHeight: 64)
-    .background(RoundedRectangle(cornerRadius: 16, style: .continuous).fill(background))
+    .foregroundStyle(tile.state == .current ? Color.white : Palette.ink)
+    .frame(maxWidth: .infinity)
+    .aspectRatio(1, contentMode: .fit)
+    .background(
+      RoundedRectangle(cornerRadius: 16, style: .continuous)
+        .fill(background)
+        .shadow(color: tile.state == .current ? Palette.buttonShadow : .clear, radius: 0, y: 4)
+    )
     .overlay(
       RoundedRectangle(cornerRadius: 16, style: .continuous)
-        .strokeBorder(tile.state == .current ? Palette.accent : .clear, lineWidth: 2)
+        .strokeBorder(border, lineWidth: 1.5)
     )
+    .opacity(tile.state == .locked ? 0.5 : 1)
+    .accessibilityElement(children: .ignore)
     .accessibilityLabel(label)
   }
 
   private var background: Color {
     switch tile.state {
-    case .done: Palette.goodBackground
-    case .current: Palette.selection
-    case .open: Palette.surface
-    case .locked: Palette.surface2
+    case .done: Palette.selection
+    case .current: Palette.buttonFill
+    case .open, .locked: Palette.surface
     }
   }
 
-  private var foreground: Color {
+  private var border: Color {
     switch tile.state {
-    case .done: Palette.good
-    case .current: Palette.accent
-    case .open: Palette.ink
-    case .locked: Palette.muted
+    case .done: .clear
+    case .current: Palette.buttonFill
+    case .open, .locked: Palette.line
     }
   }
 

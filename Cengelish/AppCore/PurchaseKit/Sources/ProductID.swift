@@ -8,11 +8,53 @@ public enum ProductID {
   public static let plusYearly = "com.hasangurbuz.cengelish.plus.yearly"
   /// YDS paketi (tek seferlik).
   public static let packYDS = "com.hasangurbuz.cengelish.pack.yds"
+  /// YÖKDİL paketi (tek seferlik).
+  public static let packYOKDIL = "com.hasangurbuz.cengelish.pack.yokdil"
+  /// LGS paketi (tek seferlik).
+  public static let packLGS = "com.hasangurbuz.cengelish.pack.lgs"
+  /// IELTS paketi (tek seferlik).
+  public static let packIELTS = "com.hasangurbuz.cengelish.pack.ielts"
+  /// TOEFL paketi (tek seferlik).
+  public static let packTOEFL = "com.hasangurbuz.cengelish.pack.toefl"
 
   /// Abonelik ürünleri.
   public static let subscriptions: [String] = [plusYearly, plusMonthly]
+  /// Tek seferlik sınav paketleri.
+  public static let examPacks: [String] = [packYDS, packYOKDIL, packLGS, packIELTS, packTOEFL]
   /// Tüm ürünler.
-  public static let all: [String] = subscriptions + [packYDS]
+  public static let all: [String] = subscriptions + examPacks
+
+  /// Sınav paketi ürününün ekranda görünen sınav adı (YDS, YÖKDİL...); sınav paketi değilse nil.
+  public static func examTitle(for productId: String) -> String? {
+    switch productId {
+    case packYDS: "YDS"
+    case packYOKDIL: "YÖKDİL"
+    case packLGS: "LGS"
+    case packIELTS: "IELTS"
+    case packTOEFL: "TOEFL"
+    default: nil
+    }
+  }
+}
+
+/// Aktif Çengelish+ aboneliğinin özeti.
+public struct ActiveSubscription: Equatable, Sendable {
+  /// Abonelik ürün kimliği (`ProductID.plusYearly` / `plusMonthly`).
+  public let productId: String
+  /// Sonraki yenilenme (ya da yenilenmeyecekse bitiş) tarihi.
+  public let renewalDate: Date?
+  /// Dönem sonunda otomatik yenilenecek mi.
+  public let willAutoRenew: Bool
+
+  /// Abonelik özetini oluşturur.
+  public init(productId: String, renewalDate: Date?, willAutoRenew: Bool = true) {
+    self.productId = productId
+    self.renewalDate = renewalDate
+    self.willAutoRenew = willAutoRenew
+  }
+
+  /// Planın Türkçe adı ("Yıllık" / "Aylık").
+  public var planTitle: String { productId == ProductID.plusYearly ? "Yıllık" : "Aylık" }
 }
 
 /// Paywall'da gösterilen ürün bilgisi.

@@ -55,11 +55,16 @@ public struct Word: Codable, Identifiable, Hashable, Sendable {
   public let example: String
   /// Sınav ve tema etiketleri.
   public let tags: [String]
+  /// İngiliz telaffuzu (IPA); yoksa Amerikan kullanılır.
+  public let ipaUK: String?
+  /// Örnek cümlenin Türkçesi.
+  public let exampleTr: String?
 
   /// Kelimeyi tüm alanlarıyla oluşturur.
   public init(
     id: String, en: String, level: CEFRLevel, pos: String, clue: String, meaning: String,
-    ipa: String, example: String, tags: [String] = []
+    ipa: String, example: String, tags: [String] = [], ipaUK: String? = nil,
+    exampleTr: String? = nil
   ) {
     self.id = id
     self.en = en
@@ -70,7 +75,12 @@ public struct Word: Codable, Identifiable, Hashable, Sendable {
     self.ipa = ipa
     self.example = example
     self.tags = tags
+    self.ipaUK = ipaUK
+    self.exampleTr = exampleTr
   }
+
+  /// Seçilen aksana göre IPA (`uk` için İngiliz, yoksa Amerikan).
+  public func ipa(british: Bool) -> String { british ? (ipaUK ?? ipa) : ipa }
 
   /// Sözcük türünün Türkçe kısaltması.
   public var posTitle: String {

@@ -7,7 +7,8 @@
 
 ```swift
 struct CrosswordLayout   // kind(at:), entries(at:), entry(at:preferring:), entry(after:step:), answer(at:)
-struct PuzzleGridView, MiniGridView, GridGeometry (sabit çizim geometrisi)
+struct PuzzleGridView, GridGeometry (sabit çizim geometrisi)
+struct MiniGridView      // init(puzzle:theme:cellSize:highlighted:active:) — vurgu verilmezse ilk yatay kelime
 struct PuzzleTheme      // canli, kagit, gece, okyanus, pastel*, kareli*; resolve(id:isDark:autoNight:highContrast:)
 enum PenStyle, PenColorRow, ThemeOptionCard, SamplePuzzles.demo
 ```

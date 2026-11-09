@@ -30,7 +30,7 @@ struct DataView: View {
               Label {
                 VStack(alignment: .leading, spacing: 2) {
                   Text("iCloud yedekleme").font(AppFont.bodyBold)
-                  Text("iPhone ve iPad arasında senkron · sadece senin iCloud hesabında")
+                  Text("iPhone ve iPad'in arasında senkron")
                     .font(AppFont.caption).foregroundStyle(Palette.muted)
                 }
               } icon: {
@@ -38,6 +38,31 @@ struct DataView: View {
               }
             }
             .tint(Palette.good)
+            HStack {
+              Text("Son yedek").foregroundStyle(Palette.muted)
+              Spacer()
+              if let text = viewModel.lastBackupText() {
+                HStack(spacing: 4) {
+                  Text(text).foregroundStyle(Palette.ink)
+                  Image(systemName: "checkmark").font(.system(size: 11, weight: .black))
+                    .foregroundStyle(Palette.good)
+                }
+                .accessibilityElement(children: .combine)
+              } else {
+                Text("Henüz yok").foregroundStyle(Palette.muted)
+              }
+            }
+            .font(AppFont.caption)
+            Button {
+              if let url = viewModel.backupNow() { exportURL = url }
+            } label: {
+              Label("Şimdi yedekle", systemImage: "arrow.clockwise")
+            }
+            .buttonStyle(ChunkyButtonStyle(.secondary, compact: true))
+            .overlay(
+              RoundedRectangle(cornerRadius: Metrics.buttonRadius, style: .continuous)
+                .strokeBorder(Palette.line, lineWidth: 2)
+                .allowsHitTesting(false))
             if viewModel.iCloudOn && !viewModel.iCloudAvailable {
               Label(
                 "Bu cihazda iCloud'a giriş yapılmamış. Veriler şimdilik sadece cihazda.",

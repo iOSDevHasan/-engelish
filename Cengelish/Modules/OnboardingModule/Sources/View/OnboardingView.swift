@@ -24,6 +24,12 @@ struct OnboardingView: View {
     }
     .screenBackground()
     .animation(.snappy, value: viewModel.step)
+    .sheet(item: $viewModel.levelTest) { test in
+      LevelTestView(viewModel: test, onAccept: viewModel.acceptLevel) {
+        viewModel.levelTest = nil
+      }
+      .presentationDragIndicator(.visible)
+    }
   }
 
   @ViewBuilder
@@ -31,7 +37,7 @@ struct OnboardingView: View {
     switch viewModel.step {
     case .welcome: WelcomeStep()
     case .profile: ProfileStep(viewModel: viewModel)
-    case .level: LevelStep(selection: $viewModel.level)
+    case .level: LevelStep(selection: $viewModel.level, onTest: viewModel.openLevelTest)
     case .goal: GoalStep(viewModel: viewModel)
     case .data: DataStep(useICloud: $viewModel.useICloud)
     }
@@ -39,9 +45,10 @@ struct OnboardingView: View {
 
   private var footer: some View {
     VStack(spacing: 10) {
-      Button(
-        viewModel.step == .welcome ? "Başlayalım" : viewModel.step == .data ? "Bitir" : "Devam"
-      ) {
+      if viewModel.step == .welcome {
+        PageDots(count: 3, current: 0).padding(.bottom, 4)
+      }
+      Button(footerTitle) {
         viewModel.next()
       }
       .buttonStyle(.chunky)
@@ -54,6 +61,33 @@ struct OnboardingView: View {
     .padding(.horizontal, Metrics.gutter)
     .padding(.bottom, 12)
     .frame(maxWidth: 560)
+  }
+
+  /// Alt butonun metni.
+  private var footerTitle: String {
+    switch viewModel.step {
+    case .welcome: "Başlayalım"
+    case .data: "Bulmacaya başla"
+    default: "Devam"
+    }
+  }
+}
+
+/// Karşılama ekranındaki sayfa noktaları.
+private struct PageDots: View {
+  let count: Int
+  let current: Int
+
+  var body: some View {
+    HStack(spacing: 6) {
+      ForEach(0..<count, id: \.self) { index in
+        Capsule()
+          .fill(index == current ? Palette.accent : Palette.lineStrong)
+          .frame(width: index == current ? 22 : 8, height: 8)
+      }
+    }
+    .frame(maxWidth: .infinity)
+    .accessibilityHidden(true)
   }
 }
 
@@ -117,10 +151,10 @@ private struct ProfileStep: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 16) {
       Text("Seni tanıyalım").font(AppFont.title).foregroundStyle(Palette.ink)
-      Text("Kendi Kalemo'nu oluştur. Hesap gerekmez, profilin bu cihazda kalır.")
+      Text("Kendi Kalemo'nu oluştur. Hesap gerekmez, profilin bu cihazda saklanır.")
         .font(AppFont.body).foregroundStyle(Palette.muted)
       AvatarView(viewModel.avatar, size: 120).frame(maxWidth: .infinity)
-      Text("Renk").font(AppFont.section).foregroundStyle(Palette.ink)
+      Text("Kalemo rengi").font(AppFont.section).foregroundStyle(Palette.ink)
       BodyColorPicker(selection: $viewModel.avatar.body)
       Text("Aksesuar").font(AppFont.section).foregroundStyle(Palette.ink)
       AccessoryPicker(
@@ -128,7 +162,7 @@ private struct ProfileStep: View {
         body: viewModel.avatar.body)
       Text("Arka plan").font(AppFont.section).foregroundStyle(Palette.ink)
       BackgroundPicker(selection: $viewModel.avatar.background) { $0 == .night || $0 == .coral }
-      Text("Takma ad").font(AppFont.section).foregroundStyle(Palette.ink)
+      Text("Takma adın").font(AppFont.section).foregroundStyle(Palette.ink)
       HStack {
         TextField(
           "Örn. Deniz",
@@ -152,11 +186,12 @@ private struct ProfileStep: View {
 /// 2 · Seviye seçimi.
 private struct LevelStep: View {
   @Binding var selection: CEFRLevel?
+  let onTest: () -> Void
 
   var body: some View {
     VStack(alignment: .leading, spacing: 12) {
-      Text("İngilizcen ne seviyede?").font(AppFont.title).foregroundStyle(Palette.ink)
-      Text("Bulmacaları buna göre seçeriz. Sonra değiştirebilirsin.")
+      Text("Seviyeni seç").font(AppFont.title).foregroundStyle(Palette.ink)
+      Text("Bulmacalar seviyene göre hazırlanır. İstediğin zaman değiştirebilirsin.")
         .font(AppFont.body).foregroundStyle(Palette.muted)
       ForEach(CEFRLevel.allCases, id: \.self) { level in
         Button {
@@ -178,8 +213,30 @@ private struct LevelStep: View {
         }
         .buttonStyle(.plain)
       }
-      Button("Bilmiyorum, A1'den başlayayım") { selection = .a1 }
-        .buttonStyle(ChunkyButtonStyle(.ghost))
+      Button(action: onTest) {
+        HStack(spacing: 12) {
+          Image(systemName: "magnifyingglass")
+            .font(.system(size: 20, weight: .bold))
+            .foregroundStyle(Palette.accent)
+            .frame(width: 40, height: 40)
+          VStack(alignment: .leading, spacing: 2) {
+            Text("Emin değilim").font(AppFont.bodyBold).foregroundStyle(Palette.ink)
+            Text("2 dakikalık seviye testi").font(AppFont.caption).foregroundStyle(Palette.muted)
+          }
+          Spacer()
+          Image(systemName: "chevron.right")
+            .font(.system(size: 14, weight: .bold))
+            .foregroundStyle(Palette.muted)
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        .overlay(
+          RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
+            .strokeBorder(Palette.lineStrong, style: StrokeStyle(lineWidth: 2, dash: [6, 5])))
+      }
+      .buttonStyle(.plain)
     }
   }
 }
@@ -191,43 +248,74 @@ private struct GoalStep: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 14) {
       Text("Amacın ne?").font(AppFont.title).foregroundStyle(Palette.ink)
-      Text("Birden fazla seçebilirsin. Sınav seçersen o paketi öneririz.")
+      Text("Sana uygun paketleri öne çıkaralım. Birden fazla seçebilirsin.")
         .font(AppFont.body).foregroundStyle(Palette.muted)
       FlowChips(
         items: LearningGoal.allCases, isOn: { viewModel.goals.contains($0) },
         title: \.title, onTap: viewModel.toggle)
       Text("Günlük hedef").font(AppFont.section).foregroundStyle(Palette.ink).padding(.top, 6)
       HStack(spacing: 10) {
-        ForEach([1, 2, 3], id: \.self) { count in
+        ForEach(DailyGoalOption.all) { option in
+          let isOn = viewModel.dailyGoal == option.count
           Button {
-            viewModel.dailyGoal = count
+            viewModel.dailyGoal = option.count
           } label: {
             VStack(spacing: 2) {
-              Text("\(count)").font(AppFont.title)
-              Text("bulmaca").font(AppFont.tiny)
+              Text("\(option.count)").font(AppFont.title)
+                .foregroundStyle(isOn ? Palette.accent : Palette.ink)
+              Text("bulmaca").font(AppFont.tiny).foregroundStyle(Palette.ink)
+              Text("\(option.minutes) · \(option.pace)").font(AppFont.tiny)
+                .foregroundStyle(Palette.muted)
+                .padding(.top, 2)
             }
-            .foregroundStyle(viewModel.dailyGoal == count ? Palette.accent : Palette.ink)
-            .frame(maxWidth: .infinity, minHeight: 74)
+            .frame(maxWidth: .infinity, minHeight: 86)
             .background(
               RoundedRectangle(cornerRadius: 18)
-                .fill(viewModel.dailyGoal == count ? Palette.selection : Palette.surface)
+                .fill(isOn ? Palette.selection : Palette.surface)
                 .overlay(
                   RoundedRectangle(cornerRadius: 18).strokeBorder(
-                    viewModel.dailyGoal == count ? Palette.accent : Palette.line, lineWidth: 2)))
+                    isOn ? Palette.accent : Palette.line, lineWidth: 2)))
           }
           .buttonStyle(.plain)
+          .accessibilityAddTraits(isOn ? .isSelected : [])
         }
       }
-      Toggle(isOn: $viewModel.reminderOn) {
-        VStack(alignment: .leading, spacing: 2) {
-          Text("Günlük hatırlatıcı").font(AppFont.bodyBold)
-          Text("Her akşam 20.00'de Günün Bulmacası").font(AppFont.caption)
-            .foregroundStyle(Palette.muted)
+      VStack(spacing: 10) {
+        Toggle(isOn: $viewModel.reminderOn) {
+          Label {
+            VStack(alignment: .leading, spacing: 2) {
+              Text("Günlük hatırlatıcı").font(AppFont.bodyBold).foregroundStyle(Palette.ink)
+              Text(viewModel.reminderDetail).font(AppFont.caption)
+                .foregroundStyle(Palette.muted)
+            }
+          } icon: {
+            Image(systemName: "bell.fill").foregroundStyle(Palette.accent)
+          }
+        }
+        .tint(Palette.good)
+        if viewModel.reminderOn {
+          DatePicker("Saat", selection: reminderTime, displayedComponents: .hourAndMinute)
+            .font(AppFont.body)
+            .foregroundStyle(Palette.ink)
         }
       }
-      .tint(Palette.good)
       .card(padding: 14)
     }
+  }
+
+  /// Hatırlatıcı saatini `Date` olarak bağlar.
+  private var reminderTime: Binding<Date> {
+    Binding(
+      get: {
+        Calendar.current.date(
+          from: DateComponents(hour: viewModel.reminderHour, minute: viewModel.reminderMinute))
+          ?? .now
+      },
+      set: { date in
+        let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+        viewModel.reminderHour = parts.hour ?? 20
+        viewModel.reminderMinute = parts.minute ?? 0
+      })
   }
 }
 
@@ -239,22 +327,36 @@ private struct DataStep: View {
     VStack(alignment: .leading, spacing: 14) {
       Text("Verilerin sende kalsın").font(AppFont.title).foregroundStyle(Palette.ink)
       Text(
-        "Hesap açmıyoruz. Profilin, ilerlemen ve defterin cihazında saklanır. İstersen kendi iCloud hesabına yedekleriz."
+        "Profilin, ilerlemen ve kelime defterin bu cihazda saklanır. İstersen iCloud ile yedekle."
       )
       .font(AppFont.body).foregroundStyle(Palette.muted)
       choice(
         isOn: !useICloud, icon: "iphone", title: "Sadece bu cihazda",
-        detail: "Telefon değişirse veriler taşınmaz; dosyaya dışa aktarabilirsin."
+        detail: "İnternet ve hesap gerekmez. Uygulamayı silersen veriler de silinir."
       ) { useICloud = false }
       choice(
         isOn: useICloud, icon: "icloud.fill", title: "iCloud ile yedekle",
-        detail: "iPhone ve iPad arasında senkron. Veriler sadece senin iCloud hesabında.",
+        detail: "Telefon değişse de ilerlemen kaybolmaz. iPhone ve iPad'in senkron kalır.",
         badge: "Önerilen"
       ) { useICloud = true }
-      Label(
-        "Bu tercihi Ayarlar → Veri ve yedekleme'den değiştirebilirsin.", systemImage: "info.circle"
-      )
-      .font(AppFont.caption).foregroundStyle(Palette.muted)
+      HStack(spacing: 10) {
+        Image(systemName: "checkmark.shield.fill")
+          .font(.system(size: 22))
+          .foregroundStyle(Palette.good)
+        Text(
+          "Verilerini biz görmeyiz, reklam için kullanılmaz. Yedek senin iCloud hesabında durur."
+        )
+        .font(AppFont.caption)
+        .foregroundStyle(Palette.ink)
+        .fixedSize(horizontal: false, vertical: true)
+        Spacer(minLength: 0)
+      }
+      .card(padding: 14)
+      Text("İstediğin zaman Ayarlar > Veri ve yedekleme'den değiştirebilirsin.")
+        .font(AppFont.caption)
+        .foregroundStyle(Palette.muted)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
     }
   }
 
@@ -295,13 +397,18 @@ private struct FlowChips<Item: Hashable>: View {
         Button {
           onTap(item)
         } label: {
-          Text(item[keyPath: title])
-            .font(AppFont.bodyBold)
-            .foregroundStyle(isOn(item) ? .white : Palette.ink)
-            .padding(.horizontal, 16)
-            .frame(height: 42)
-            .background(Capsule().fill(isOn(item) ? Palette.accent : Palette.surface))
-            .overlay(Capsule().strokeBorder(isOn(item) ? .clear : Palette.line, lineWidth: 2))
+          HStack(spacing: 6) {
+            if isOn(item) {
+              Image(systemName: "checkmark").font(.system(size: 13, weight: .black))
+            }
+            Text(item[keyPath: title])
+          }
+          .font(AppFont.bodyBold)
+          .foregroundStyle(isOn(item) ? .white : Palette.ink)
+          .padding(.horizontal, 16)
+          .frame(height: 42)
+          .background(Capsule().fill(isOn(item) ? Palette.accent : Palette.surface))
+          .overlay(Capsule().strokeBorder(isOn(item) ? .clear : Palette.line, lineWidth: 2))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isOn(item) ? .isSelected : [])

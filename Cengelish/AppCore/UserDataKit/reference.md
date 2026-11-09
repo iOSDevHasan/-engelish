@@ -9,13 +9,24 @@
 @MainActor protocol UserDataStoring   // profile, settings, progress, finish(...), notebook, review, stats, badges, hints, iCloud, export/import, deleteAll
 final class UserDataStore: UserDataStoring  // init(inMemory:)
 UserProfile, AppSettings, Appearance, SpeechAccent, PuzzleProgress, PuzzleStatus, NotebookItem, UserStats, FinishResult, StorageUsage
-BadgeKind, UserTitle, UnlockRules, StreakRules, LeitnerRules, HintRules, StarRules
+BadgeKind (15 rozet; progress(_:) / isEarned(_:event:)), AchievementSnapshot, FinishEvent
+UserTitle (Yeni Kalem, Kelime Avcısı, Gece Kuşu, Bulmaca Kurdu, YDS Savaşçısı, Kelime Ustası;
+  init(storedId:) eski kimlikleri eşler, isUnlocked(badges:snapshot:) rozetle açılır)
+UnlockRules, StreakRules, LeitnerRules, HintRules, StarRules
 enum ReminderScheduler
 ```
 
 ## Structure
 
 Persistence/ (SwiftData kayıtları, ContainerFactory, BackupCoder) · Model/ · Rules/ · Store/
+
+## Badges
+
+Rozetler `finish(...)` içinde `awardBadges` ile verilir. Sayaçlı rozetler `AchievementSnapshot`
+(UserStats + bitirilen bulmaca kimlikleri + defterde öğrenilen kelime) üzerinden; YDS sayacı
+`yds_NN` kimlik önekinden, günlük sayaç `daily_` önekinden hesaplanır. Anlık rozetler
+(`perfect` = ilk bitirişte hatasız ve ipucusuz, `nightOwl` 22–05, `earlyBird` 05–08, `speed` < 3 dk)
+`FinishEvent` ile değerlendirilir.
 
 ## Dependencies
 

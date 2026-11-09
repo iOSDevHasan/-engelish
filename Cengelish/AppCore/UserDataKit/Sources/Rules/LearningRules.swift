@@ -3,6 +3,9 @@ import Foundation
 /// Seri hesabı.
 public enum StreakRules {
 
+  /// Çengelish+ üyelerinin ayda kullanabildiği seri dondurma hakkı.
+  public static let monthlyFreezes = 2
+
   /// Bugün bir bulmaca bitince yeni seriyi hesaplar.
   ///
   /// - Parameters:
@@ -38,6 +41,8 @@ public enum LeitnerRules {
 
   /// Kutuya göre bekleme süresi (gün).
   public static let intervals = [1, 3, 7, 14, 30]
+  /// En yüksek kutu numarası.
+  public static var maxBox: Int { intervals.count }
 
   /// Tekrar sonrası yeni kutu ve sonraki tarih.
   public static func review(

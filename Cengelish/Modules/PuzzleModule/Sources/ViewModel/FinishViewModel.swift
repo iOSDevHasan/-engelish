@@ -20,6 +20,10 @@ final class FinishViewModel: ObservableObject {
   let avatar: AvatarConfig
   /// Kullanıcının adı.
   let name: String
+  /// Cevap anahtarındaki işaretler (kelime kimliği → doğru mu).
+  let marks: [String: Bool]
+  /// Bitiş anı.
+  let finishedAt: Date
   private let coordinator: PuzzleCoordinator
   private let userData: any UserDataStoring
   private let pronouncer: any Pronouncing
@@ -27,11 +31,14 @@ final class FinishViewModel: ObservableObject {
   // MARK: - Init
 
   init(
-    session: PuzzleSession, result: FinishResult, coordinator: PuzzleCoordinator,
-    userData: any UserDataStoring, pronouncer: any Pronouncing
+    session: PuzzleSession, result: FinishResult, marks: [String: Bool],
+    coordinator: PuzzleCoordinator, userData: any UserDataStoring, pronouncer: any Pronouncing,
+    finishedAt: Date = .now
   ) {
     self.session = session
     self.result = result
+    self.marks = marks
+    self.finishedAt = finishedAt
     self.coordinator = coordinator
     self.userData = userData
     self.pronouncer = pronouncer
@@ -68,6 +75,16 @@ final class FinishViewModel: ObservableObject {
   /// Sonraki bulmaca var mı.
   var hasNext: Bool { session.nextPuzzleId != nil }
 
+  /// Paylaşım kartının verisi (cevaplar yok).
+  var shareCard: ShareCard {
+    ShareCard(
+      layout: session.layout, title: session.title,
+      owner: ShareText.owner(name: name, level: session.puzzle.level.rawValue), avatar: avatar,
+      date: finishedAt, results: ShareText.results(entries: session.puzzle.entries, marks: marks),
+      duration: durationText, correct: result.correct, total: result.total,
+      streak: result.streak)
+  }
+
   // MARK: - Intents
 
   /// Kelimeyi okur.
@@ -80,9 +97,14 @@ final class FinishViewModel: ObservableObject {
     if notebookIds.contains(word.id) {
       userData.removeFromNotebook(wordId: word.id)
     } else {
-      userData.addToNotebook(wordId: word.id)
+      userData.addToNotebook(wordId: word.id, source: session.puzzle.id)
     }
     refreshNotebook()
+  }
+
+  /// Paylaş ekranını açar.
+  func share() {
+    coordinator.showShare(card: shareCard)
   }
 
   /// Sonraki bulmacayı açar.

@@ -36,6 +36,7 @@ final class SettingsRecord {
   var reminderEnabled: Bool = false
   var reminderHour: Int = 20
   var reminderMinute: Int = 0
+  var lastBackupAt: Date?
 
   init() {}
 }
@@ -82,6 +83,7 @@ final class StatsRecord {
   var longestStreak: Int = 0
   var lastPlayedDay: String?
   var freezesUsed: Int = 0
+  var freezeMonth: String = ""
   var puzzlesSolved: Int = 0
   var wordsSeen: Int = 0
   var perfectCount: Int = 0

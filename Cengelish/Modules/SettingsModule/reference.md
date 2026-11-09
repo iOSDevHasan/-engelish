@@ -1,13 +1,17 @@
 # SettingsModule
 
 **Layer**: Modules
-**Purpose**: Ayarlar, uygulama görünümü, Bulmaca teması ekranı, veri ve yedekleme (iCloud, dışa/içe aktarma, silme).
+**Purpose**: Ayarlar (profili düzenle, abonelik planı + yenilenme tarihi), uygulama görünümü, Bulmaca teması ekranı, veri ve yedekleme (iCloud, son yedek + Şimdi yedekle, dışa/içe aktarma, eski çizimler, silme).
 
 ## Public API
 
 ```swift
 @MainActor protocol SettingsModuleInterface: AnyObject
   func createSettingsView() / createPuzzleThemeView() -> AnyView
+  func createSettingsView(onEditProfile: (@MainActor () -> Void)?) -> AnyView
+  // Ayarlar Profil modülünü tanımaz (Profil → Settings arayüzü; tersi paket döngüsü olurdu).
+  // Profil ayarları açarken kendi düzenleme ekranını kancayla verir; kanca yoksa satır
+  // takma adı küçük bir pencerede düzenler. Varsayılan uygulama createSettingsView()'a düşer.
 ```
 
 ## Structure

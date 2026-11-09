@@ -35,7 +35,7 @@ public final class ProfileCoordinator: ProfileModuleInterface {
 
   /// Ayarları açar.
   func showSettings() {
-    nav.push(settings.createSettingsView())
+    nav.push(settings.createSettingsView(onEditProfile: { [weak self] in self?.showEdit() }))
   }
 
   /// Paywall'u açar.

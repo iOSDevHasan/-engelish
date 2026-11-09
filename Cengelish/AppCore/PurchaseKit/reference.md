@@ -6,9 +6,10 @@
 ## Public API
 
 ```swift
-enum ProductID   // plusMonthly, plusYearly, packYDS
-@MainActor protocol EntitlementProviding  // isPremium, ownedProductIds, products, loadProducts(), purchase(_:), restore(), canAccess(productId:)
-final class EntitlementStore: EntitlementProviding
+enum ProductID   // plusMonthly, plusYearly, packYDS/YOKDIL/LGS/IELTS/TOEFL, subscriptions, examPacks, all, examTitle(for:)
+@MainActor protocol EntitlementProviding  // isPremium, ownedProductIds, products, activeSubscription (varsayılan nil), loadProducts(), purchase(_:), restore(), canAccess(productId:)
+final class EntitlementStore: EntitlementProviding   // activeSubscription: Transaction.currentEntitlements + SubscriptionInfo.Status
+struct ActiveSubscription  // productId, renewalDate, willAutoRenew, planTitle
 StoreProduct, PurchaseOutcome
 ```
 
@@ -18,4 +19,4 @@ Sources/
 
 ## Dependencies
 
-- Yok (StoreKit). Yerel test: repo kökündeki StoreKit/Cengelish.storekit (şemaya bağlı)
+- Yok (StoreKit). Yerel test: repo kökündeki StoreKit/Cengelish.storekit (şemaya bağlı; 2 abonelik + 5 sınav paketi)

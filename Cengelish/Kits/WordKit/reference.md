@@ -7,12 +7,16 @@
 
 ```swift
 @MainActor protocol Pronouncing; final class Pronouncer
-WordRow, WordDetailSheet
+WordRow, WordDetailSheet   // init(word:boxLabel:onSpeak:primaryTitle:onPrimary:accent:onSpeakAccent:notebook:)
+enum WordAccent            // .american / .british, languageCode, isBritish, init(languageCode:)
+struct WordNotebookStatus  // firstSeen, box, maxBox, learned, onKeepReviewing, onLearned, onRemove
+SegmentBar<Value>          // tasarımdaki bölmeli seçici (compact: küçük)
+BoxDots, SpeakerButton     // Leitner kutu ilerlemesi (5 nokta), köşeli telaffuz butonu
 ```
 
 ## Structure
 
-Sources/
+Sources/WordViews.swift (WordRow, WordDetailSheet) · Sources/WordSheetSupport.swift · Sources/Pronouncer.swift
 
 ## Dependencies
 

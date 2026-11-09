@@ -1,58 +1,88 @@
 # Çengelish — Senin yapacakların
 
-Kod tarafı hazır ve simülatörde çalışıyor. Aşağıdakiler senin hesaplarınla yapılması gereken adımlar.
-Sıra önemli: 1 → 2 → 3, sonra diğerleri.
+Kod, Firebase ve App Store Connect'in büyük kısmı hazır. Aşağıdakiler senin hesabınla, onayınla ya da
+yasal beyanınla yapılması gereken adımlar. Sıra önemli.
 
-## 1. Xcode ve Apple Developer
-1. `Cengelish/Cengelish.xcodeproj` dosyasını aç → **Cengelish** hedefi → **Signing & Capabilities**.
-   - **Team**: kendi takımını seç (projede takım ayarlanmadı).
-   - Bundle ID: `com.hasangurbuz.cengelish` (istersen değiştir; değiştirirsen aşağıdaki ürün kimliklerini de değiştir).
-2. Aynı ekranda şu yetenekler `Config/Cengelish.entitlements` içinde hazır; Xcode'un bunları Apple Developer'da kaydetmesine izin ver:
-   - **iCloud → CloudKit**, kapsayıcı: `iCloud.com.hasangurbuz.cengelish`
-   - **Push Notifications** (CloudKit senkronu için)
-   - **Background Modes → Remote notifications** (Info.plist'te hazır)
-3. Gerçek bir iPhone'da iCloud'a giriş yapılıyken "iCloud ile yedekle"yi dene. (Simülatörde iCloud girişi olmadığı için uygulama sessizce cihazda çalışır.)
-4. Yayından önce `Config/Cengelish.entitlements` içindeki `aps-environment` değerini Xcode dağıtımda otomatik `production` yapar; elle bir şey yapma.
+## Hazır olanlar (bilgi için)
+- **GitHub:** `iOSDevHasan/-engelish` (herkese açık depo). `GoogleService-Info.plist` ve hizmet hesabı
+  anahtarları `.gitignore`'da, depoya girmez.
+- **Firebase (`cengelish`):** iOS uygulaması kayıtlı, plist projede, Firestore (europe-west3) açık,
+  kurallar yüklü. Storage kullanılmıyor (ücretli plan istemez).
+- **App Store Connect (Çengelish, 6832412024):**
+  - Ad, alt başlık, kategori (Eğitim + Oyunlar: Kelime/Bulmaca), yaş sınırı 4+, açıklama, anahtar
+    kelimeler, tanıtım metni, destek URL'si, telif ve App Review notu girildi. "Giriş gerekir" işareti
+    kaldırıldı.
+  - Fiyat: ücretsiz, 175 ülke.
+  - "Çengelish+" abonelik grubu:
+    - `plus.yearly` 449,99 ₺, 7 gün ücretsiz deneme
+    - `plus.monthly` 74,99 ₺
+  - Tek seferlik paketler:
+    - `pack.yds`, `pack.yokdil`, `pack.ielts`, `pack.toefl`: 199,99 ₺
+    - `pack.lgs`: 129,99 ₺
+  - Bütün ürünlerin Türkçe adı ve açıklaması var; inceleme görseli olarak paywall ekranı yüklendi.
 
-## 2. App Store Connect
-1. **Uygulama kaydı**: Ad `Çengelish: İngilizce Çengel`, birincil dil Türkçe, Bundle ID yukarıdaki.
-   Bu adım ismi senin adına ayırır.
-2. **Ürünler** (kimlikler kodda sabit, `PurchaseKit/Sources/ProductID.swift`):
-   | Kimlik | Tür | Fiyat (öneri) |
-   |---|---|---|
-   | `com.hasangurbuz.cengelish.plus.yearly` | Otomatik yenilenen abonelik, grup "Çengelish+", 7 gün ücretsiz deneme | 449,99 ₺ |
-   | `com.hasangurbuz.cengelish.plus.monthly` | Otomatik yenilenen abonelik, aynı grup | 74,99 ₺ |
-   | `com.hasangurbuz.cengelish.pack.yds` | Tüketilemez (non-consumable) | 199,99 ₺ |
-3. **Paid Apps sözleşmesi** ve banka/vergi bilgileri (abonelik satmak için şart).
-4. **Gizlilik politikası URL'si**: paywall'daki bağlantı `https://cengelish.app/gizlilik` — bu sayfayı yayınla ya da bağlantıyı `PaywallModule/Sources/View/PaywallView.swift` içindeki `LegalLinks.privacy` ile değiştir.
-5. Mağaza metni önerisi: Başlık `Çengelish: İngilizce Çengel`, alt başlık `Kelime öğreten bulmaca oyunu`, anahtar kelimeler `OYUN-PLANI.md` Bölüm 11.4'te.
-6. Satın almayı yayından önce denemek için: Xcode'da şemaya bağlı `StoreKit/Cengelish.storekit` hazır (Xcode'dan çalıştırınca paywall gerçek fiyatlarla açılır), sonra TestFlight + Sandbox hesabı.
+## 1. GitHub Pages (destek ve gizlilik sayfası) — 1 dakika
+Mağazadaki destek URL'si ve paywall'daki gizlilik bağlantısı bu sayfalara gidiyor:
+`https://iosdevhasan.github.io/-engelish/` ve `.../gizlilik.html`. Sayfalar `docs/` klasöründe hazır.
+Herkese açık bir site yayınlamak senin kararın olduğu için açmadım. Açmak için:
+- GitHub → depo → Settings → Pages → Source: `main` / `/docs` → Save.
+- Ya da terminalde:
+```bash
+gh api -X POST repos/iOSDevHasan/-engelish/pages -f "source[branch]=main" -f "source[path]=/docs"
+```
+`cengelish.app` alan adını alırsan sonra bu adrese taşıyabiliriz.
 
-## 3. Firebase (içerik)
-Firebase olmadan da uygulama gömülü içerikle (5 paket, 56 bulmaca, 30 günlük bulmaca) çalışır. Yeni içeriği güncellemesiz göndermek için:
-1. Firebase konsolunda proje aç → iOS uygulaması ekle (Bundle ID yukarıdaki).
-2. **GoogleService-Info.plist** dosyasını indir ve Xcode'da `Cengelish/App/Resources/` klasörüne sürükle (hedef: Cengelish). Dosya eklenince uygulama Firebase'i kendiliğinden açar.
-3. **Firestore** ve **Storage**'ı etkinleştir (bölge: `europe-west1` gibi yakın bir bölge).
-4. Güvenlik kurallarını yükle: `firebase/` klasöründe hazır.
-   ```
-   cd Cengelish/firebase && firebase deploy --only firestore:rules,storage
-   ```
-5. **App Check**: konsolda App Attest'i aç. Geliştirmede ilk çalıştırmada Xcode konsoluna yazılan *debug token*'ı App Check → Apps → Manage debug tokens'a ekle. Her şey çalışınca Firestore ve Storage için "Enforce" yap.
-6. İçeriği yükle: Proje Ayarları → Hizmet hesapları → yeni özel anahtar (JSON) indir. **Bu dosyayı repoya koyma.**
-   ```
-   pip install firebase-admin
-   python3 tools/content/upload_firebase.py --key /güvenli/yol/serviceAccount.json --bucket <proje-id>.firebasestorage.app
-   ```
-7. Yeni kelime / bulmaca eklemek için: `tools/content/words.psv`'ye kelime ekle → `python3 tools/content/generate.py --start <tarih> --days 30` → 6. adımdaki yükleme.
-   (Gömülü içeriği de güncellemek istersen aynı komut `starter.json`'ı yeniler; sonra uygulamayı yeniden derle.)
+## 2. App Store Connect — yasal beyanlar ve sözleşme
+1. **Paid Apps sözleşmesi + vergi + banka** (Business bölümü). Abonelik ve paket satmak için şart.
+2. **App Privacy** (Uygulama Gizliliği): "Veri toplamıyoruz" (Data Not Collected) seçmen yeterli.
+   Firebase'e kişisel veri gitmiyor; App Check sadece cihazın gerçek olduğunu doğruluyor.
+   Gizlilik politikası URL'si: `https://iosdevhasan.github.io/-engelish/gizlilik.html`
+3. **Content Rights** (Uygulama Bilgileri): "No, it does not contain … third-party content".
+4. **App Review iletişim bilgileri** (ad, telefon, e-posta) sürüm sayfasında.
+5. **Ekran görüntüleri:**
+   - Zorunlu: 6.9" iPhone (1320×2868) ve 13" iPad.
+   - Bir tasarımcıya yaptırman en iyisi; sıra önerisi `OYUN-PLANI.md` 11.4'te.
+   - İstersen simülatörden ham görüntüleri ben de çekip yükleyebilirim.
 
-## 4. Marka ve isim
-1. **TÜRKPATENT**: Sınıf 9 ve 41'de "Çengelish" ve "Çengel" içeren markaları ara; uygunsa başvur.
-2. **Alan adı**: `cengelish.app` (gizlilik sayfası için de lazım) ve sosyal medya kullanıcı adları (`@cengelish`).
+## 3. Xcode — ilk build ve TestFlight
+1. `Cengelish.xcodeproj` → Signing & Capabilities. Takım (D4VYL8Q23D) iki hedefte de seçili. Xcode'un
+   şunları Apple Developer'da kaydetmesine izin ver:
+   - App Group `group.com.hasangurbuz.cengelish` (uygulama + widget)
+   - iCloud/CloudKit `iCloud.com.hasangurbuz.cengelish`
+   - Push
+2. Product → Archive → Distribute → App Store Connect (TestFlight).
+3. Gerçek cihazda dene:
+   - iCloud yedekleme
+   - Widget'lar (Ana Ekran: Günün kelimesi, Seri, Günün Bulmacası; Kilit Ekranı: Seri, Günün kelimesi)
+   - Sandbox hesabıyla satın alma
+4. Firebase App Check:
+   - Konsolda App Check → iOS uygulaması → App Attest'i kaydet (Team ID: D4VYL8Q23D).
+   - Debug çalıştırmada Xcode konsoluna düşen debug token'ı "Manage debug tokens"a ekle.
+   - Her şey çalışınca Firestore için "Enforce" yap.
 
-## 5. Görseller
-1. **Uygulama ikonu**: `tools/icon/make_icon.py` ile Kalemo'lu bir başlangıç ikonu üretildi. Yayından önce bir tasarımcıya son halini yaptırmanı öneririm (açık / koyu / tinted varyantlarıyla).
-2. App Store ekran görüntüleri (6.9" iPhone + 13" iPad).
+## 4. Firebase içerik yükleme (isteğe bağlı, güncellemesiz yeni içerik için)
+Uygulama bütün içeriği gömülü taşıyor (338 bulmaca, 1.000+ kelime), bu adım olmadan da çalışır.
+Firestore'a yüklemek için bir kez:
+```bash
+gcloud auth application-default login
+```
+```bash
+pip install firebase-admin && python3 tools/content/upload_firebase.py --project cengelish
+```
+
+## 5. Marka
+- TÜRKPATENT'te sınıf 9 ve 41'de "Çengelish" ve "Çengel" araması yap.
+- `cengelish.app` alan adını ve `@cengelish` sosyal hesaplarını al. Paylaşım kartındaki bağlantı
+  `https://cengelish.app`.
+- IELTS (British Council/IDP/Cambridge) ve TOEFL (ETS) tescilli markalar. "IELTS kelimeleri" gibi
+  tanımlayıcı kullanım yaygın, ama App Review sorarsa resmi bağlantı olmadığını belirtmek gerekebilir.
 
 ## 6. İçerik kontrolü
-`tools/content/words.psv` dosyasındaki 364 kelimenin Türkçe ipuçlarını, anlamlarını, IPA'larını ve örnek cümlelerini bir kez gözden geçir. Özellikle sınav (YDS) kelimeleri için bir öğretmene baktırmak iyi olur.
+`tools/content/words.psv` dosyasında 1.229 kelime var:
+- İpucu, anlam, ABD ve İngiliz IPA'sı, örnek cümle ve Türkçesi.
+- 5 sınav etiketi (yds, yokdil, lgs, ielts, toefl), 6 tema ve C1 seti.
+
+Bir öğretmene baktırman iyi olur. Düzeltme sonrası:
+```bash
+python3 tools/content/generate.py --start 2026-11-09 --days 60
+```

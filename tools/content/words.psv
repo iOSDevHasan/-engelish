@@ -1,366 +1,1231 @@
-# en|level|pos|clue_tr|meaning_tr|ipa_us|example_en|tags
-# Kelime havuzu. clue_tr kısa olmalı (çengel kutusuna sığar), meaning_tr bitiş ekranında görünür.
-house|A1|noun|Ev|ev, konut|/haʊs/|We moved into a new house last year.|
-cat|A1|noun|Kedi|kedi|/kæt/|The cat is sleeping on the sofa.|
-dog|A1|noun|Köpek|köpek|/dɔːɡ/|My dog loves long walks.|
-red|A1|adj|Kırmızı|kırmızı|/red/|She has a red bike.|
-blue|A1|adj|Mavi|mavi|/bluː/|The sky is blue today.|
-green|A1|adj|Yeşil|yeşil|/ɡriːn/|Green apples are a bit sour.|
-apple|A1|noun|Elma|elma|/ˈæp.əl/|I eat an apple every morning.|
-bread|A1|noun|Ekmek|ekmek|/bred/|Can you buy some bread?|
-water|A1|noun|Su|su|/ˈwɑː.t̬ɚ/|Drink more water in summer.|
-milk|A1|noun|Süt|süt|/mɪlk/|The baby drinks warm milk.|
-egg|A1|noun|Yumurta|yumurta|/eɡ/|I had a boiled egg for breakfast.|
-book|A1|noun|Kitap|kitap|/bʊk/|This book is very funny.|
-pen|A1|noun|Tükenmez kalem|kalem, tükenmez kalem|/pen/|Can I borrow your pen?|
-table|A1|noun|Masa|masa|/ˈteɪ.bəl/|Put the cups on the table.|
-chair|A1|noun|Sandalye|sandalye|/tʃer/|This chair is very comfortable.|
-door|A1|noun|Kapı|kapı|/dɔːr/|Please close the door.|
-window|A1|noun|Pencere|pencere|/ˈwɪn.doʊ/|Open the window, it is hot.|
-bed|A1|noun|Yatak|yatak|/bed/|I go to bed at ten.|
-car|A1|noun|Araba|araba, otomobil|/kɑːr/|His car is in the garage.|
-bus|A1|noun|Otobüs|otobüs|/bʌs/|I take the bus to school.|
-train|A1|noun|Tren|tren|/treɪn/|The train leaves at nine.|
-sun|A1|noun|Güneş|güneş|/sʌn/|The sun is shining.|
-moon|A1|noun|Ay (gök cismi)|ay, dolunay|/muːn/|The moon is bright tonight.|
-star|A1|noun|Yıldız|yıldız|/stɑːr/|I can see a star in the sky.|
-rain|A1|noun|Yağmur|yağmur|/reɪn/|Take an umbrella, there is rain.|
-snow|A1|noun|Kar|kar|/snoʊ/|The children play in the snow.|
-tree|A1|noun|Ağaç|ağaç|/triː/|There is a bird in the tree.|
-fish|A1|noun|Balık|balık|/fɪʃ/|We had fish for dinner.|
-bird|A1|noun|Kuş|kuş|/bɝːd/|A small bird is singing.|
-horse|A1|noun|At|at|/hɔːrs/|She rides a white horse.|
-cow|A1|noun|İnek|inek|/kaʊ/|The cow gives milk.|
-hand|A1|noun|El|el|/hænd/|Raise your hand, please.|
-head|A1|noun|Baş, kafa|baş, kafa|/hed/|My head hurts.|
-eye|A1|noun|Göz|göz|/aɪ/|She has green eyes.|
-ear|A1|noun|Kulak|kulak|/ɪr/|The dog has big ears.|
-nose|A1|noun|Burun|burun|/noʊz/|My nose is cold.|
-mouth|A1|noun|Ağız|ağız|/maʊθ/|Open your mouth, please.|
-foot|A1|noun|Ayak|ayak|/fʊt/|I hurt my foot.|
-leg|A1|noun|Bacak|bacak|/leɡ/|He broke his leg skiing.|
-arm|A1|noun|Kol|kol|/ɑːrm/|She has a cat in her arms.|
-mother|A1|noun|Anne|anne|/ˈmʌð.ɚ/|My mother is a teacher.|
-father|A1|noun|Baba|baba|/ˈfɑː.ðɚ/|His father works in a bank.|
-sister|A1|noun|Kız kardeş|kız kardeş, abla|/ˈsɪs.tɚ/|My sister is ten years old.|
-baby|A1|noun|Bebek|bebek|/ˈbeɪ.bi/|The baby is sleeping.|
-friend|A1|noun|Arkadaş|arkadaş|/frend/|Ali is my best friend.|
-school|A1|noun|Okul|okul|/skuːl/|School starts at eight.|
-city|A1|noun|Şehir|şehir|/ˈsɪt̬.i/|Istanbul is a big city.|
-road|A1|noun|Yol|yol|/roʊd/|This road goes to the sea.|
-shop|A1|noun|Dükkân|dükkân, mağaza|/ʃɑːp/|The shop opens at ten.|
-money|A1|noun|Para|para|/ˈmʌn.i/|I have no money with me.|
-day|A1|noun|Gün|gün|/deɪ/|Have a nice day!|
-night|A1|noun|Gece|gece|/naɪt/|Good night, see you tomorrow.|
-week|A1|noun|Hafta|hafta|/wiːk/|I see her every week.|
-year|A1|noun|Yıl|yıl, sene|/jɪr/|He is ten years old.|
-one|A1|num|Bir|bir|/wʌn/|I have one brother.|
-two|A1|num|İki|iki|/tuː/|Two coffees, please.|
-three|A1|num|Üç|üç|/θriː/|We have three cats.|
-ten|A1|num|On|on|/ten/|Count to ten.|
-big|A1|adj|Büyük|büyük|/bɪɡ/|They live in a big house.|
-small|A1|adj|Küçük|küçük|/smɑːl/|I have a small room.|
-hot|A1|adj|Sıcak|sıcak|/hɑːt/|The soup is very hot.|
-cold|A1|adj|Soğuk|soğuk|/koʊld/|It is cold outside.|
-happy|A1|adj|Mutlu|mutlu|/ˈhæp.i/|I am happy to see you.|
-sad|A1|adj|Üzgün|üzgün|/sæd/|Why are you sad?|
-new|A1|adj|Yeni|yeni|/nuː/|I have a new phone.|
-old|A1|adj|Eski, yaşlı|eski, yaşlı|/oʊld/|This is an old song.|
-eat|A1|verb|Yemek yemek|yemek, yemek yemek|/iːt/|We eat lunch at one.|
-drink|A1|verb|İçmek|içmek|/drɪŋk/|I drink tea every day.|
-sleep|A1|verb|Uyumak|uyumak|/sliːp/|Babies sleep a lot.|
-run|A1|verb|Koşmak|koşmak|/rʌn/|I run in the park.|
-walk|A1|verb|Yürümek|yürümek|/wɑːk/|We walk to school.|
-read|A1|verb|Okumak|okumak|/riːd/|I read before bed.|
-write|A1|verb|Yazmak|yazmak|/raɪt/|Write your name here.|
-open|A1|verb|Açmak|açmak|/ˈoʊ.pən/|Open your books.|
-black|A1|adj|Siyah|siyah, kara|/blæk/|He wears a black coat.|
-white|A1|adj|Beyaz|beyaz|/waɪt/|Snow is white.|
-tea|A1|noun|Çay|çay|/tiː/|Would you like some tea?|
-rice|A1|noun|Pirinç|pirinç, pilav|/raɪs/|We had rice with chicken.|
-salt|A1|noun|Tuz|tuz|/sɑːlt/|Pass me the salt, please.|
-sugar|A1|noun|Şeker|şeker|/ˈʃʊɡ.ɚ/|No sugar in my coffee.|
-cake|A1|noun|Kek, pasta|kek, pasta|/keɪk/|Mum made a chocolate cake.|
-shoe|A1|noun|Ayakkabı|ayakkabı|/ʃuː/|My shoes are wet.|
-hat|A1|noun|Şapka|şapka|/hæt/|He wears a hat in summer.|
-shirt|A1|noun|Gömlek|gömlek|/ʃɝːt/|This shirt is too big.|
-sea|A1|noun|Deniz|deniz|/siː/|We swim in the sea.|
-park|A1|noun|Park|park|/pɑːrk/|Let's meet in the park.|
-room|A1|noun|Oda|oda|/ruːm/|My room is upstairs.|
-lemon|A1|noun|Limon|limon|/ˈlem.ən/|Tea with lemon, please.|
-nine|A1|num|Dokuz|dokuz|/naɪn/|The shop opens at nine.|
-song|A1|noun|Şarkı|şarkı|/sɑːŋ/|I love this song.|
-game|A1|noun|Oyun|oyun|/ɡeɪm/|Let's play a game.|
-time|A1|noun|Zaman|zaman, saat|/taɪm/|What time is it?|
-name|A1|noun|İsim, ad|isim, ad|/neɪm/|What is your name?|
-north|A2|noun|Kuzey|kuzey|/nɔːrθ/|Birds fly north in spring.|
-earth|A2|noun|Dünya gezegeni|Dünya, toprak|/ɝːθ/|The Earth goes around the sun.|
-south|A2|noun|Güney|güney|/saʊθ/|Antalya is in the south.|
-east|A2|noun|Doğu|doğu|/iːst/|The sun rises in the east.|
-west|A2|noun|Batı|batı|/west/|They live in the west of the city.|
-kitchen|A2|noun|Mutfak|mutfak|/ˈkɪtʃ.ən/|Dad is cooking in the kitchen.|
-bridge|A2|noun|Köprü|köprü|/brɪdʒ/|We walked across the bridge.|
-ticket|A2|noun|Bilet|bilet|/ˈtɪk.ɪt/|I bought two tickets for the film.|
-travel|A2|verb|Seyahat etmek|seyahat etmek, gezmek|/ˈtræv.əl/|I love to travel by train.|
-market|A2|noun|Pazar|pazar, market|/ˈmɑːr.kɪt/|We buy fruit at the market.|
-cheap|A2|adj|Ucuz|ucuz|/tʃiːp/|This shirt was very cheap.|
-early|A2|adj|Erken|erken|/ˈɝː.li/|I get up early on Mondays.|
-late|A2|adj|Geç|geç|/leɪt/|Sorry, I am late.|
-angry|A2|adj|Kızgın|kızgın, öfkeli|/ˈæŋ.ɡri/|Why is the teacher angry?|
-tired|A2|adj|Yorgun|yorgun|/taɪrd/|I am too tired to cook.|
-hungry|A2|adj|Aç (karnı)|aç, acıkmış|/ˈhʌŋ.ɡri/|Are you hungry?|
-empty|A2|adj|Boş|boş|/ˈemp.ti/|The fridge is empty.|
-heavy|A2|adj|Ağır|ağır|/ˈhev.i/|This bag is very heavy.|
-quiet|A2|adj|Sessiz|sessiz, sakin|/ˈkwaɪ.ət/|The library is quiet.|
-clean|A2|adj|Temiz|temiz|/kliːn/|Keep your room clean.|
-dirty|A2|adj|Kirli|kirli|/ˈdɝː.t̬i/|Your shoes are dirty.|
-doctor|A2|noun|Doktor|doktor, hekim|/ˈdɑːk.tɚ/|You should see a doctor.|
-nurse|A2|noun|Hemşire|hemşire|/nɝːs/|The nurse was very kind.|
-farmer|A2|noun|Çiftçi|çiftçi|/ˈfɑːr.mɚ/|The farmer grows wheat.|
-driver|A2|noun|Sürücü|sürücü, şoför|/ˈdraɪ.vɚ/|The bus driver smiled at us.|
-island|A2|noun|Ada|ada|/ˈaɪ.lənd/|We spent a week on an island.|
-forest|A2|noun|Orman|orman|/ˈfɔːr.ɪst/|Wolves live in the forest.|
-desert|A2|noun|Çöl|çöl|/ˈdez.ɚt/|It rarely rains in the desert.|
-castle|A2|noun|Kale, şato|kale, şato|/ˈkæs.əl/|The castle is on a hill.|
-cloud|A2|noun|Bulut|bulut|/klaʊd/|There is not a cloud in the sky.|
-storm|A2|noun|Fırtına|fırtına|/stɔːrm/|The storm broke many trees.|
-wind|A2|noun|Rüzgâr|rüzgâr|/wɪnd/|The wind is very strong today.|
-summer|A2|noun|Yaz (mevsim)|yaz|/ˈsʌm.ɚ/|We go to the beach in summer.|
-winter|A2|noun|Kış|kış|/ˈwɪn.t̬ɚ/|Winter is cold in Erzurum.|
-autumn|A2|noun|Sonbahar|sonbahar|/ˈɑː.t̬əm/|Leaves fall in autumn.|
-holiday|A2|noun|Tatil|tatil|/ˈhɑː.lə.deɪ/|Where did you go on holiday?|
-hotel|A2|noun|Otel|otel|/hoʊˈtel/|Our hotel is near the beach.|
-plane|A2|noun|Uçak|uçak|/pleɪn/|The plane landed on time.|
-ship|A2|noun|Gemi|gemi|/ʃɪp/|The ship sails at noon.|
-coin|A2|noun|Madeni para|madeni para|/kɔɪn/|I found a coin on the floor.|
-price|A2|noun|Fiyat|fiyat|/praɪs/|The price is too high.|
-gift|A2|noun|Hediye|hediye|/ɡɪft/|Thank you for the lovely gift.|
-party|A2|noun|Parti|parti, eğlence|/ˈpɑːr.t̬i/|Are you coming to my party?|
-dance|A2|verb|Dans etmek|dans etmek|/dæns/|Let's dance together.|
-smile|A2|verb|Gülümsemek|gülümsemek|/smaɪl/|Smile for the photo!|
-laugh|A2|verb|Gülmek|gülmek, kahkaha atmak|/læf/|His jokes make me laugh.|
-cry|A2|verb|Ağlamak|ağlamak|/kraɪ/|The baby started to cry.|
-borrow|A2|verb|Ödünç almak|ödünç almak|/ˈbɑː.roʊ/|Can I borrow your bike?|
-carry|A2|verb|Taşımak|taşımak|/ˈker.i/|Can you carry this box?|
-catch|A2|verb|Yakalamak|yakalamak, tutmak|/kætʃ/|Catch the ball!|
-throw|A2|verb|Fırlatmak|atmak, fırlatmak|/θroʊ/|Throw the ball to me.|
-climb|A2|verb|Tırmanmak|tırmanmak|/klaɪm/|We climbed the mountain.|
-swim|A2|verb|Yüzmek|yüzmek|/swɪm/|Can you swim?|
-cook|A2|verb|Pişirmek|yemek pişirmek|/kʊk/|My father loves to cook.|
-wash|A2|verb|Yıkamak|yıkamak|/wɑːʃ/|Wash your hands before dinner.|
-build|A2|verb|İnşa etmek|inşa etmek, yapmak|/bɪld/|They want to build a new school.|
-break|A2|verb|Kırmak|kırmak|/breɪk/|Be careful, don't break the glass.|
-forget|A2|verb|Unutmak|unutmak|/fɚˈɡet/|Don't forget your keys.|
-invite|A2|verb|Davet etmek|davet etmek|/ɪnˈvaɪt/|I want to invite you to dinner.|
-enjoy|A2|verb|Keyif almak|keyif almak, sevmek|/ɪnˈdʒɔɪ/|I really enjoy reading.|
-visit|A2|verb|Ziyaret etmek|ziyaret etmek|/ˈvɪz.ɪt/|We visit our grandma on Sundays.|
-arrive|A2|verb|Varmak|varmak, ulaşmak|/əˈraɪv/|The train arrives at six.|
-leave|A2|verb|Ayrılmak|ayrılmak, bırakmak|/liːv/|We leave at eight tomorrow.|
-lose|A2|verb|Kaybetmek|kaybetmek|/luːz/|Don't lose your ticket.|
-win|A2|verb|Kazanmak|kazanmak|/wɪn/|Our team will win the match.|
-choose|A2|verb|Seçmek|seçmek|/tʃuːz/|Choose a card.|
-kind|A2|adj|Nazik|nazik, iyi kalpli|/kaɪnd/|She is kind to everyone.|
-brave|A2|adj|Cesur|cesur|/breɪv/|The brave girl saved the cat.|
-rich|A2|adj|Zengin|zengin|/rɪtʃ/|He became rich very young.|
-poor|A2|adj|Fakir|fakir, yoksul|/pʊr/|They were poor but happy.|
-wide|A2|adj|Geniş|geniş|/waɪd/|The river is very wide here.|
-narrow|A2|adj|Dar|dar|/ˈner.oʊ/|The streets are narrow in the old town.|
-sharp|A2|adj|Keskin|keskin|/ʃɑːrp/|Be careful, the knife is sharp.|
-thin|A2|adj|İnce|ince, zayıf|/θɪn/|The ice is too thin to walk on.|
-thick|A2|adj|Kalın|kalın|/θɪk/|This book is very thick.|
-ill|A2|adj|Hasta|hasta|/ɪl/|She was ill last week.|
-uncle|A2|noun|Amca, dayı|amca, dayı|/ˈʌŋ.kəl/|My uncle lives in Izmir.|
-aunt|A2|noun|Teyze, hala|teyze, hala|/ænt/|My aunt makes great cakes.|
-cousin|A2|noun|Kuzen|kuzen|/ˈkʌz.ən/|My cousin is my age.|
-wallet|A2|noun|Cüzdan|cüzdan|/ˈwɑː.lɪt/|I left my wallet at home.|
-pocket|A2|noun|Cep|cep|/ˈpɑː.kɪt/|My phone is in my pocket.|
-river|A2|noun|Nehir|nehir, ırmak|/ˈrɪv.ɚ/|The river flows into the sea.|
-lake|A2|noun|Göl|göl|/leɪk/|We swam in the lake.|
-hill|A2|noun|Tepe|tepe|/hɪl/|The house is on a hill.|
-village|A2|noun|Köy|köy|/ˈvɪl.ɪdʒ/|My grandparents live in a village.|
-honey|A2|noun|Bal|bal|/ˈhʌn.i/|Bees make honey.|
-onion|A2|noun|Soğan|soğan|/ˈʌn.jən/|Cut the onion into small pieces.|
-racer|B1|noun|Yarışçı|yarışçı|/ˈreɪ.sɚ/|The young racer crossed the line first.|
-advice|B1|noun|Tavsiye|tavsiye, öğüt|/ədˈvaɪs/|Can I give you some advice?|
-career|B1|noun|Kariyer|kariyer, meslek hayatı|/kəˈrɪr/|She started her career as a nurse.|
-debate|B1|noun|Tartışma|tartışma, münazara|/dɪˈbeɪt/|There was a long debate about it.|
-effort|B1|noun|Çaba|çaba, gayret|/ˈef.ɚt/|Learning a language takes effort.|
-guilty|B1|adj|Suçlu|suçlu|/ˈɡɪl.ti/|I feel guilty about lying.|
-honest|B1|adj|Dürüst|dürüst|/ˈɑː.nɪst/|Please be honest with me.|
-income|B1|noun|Gelir|gelir|/ˈɪn.kʌm/|Their income is quite low.|
-jealous|B1|adj|Kıskanç|kıskanç|/ˈdʒel.əs/|He is jealous of his brother.|
-manage|B1|verb|Yönetmek|yönetmek, başarmak|/ˈmæn.ɪdʒ/|She manages a small hotel.|
-nervous|B1|adj|Gergin|gergin, sinirli|/ˈnɝː.vəs/|I always get nervous before exams.|
-offer|B1|verb|Teklif etmek|teklif etmek, sunmak|/ˈɑː.fɚ/|They offered me a job.|
-proud|B1|adj|Gururlu|gururlu|/praʊd/|I am proud of you.|
-rescue|B1|verb|Kurtarmak|kurtarmak|/ˈres.kjuː/|Firefighters rescued the family.|
-reward|B1|noun|Ödül|ödül|/rɪˈwɔːrd/|There is a reward for the lost dog.|
-shelter|B1|noun|Barınak|barınak, sığınak|/ˈʃel.tɚ/|We found shelter from the rain.|
-signal|B1|noun|Sinyal|sinyal, işaret|/ˈsɪɡ.nəl/|There is no phone signal here.|
-silent|B1|adj|Sessiz|sessiz|/ˈsaɪ.lənt/|The room went silent.|
-solve|B1|verb|Çözmek|çözmek|/sɑːlv/|Can you solve this puzzle?|
-spare|B1|adj|Yedek|yedek, boş (zaman)|/sper/|What do you do in your spare time?|
-steady|B1|adj|Sabit, düzenli|sabit, istikrarlı|/ˈsted.i/|Keep the ladder steady.|
-tidy|B1|adj|Düzenli|düzenli, toplu|/ˈtaɪ.di/|Her desk is always tidy.|
-tough|B1|adj|Zorlu, sert|zor, dayanıklı|/tʌf/|It was a tough decision.|
-wander|B1|verb|Dolaşmak|dolaşmak, gezinmek|/ˈwɑːn.dɚ/|We wandered around the old town.|
-warn|B1|verb|Uyarmak|uyarmak|/wɔːrn/|I warned you about the dog.|
-whisper|B1|verb|Fısıldamak|fısıldamak|/ˈwɪs.pɚ/|She whispered his name.|
-worth|B1|adj|Değer|değerinde, değer|/wɝːθ/|The film is worth watching.|
-attempt|B1|noun|Deneme, girişim|girişim, deneme|/əˈtempt/|He passed on his second attempt.|
-avoid|B1|verb|Kaçınmak|kaçınmak|/əˈvɔɪd/|Try to avoid sugar.|
-coast|B1|noun|Sahil|sahil, kıyı|/koʊst/|We drove along the coast.|
-crowd|B1|noun|Kalabalık|kalabalık|/kraʊd/|A huge crowd watched the match.|
-damage|B1|noun|Hasar|hasar, zarar|/ˈdæm.ɪdʒ/|The storm caused a lot of damage.|
-deny|B1|verb|İnkâr etmek|inkâr etmek, reddetmek|/dɪˈnaɪ/|He denied taking the money.|
-earn|B1|verb|Kazanmak (para)|kazanmak|/ɝːn/|She earns a good salary.|
-edge|B1|noun|Kenar|kenar, uç|/edʒ/|Don't stand on the edge.|
-escape|B1|verb|Kaçmak|kaçmak, kurtulmak|/ɪˈskeɪp/|The bird escaped from its cage.|
-fault|B1|noun|Kusur, hata|kusur, hata|/fɑːlt/|It wasn't my fault.|
-goal|B1|noun|Hedef, gol|hedef, gol|/ɡoʊl/|My goal is to speak English well.|
-harm|B1|noun|Zarar|zarar|/hɑːrm/|Too much sun can do harm.|
-hire|B1|verb|Kiralamak|kiralamak, işe almak|/haɪr/|We hired a car for the week.|
-injury|B1|noun|Yaralanma|yara, yaralanma|/ˈɪn.dʒɚ.i/|He missed the match with an injury.|
-lazy|B1|adj|Tembel|tembel|/ˈleɪ.zi/|Don't be lazy, help me!|
-loan|B1|noun|Borç, kredi|borç, kredi|/loʊn/|They took a loan from the bank.|
-loyal|B1|adj|Sadık|sadık|/ˈlɔɪ.əl/|Dogs are loyal animals.|
-mild|B1|adj|Ilıman|ılıman, hafif|/maɪld/|The winter was mild this year.|
-mood|B1|noun|Ruh hâli|ruh hâli, keyif|/muːd/|She is in a good mood today.|
-novel|B1|noun|Roman|roman|/ˈnɑː.vəl/|I'm reading a great novel.|
-occur|B1|verb|Meydana gelmek|olmak, meydana gelmek|/əˈkɝː/|The accident occurred at night.|
-plenty|B1|noun|Bolca|bol, çok|/ˈplen.t̬i/|We have plenty of time.|
-polite|B1|adj|Kibar|kibar, nazik|/pəˈlaɪt/|Be polite to the guests.|
-rare|B1|adj|Nadir|nadir, ender|/rer/|This is a rare bird.|
-rely|B1|verb|Güvenmek|güvenmek, bel bağlamak|/rɪˈlaɪ/|You can rely on me.|
-rude|B1|adj|Kaba|kaba, terbiyesiz|/ruːd/|It is rude to interrupt.|
-scare|B1|verb|Korkutmak|korkutmak|/sker/|Did the noise scare you?|
-shy|B1|adj|Utangaç|utangaç, çekingen|/ʃaɪ/|He is too shy to speak.|
-smooth|B1|adj|Pürüzsüz|pürüzsüz, düz|/smuːð/|The baby has smooth skin.|
-stare|B1|verb|Dik dik bakmak|dik dik bakmak|/ster/|Don't stare at people.|
-sweat|B1|verb|Terlemek|terlemek|/swet/|I sweat a lot in summer.|
-theft|B1|noun|Hırsızlık|hırsızlık|/θeft/|He was arrested for theft.|
-trust|B1|verb|Güvenmek|güvenmek|/trʌst/|I trust my friends.|
-upset|B1|adj|Üzgün, kırgın|üzgün, kırgın|/ʌpˈset/|She was upset about the news.|
-vote|B1|verb|Oy vermek|oy vermek|/voʊt/|Did you vote yesterday?|
-waste|B1|verb|Boşa harcamak|israf etmek|/weɪst/|Don't waste water.|
-yell|B1|verb|Bağırmak|bağırmak|/jel/|Please don't yell at me.|
-habit|B1|noun|Alışkanlık|alışkanlık|/ˈhæb.ɪt/|Smoking is a bad habit.|
-fair|B1|adj|Adil|adil, hakça|/fer/|That's not fair!|
-heron|B2|noun|Balıkçıl (kuş)|balıkçıl|/ˈher.ən/|A heron stood still in the shallow water.|
-ulcer|B2|noun|Mide yarası|ülser, mide yarası|/ˈʌl.sɚ/|Stress can make a stomach ulcer worse.|
-absorb|B2|verb|Emmek|emmek, özümsemek|/əbˈzɔːrb/|Plants absorb water through their roots.|
-adapt|B2|verb|Uyum sağlamak|uyum sağlamak, uyarlamak|/əˈdæpt/|Animals adapt to their environment.|
-anxious|B2|adj|Endişeli|endişeli, kaygılı|/ˈæŋk.ʃəs/|She felt anxious before the interview.|
-assess|B2|verb|Değerlendirmek|değerlendirmek|/əˈses/|Teachers assess students regularly.|
-bias|B2|noun|Önyargı|önyargı, taraflılık|/ˈbaɪ.əs/|The report shows a clear bias.|
-blunt|B2|adj|Kör (bıçak)|kör, açık sözlü|/blʌnt/|This knife is blunt.|
-cease|B2|verb|Sona ermek|durmak, sona ermek|/siːs/|The rain ceased at noon.|
-clumsy|B2|adj|Sakar|sakar, beceriksiz|/ˈklʌm.zi/|I'm so clumsy, I broke a cup again.|
-cozy|B2|adj|Rahat, sıcak|rahat, sıcacık|/ˈkoʊ.zi/|It's a small but cozy flat.|
-crave|B2|verb|Can çekmek|çok istemek, can çekmek|/kreɪv/|I crave chocolate at night.|
-dense|B2|adj|Yoğun, sık|yoğun, sık|/dens/|We walked through dense fog.|
-devote|B2|verb|Adamak|adamak, vakfetmek|/dɪˈvoʊt/|She devoted her life to science.|
-dread|B2|verb|Çok korkmak|dehşetle beklemek|/dred/|I dread going to the dentist.|
-eager|B2|adj|İstekli|istekli, hevesli|/ˈiː.ɡɚ/|The students were eager to learn.|
-emerge|B2|verb|Ortaya çıkmak|ortaya çıkmak, belirmek|/ɪˈmɝːdʒ/|The sun emerged from the clouds.|
-endure|B2|verb|Katlanmak|dayanmak, katlanmak|/ɪnˈdʊr/|They endured a long winter.|
-fierce|B2|adj|Vahşi, şiddetli|vahşi, şiddetli|/fɪrs/|A fierce dog guarded the gate.|
-flaw|B2|noun|Kusur|kusur, defo|/flɑː/|There is a flaw in your plan.|
-fragile|B2|adj|Kırılgan|kırılgan, narin|/ˈfrædʒ.əl/|Be careful, the vase is fragile.|
-grasp|B2|verb|Kavramak|kavramak, sıkıca tutmak|/ɡræsp/|It took me a while to grasp the idea.|
-greed|B2|noun|Açgözlülük|açgözlülük, hırs|/ɡriːd/|Greed led him to steal.|
-grief|B2|noun|Keder|keder, yas|/ɡriːf/|She was full of grief after the loss.|
-hazard|B2|noun|Tehlike|tehlike, risk|/ˈhæz.ɚd/|Ice on the road is a hazard.|
-hollow|B2|adj|İçi boş|içi boş, oyuk|/ˈhɑː.loʊ/|The tree trunk was hollow.|
-humble|B2|adj|Alçakgönüllü|alçakgönüllü, mütevazı|/ˈhʌm.bəl/|Despite his fame, he stayed humble.|
-ignite|B2|verb|Tutuşturmak|tutuşturmak, ateşlemek|/ɪɡˈnaɪt/|A small spark can ignite a fire.|
-immune|B2|adj|Bağışık|bağışık, muaf|/ɪˈmjuːn/|You are immune after the vaccine.|
-keen|B2|adj|Hevesli|hevesli, meraklı|/kiːn/|He is keen on football.|
-linger|B2|verb|Oyalanmak|oyalanmak, kalmak|/ˈlɪŋ.ɡɚ/|The smell lingered for days.|
-merge|B2|verb|Birleşmek|birleşmek|/mɝːdʒ/|The two companies merged.|
-modest|B2|adj|Mütevazı|mütevazı, alçakgönüllü|/ˈmɑː.dɪst/|They live in a modest house.|
-myth|B2|noun|Efsane|efsane, mit|/mɪθ/|It's a myth that bats are blind.|
-notion|B2|noun|Kavram, fikir|kavram, fikir|/ˈnoʊ.ʃən/|I have no notion of what he means.|
-obey|B2|verb|İtaat etmek|itaat etmek, uymak|/oʊˈbeɪ/|You must obey the rules.|
-pace|B2|noun|Tempo, hız|tempo, hız|/peɪs/|Walk at your own pace.|
-peer|B2|noun|Akran|akran, emsal|/pɪr/|Teens care about their peers.|
-pledge|B2|noun|Söz, taahhüt|söz, taahhüt|/pledʒ/|He made a pledge to help.|
-prone|B2|adj|Eğilimli|eğilimli, yatkın|/proʊn/|He is prone to colds.|
-quest|B2|noun|Arayış|arayış, macera|/kwest/|Their quest for gold failed.|
-rage|B2|noun|Öfke|öfke, hiddet|/reɪdʒ/|He was shaking with rage.|
-rebel|B2|noun|Asi|asi, isyancı|/ˈreb.əl/|She was a rebel as a teenager.|
-refuge|B2|noun|Sığınak|sığınak, barınak|/ˈref.juːdʒ/|They took refuge in a cave.|
-remedy|B2|noun|Çare, ilaç|çare, deva|/ˈrem.ə.di/|Honey is a remedy for sore throats.|
-rigid|B2|adj|Katı, sert|katı, esnemez|/ˈrɪdʒ.ɪd/|The rules are too rigid.|
-ritual|B2|noun|Ritüel|ritüel, âdet|/ˈrɪtʃ.u.əl/|Morning coffee is my daily ritual.|
-scarce|B2|adj|Kıt, az|kıt, nadir|/skers/|Water is scarce in the desert.|
-scorn|B2|noun|Küçümseme|küçümseme, hor görme|/skɔːrn/|She looked at him with scorn.|
-shrink|B2|verb|Küçülmek|küçülmek, çekmek|/ʃrɪŋk/|My sweater shrank in the wash.|
-siege|B2|noun|Kuşatma|kuşatma|/siːdʒ/|The city was under siege.|
-soar|B2|verb|Süzülmek|yükselmek, süzülmek|/sɔːr/|Eagles soar high in the sky.|
-spine|B2|noun|Omurga|omurga, sırt|/spaɪn/|Sit up straight to protect your spine.|
-stern|B2|adj|Sert, katı|sert, haşin|/stɝːn/|The teacher gave a stern warning.|
-strive|B2|verb|Çabalamak|çabalamak, uğraşmak|/straɪv/|We strive to improve every day.|
-subtle|B2|adj|İnce, belirsiz|ince, zor fark edilen|/ˈsʌt̬.əl/|There is a subtle difference.|
-swift|B2|adj|Hızlı, çabuk|hızlı, çabuk|/swɪft/|We need a swift decision.|
-thrive|B2|verb|Gelişmek|gelişmek, serpilmek|/θraɪv/|Plants thrive in this climate.|
-timid|B2|adj|Ürkek|ürkek, çekingen|/ˈtɪm.ɪd/|The timid boy hid behind his mum.|
-toxic|B2|adj|Zehirli|zehirli, toksik|/ˈtɑːk.sɪk/|These berries are toxic.|
-trait|B2|noun|Özellik|özellik, nitelik|/treɪt/|Patience is a rare trait.|
-urge|B2|noun|Dürtü|dürtü, istek|/ɝːdʒ/|I felt an urge to laugh.|
-vast|B2|adj|Engin, uçsuz|engin, çok geniş|/væst/|The ocean is vast.|
-vital|B2|adj|Hayati|hayati, çok önemli|/ˈvaɪ.t̬əl/|Water is vital for life.|
-vivid|B2|adj|Canlı, parlak|canlı, parlak|/ˈvɪv.ɪd/|She has vivid memories of her childhood.|
-wary|B2|adj|Temkinli|temkinli, ihtiyatlı|/ˈwer.i/|Be wary of strangers.|
-weary|B2|adj|Bitkin|bitkin, yorgun|/ˈwɪr.i/|The weary travellers finally arrived.|
-yield|B2|verb|Sağlamak, vermek|ürün vermek, boyun eğmek|/jiːld/|The trees yield a lot of fruit.|
-abolish|C1|verb|Kaldırmak (yasa)|yürürlükten kaldırmak|/əˈbɑː.lɪʃ/|Many countries abolished the death penalty.|yds
-acquire|C1|verb|Edinmek|edinmek, elde etmek|/əˈkwaɪr/|Children acquire language quickly.|yds
-adverse|C1|adj|Olumsuz, ters|olumsuz, ters|/ædˈvɝːs/|The drug has adverse effects.|yds
-allege|C1|verb|İddia etmek|iddia etmek|/əˈledʒ/|They allege that he lied.|yds
-amend|C1|verb|Değiştirmek|değiştirmek, düzeltmek|/əˈmend/|The law was amended last year.|yds
-augment|C1|verb|Artırmak|artırmak, çoğaltmak|/ɑːɡˈment/|He works nights to augment his income.|yds
-banish|C1|verb|Sürgün etmek|sürgün etmek, kovmak|/ˈbæn.ɪʃ/|The king banished him from the land.|yds
-candid|C1|adj|Açık sözlü|samimi, açık sözlü|/ˈkæn.dɪd/|Thank you for your candid answer.|yds
-coerce|C1|verb|Zorlamak|zorlamak, baskı yapmak|/koʊˈɝːs/|He was coerced into signing.|yds
-comply|C1|verb|Uymak|uymak, riayet etmek|/kəmˈplaɪ/|All staff must comply with the rules.|yds
-concede|C1|verb|Kabul etmek|kabullenmek, teslim etmek|/kənˈsiːd/|He conceded that he was wrong.|yds
-curtail|C1|verb|Kısıtlamak|kısıtlamak, kısmak|/kɚˈteɪl/|The budget was curtailed.|yds
-deplete|C1|verb|Tüketmek|tüketmek, azaltmak|/dɪˈpliːt/|We are depleting natural resources.|yds
-deter|C1|verb|Caydırmak|caydırmak, vazgeçirmek|/dɪˈtɝː/|High fines deter crime.|yds
-dismal|C1|adj|İç karartıcı|kasvetli, iç karartıcı|/ˈdɪz.məl/|The weather was dismal all week.|yds
-disrupt|C1|verb|Sekteye uğratmak|bozmak, aksatmak|/dɪsˈrʌpt/|The strike disrupted flights.|yds
-elicit|C1|verb|Ortaya çıkarmak|ortaya çıkarmak, almak|/iˈlɪs.ɪt/|The question elicited no answer.|yds
-emit|C1|verb|Yaymak|yaymak, salmak|/iˈmɪt/|Cars emit harmful gases.|yds
-endorse|C1|verb|Onaylamak|desteklemek, onaylamak|/ɪnˈdɔːrs/|The plan was endorsed by the board.|yds
-enhance|C1|verb|Geliştirmek|artırmak, iyileştirmek|/ɪnˈhæns/|Good lighting enhances the room.|yds
-entail|C1|verb|Gerektirmek|gerektirmek, içermek|/ɪnˈteɪl/|The job entails a lot of travel.|yds
-erode|C1|verb|Aşındırmak|aşındırmak, aşınmak|/ɪˈroʊd/|The sea erodes the cliffs.|yds
-evade|C1|verb|Kaçmak, atlatmak|kaçmak, sakınmak|/ɪˈveɪd/|He tried to evade taxes.|yds
-exempt|C1|adj|Muaf|muaf, bağışık|/ɪɡˈzempt/|Students are exempt from the fee.|yds
-foster|C1|verb|Teşvik etmek|teşvik etmek, beslemek|/ˈfɑː.stɚ/|Schools should foster creativity.|yds
-hamper|C1|verb|Engellemek|engellemek, sekteye uğratmak|/ˈhæm.pɚ/|Bad weather hampered the rescue.|yds
-hinder|C1|verb|Engel olmak|engel olmak, geciktirmek|/ˈhɪn.dɚ/|Noise hinders concentration.|yds
-impair|C1|verb|Zayıflatmak|bozmak, zayıflatmak|/ɪmˈper/|Alcohol impairs your judgement.|yds
-induce|C1|verb|Neden olmak|yol açmak, ikna etmek|/ɪnˈduːs/|This drug may induce sleep.|yds
-infer|C1|verb|Sonuç çıkarmak|çıkarım yapmak|/ɪnˈfɝː/|What can we infer from the data?|yds
-inhibit|C1|verb|Engellemek|engellemek, bastırmak|/ɪnˈhɪb.ɪt/|Fear can inhibit learning.|yds
-lucid|C1|adj|Berrak, açık|açık, anlaşılır|/ˈluː.sɪd/|She gave a lucid explanation.|yds
-obscure|C1|adj|Belirsiz|belirsiz, az bilinen|/əbˈskjʊr/|The origin of the word is obscure.|yds
-omit|C1|verb|Atlamak|atlamak, çıkarmak|/oʊˈmɪt/|Don't omit any details.|yds
-prevail|C1|verb|Üstün gelmek|galip gelmek, hâkim olmak|/prɪˈveɪl/|Justice will prevail.|yds
-refute|C1|verb|Çürütmek|çürütmek, yalanlamak|/rɪˈfjuːt/|He refuted the claims.|yds
-render|C1|verb|Hâle getirmek|kılmak, hâle getirmek|/ˈren.dɚ/|The news rendered her speechless.|yds
-revoke|C1|verb|İptal etmek|iptal etmek, geri almak|/rɪˈvoʊk/|His licence was revoked.|yds
-sever|C1|verb|Koparmak|kesmek, koparmak|/ˈsev.ɚ/|They severed all ties.|yds
-shrewd|C1|adj|Kurnaz, zeki|kurnaz, akıllı|/ʃruːd/|She is a shrewd businesswoman.|yds
-stifle|C1|verb|Bastırmak|bastırmak, boğmak|/ˈstaɪ.fəl/|He stifled a yawn.|yds
-sustain|C1|verb|Sürdürmek|sürdürmek, desteklemek|/səˈsteɪn/|We cannot sustain this pace.|yds
-thwart|C1|verb|Engellemek|engellemek, boşa çıkarmak|/θwɔːrt/|Police thwarted the robbery.|yds
-verify|C1|verb|Doğrulamak|doğrulamak|/ˈver.ə.faɪ/|Please verify your answer.|yds
-wane|C1|verb|Azalmak|azalmak, zayıflamak|/weɪn/|Interest in the show waned.|yds
-yearn|C1|verb|Özlem duymak|özlemek, hasret çekmek|/jɝːn/|She yearned for home.|yds
-deem|C1|verb|Saymak, addetmek|saymak, addetmek|/diːm/|The plan was deemed too risky.|yds
-vague|C1|adj|Belirsiz|belirsiz, muğlak|/veɪɡ/|His answer was vague.|yds
-mere|C1|adj|Sadece, salt|salt, sadece|/mɪr/|It was a mere accident.|yds
-avid|C1|adj|Tutkulu|hevesli, tutkulu|/ˈæv.ɪd/|He is an avid reader.|yds
+# en|level|pos|clue_tr|meaning_tr|ipa_us|ipa_uk|example_en|example_tr|tags
+# Kelime havuzu. clue_tr kısa olmalı (çengel kutusuna sığar, en fazla 14 karakter), meaning_tr bitiş ekranında görünür.
+house|A1|noun|Ev|ev, konut|/haʊs/|/haʊs/|We moved into a new house last year.|Geçen yıl yeni bir eve taşındık.|
+cat|A1|noun|Kedi|kedi|/kæt/|/kæt/|The cat is sleeping on the sofa.|Kedi kanepede uyuyor.|
+dog|A1|noun|Köpek|köpek|/dɔːɡ/|/dɒɡ/|My dog loves long walks.|Köpeğim uzun yürüyüşlere bayılır.|
+red|A1|adj|Kırmızı|kırmızı|/red/|/red/|She has a red bike.|Onun kırmızı bir bisikleti var.|
+blue|A1|adj|Mavi|mavi|/bluː/|/bluː/|The sky is blue today.|Bugün gökyüzü mavi.|
+green|A1|adj|Yeşil|yeşil|/ɡriːn/|/ɡriːn/|Green apples are a bit sour.|Yeşil elmalar biraz ekşidir.|
+apple|A1|noun|Elma|elma|/ˈæp.əl/|/ˈæp.əl/|I eat an apple every morning.|Her sabah bir elma yerim.|,mutfak
+bread|A1|noun|Ekmek|ekmek|/bred/|/bred/|Can you buy some bread?|Biraz ekmek alabilir misin?|,mutfak
+water|A1|noun|Su|su|/ˈwɑː.t̬ɚ/|/ˈwɔː.tər/|Drink more water in summer.|Yazın daha çok su için.|
+milk|A1|noun|Süt|süt|/mɪlk/|/mɪlk/|The baby drinks warm milk.|Bebek ılık süt içiyor.|,mutfak
+egg|A1|noun|Yumurta|yumurta|/eɡ/|/eɡ/|I had a boiled egg for breakfast.|Kahvaltıda haşlanmış yumurta yedim.|,mutfak
+book|A1|noun|Kitap|kitap|/bʊk/|/bʊk/|This book is very funny.|Bu kitap çok komik.|
+pen|A1|noun|Tükenmez kalem|kalem, tükenmez kalem|/pen/|/pen/|Can I borrow your pen?|Kalemini ödünç alabilir miyim?|
+table|A1|noun|Masa|masa|/ˈteɪ.bəl/|/ˈteɪ.bəl/|Put the cups on the table.|Fincanları masaya koy.|
+chair|A1|noun|Sandalye|sandalye|/tʃer/|/tʃeər/|This chair is very comfortable.|Bu sandalye çok rahat.|
+door|A1|noun|Kapı|kapı|/dɔːr/|/dɔːr/|Please close the door.|Lütfen kapıyı kapat.|
+window|A1|noun|Pencere|pencere|/ˈwɪn.doʊ/|/ˈwɪn.dəʊ/|Open the window, it is hot.|Pencereyi aç, hava sıcak.|
+bed|A1|noun|Yatak|yatak|/bed/|/bed/|I go to bed at ten.|Saat onda yatarım.|
+car|A1|noun|Araba|araba, otomobil|/kɑːr/|/kɑːr/|His car is in the garage.|Arabası garajda.|
+bus|A1|noun|Otobüs|otobüs|/bʌs/|/bʌs/|I take the bus to school.|Okula otobüsle giderim.|,seyahat
+train|A1|noun|Tren|tren|/treɪn/|/treɪn/|The train leaves at nine.|Tren dokuzda kalkıyor.|,seyahat
+sun|A1|noun|Güneş|güneş|/sʌn/|/sʌn/|The sun is shining.|Güneş parlıyor.|,doga
+moon|A1|noun|Ay (gök cismi)|ay, dolunay|/muːn/|/muːn/|The moon is bright tonight.|Bu gece ay çok parlak.|,doga
+star|A1|noun|Yıldız|yıldız|/stɑːr/|/stɑːr/|I can see a star in the sky.|Gökyüzünde bir yıldız görebiliyorum.|,doga
+rain|A1|noun|Yağmur|yağmur|/reɪn/|/reɪn/|Take an umbrella, there is rain.|Şemsiye al, yağmur yağıyor.|,doga
+snow|A1|noun|Kar|kar|/snoʊ/|/snəʊ/|The children play in the snow.|Çocuklar karda oynuyor.|,doga
+tree|A1|noun|Ağaç|ağaç|/triː/|/triː/|There is a bird in the tree.|Ağaçta bir kuş var.|,doga
+fish|A1|noun|Balık|balık|/fɪʃ/|/fɪʃ/|We had fish for dinner.|Akşam yemeğinde balık yedik.|,doga,mutfak
+bird|A1|noun|Kuş|kuş|/bɝːd/|/bɜːd/|A small bird is singing.|Küçük bir kuş ötüyor.|,doga
+horse|A1|noun|At|at|/hɔːrs/|/hɔːs/|She rides a white horse.|Beyaz bir ata biniyor.|,doga
+cow|A1|noun|İnek|inek|/kaʊ/|/kaʊ/|The cow gives milk.|İnek süt verir.|,doga
+hand|A1|noun|El|el|/hænd/|/hænd/|Raise your hand, please.|Elini kaldır lütfen.|
+head|A1|noun|Baş, kafa|baş, kafa|/hed/|/hed/|My head hurts.|Başım ağrıyor.|
+eye|A1|noun|Göz|göz|/aɪ/|/aɪ/|She has green eyes.|Onun yeşil gözleri var.|
+ear|A1|noun|Kulak|kulak|/ɪr/|/ɪər/|The dog has big ears.|Köpeğin büyük kulakları var.|
+nose|A1|noun|Burun|burun|/noʊz/|/nəʊz/|My nose is cold.|Burnum üşüyor.|
+mouth|A1|noun|Ağız|ağız|/maʊθ/|/maʊθ/|Open your mouth, please.|Ağzını aç lütfen.|
+foot|A1|noun|Ayak|ayak|/fʊt/|/fʊt/|I hurt my foot.|Ayağımı incittim.|
+leg|A1|noun|Bacak|bacak|/leɡ/|/leɡ/|He broke his leg skiing.|Kayak yaparken bacağını kırdı.|
+arm|A1|noun|Kol|kol|/ɑːrm/|/ɑːm/|She has a cat in her arms.|Kollarında bir kedi tutuyor.|
+mother|A1|noun|Anne|anne|/ˈmʌð.ɚ/|/ˈmʌð.ər/|My mother is a teacher.|Annem öğretmen.|
+father|A1|noun|Baba|baba|/ˈfɑː.ðɚ/|/ˈfɑː.ðər/|His father works in a bank.|Babası bir bankada çalışıyor.|
+sister|A1|noun|Kız kardeş|kız kardeş, abla|/ˈsɪs.tɚ/|/ˈsɪs.tər/|My sister is ten years old.|Kız kardeşim on yaşında.|
+baby|A1|noun|Bebek|bebek|/ˈbeɪ.bi/|/ˈbeɪ.bi/|The baby is sleeping.|Bebek uyuyor.|
+friend|A1|noun|Arkadaş|arkadaş|/frend/|/frend/|Ali is my best friend.|Ali en iyi arkadaşım.|
+school|A1|noun|Okul|okul|/skuːl/|/skuːl/|School starts at eight.|Okul sekizde başlıyor.|
+city|A1|noun|Şehir|şehir|/ˈsɪt̬.i/|/ˈsɪt.i/|Istanbul is a big city.|İstanbul büyük bir şehir.|
+road|A1|noun|Yol|yol|/roʊd/|/rəʊd/|This road goes to the sea.|Bu yol denize gidiyor.|
+shop|A1|noun|Dükkân|dükkân, mağaza|/ʃɑːp/|/ʃɒp/|The shop opens at ten.|Dükkân onda açılıyor.|
+money|A1|noun|Para|para|/ˈmʌn.i/|/ˈmʌn.i/|I have no money with me.|Yanımda hiç para yok.|,is
+day|A1|noun|Gün|gün|/deɪ/|/deɪ/|Have a nice day!|İyi günler!|
+night|A1|noun|Gece|gece|/naɪt/|/naɪt/|Good night, see you tomorrow.|İyi geceler, yarın görüşürüz.|
+week|A1|noun|Hafta|hafta|/wiːk/|/wiːk/|I see her every week.|Onu her hafta görüyorum.|
+year|A1|noun|Yıl|yıl, sene|/jɪr/|/jɪər/|He is ten years old.|O on yaşında.|
+one|A1|num|Bir|bir|/wʌn/|/wʌn/|I have one brother.|Bir erkek kardeşim var.|
+two|A1|num|İki|iki|/tuː/|/tuː/|Two coffees, please.|İki kahve lütfen.|
+three|A1|num|Üç|üç|/θriː/|/θriː/|We have three cats.|Üç kedimiz var.|
+ten|A1|num|On|on|/ten/|/ten/|Count to ten.|Ona kadar say.|
+big|A1|adj|Büyük|büyük|/bɪɡ/|/bɪɡ/|They live in a big house.|Büyük bir evde yaşıyorlar.|
+small|A1|adj|Küçük|küçük|/smɑːl/|/smɔːl/|I have a small room.|Küçük bir odam var.|
+hot|A1|adj|Sıcak|sıcak|/hɑːt/|/hɒt/|The soup is very hot.|Çorba çok sıcak.|
+cold|A1|adj|Soğuk|soğuk|/koʊld/|/kəʊld/|It is cold outside.|Dışarısı soğuk.|
+happy|A1|adj|Mutlu|mutlu|/ˈhæp.i/|/ˈhæp.i/|I am happy to see you.|Seni gördüğüme çok mutlu oldum.|
+sad|A1|adj|Üzgün|üzgün|/sæd/|/sæd/|Why are you sad?|Neden üzgünsün?|
+new|A1|adj|Yeni|yeni|/nuː/|/njuː/|I have a new phone.|Yeni bir telefonum var.|
+old|A1|adj|Eski, yaşlı|eski, yaşlı|/oʊld/|/əʊld/|This is an old song.|Bu eski bir şarkı.|
+eat|A1|verb|Yemek yemek|yemek, yemek yemek|/iːt/|/iːt/|We eat lunch at one.|Öğle yemeğini saat birde yeriz.|
+drink|A1|verb|İçmek|içmek|/drɪŋk/|/drɪŋk/|I drink tea every day.|Her gün çay içerim.|
+sleep|A1|verb|Uyumak|uyumak|/sliːp/|/sliːp/|Babies sleep a lot.|Bebekler çok uyur.|
+run|A1|verb|Koşmak|koşmak|/rʌn/|/rʌn/|I run in the park.|Parkta koşarım.|
+walk|A1|verb|Yürümek|yürümek|/wɑːk/|/wɔːk/|We walk to school.|Okula yürüyerek gideriz.|
+read|A1|verb|Okumak|okumak|/riːd/|/riːd/|I read before bed.|Yatmadan önce kitap okurum.|
+write|A1|verb|Yazmak|yazmak|/raɪt/|/raɪt/|Write your name here.|Adını buraya yaz.|
+open|A1|verb|Açmak|açmak|/ˈoʊ.pən/|/ˈəʊ.pən/|Open your books.|Kitaplarınızı açın.|
+black|A1|adj|Siyah|siyah, kara|/blæk/|/blæk/|He wears a black coat.|Siyah bir palto giyiyor.|
+white|A1|adj|Beyaz|beyaz|/waɪt/|/waɪt/|Snow is white.|Kar beyazdır.|
+tea|A1|noun|Çay|çay|/tiː/|/tiː/|Would you like some tea?|Biraz çay ister misin?|,mutfak
+rice|A1|noun|Pirinç|pirinç, pilav|/raɪs/|/raɪs/|We had rice with chicken.|Tavukla pilav yedik.|,mutfak
+salt|A1|noun|Tuz|tuz|/sɑːlt/|/sɒlt/|Pass me the salt, please.|Tuzu uzatır mısın lütfen?|,mutfak
+sugar|A1|noun|Şeker|şeker|/ˈʃʊɡ.ɚ/|/ˈʃʊɡ.ər/|No sugar in my coffee.|Kahveme şeker koymayın.|,mutfak
+cake|A1|noun|Kek, pasta|kek, pasta|/keɪk/|/keɪk/|Mum made a chocolate cake.|Annem çikolatalı kek yaptı.|,mutfak
+shoe|A1|noun|Ayakkabı|ayakkabı|/ʃuː/|/ʃuː/|My shoes are wet.|Ayakkabılarım ıslak.|
+hat|A1|noun|Şapka|şapka|/hæt/|/hæt/|He wears a hat in summer.|Yazın şapka takar.|
+shirt|A1|noun|Gömlek|gömlek|/ʃɝːt/|/ʃɜːt/|This shirt is too big.|Bu gömlek bana çok büyük.|
+sea|A1|noun|Deniz|deniz|/siː/|/siː/|We swim in the sea.|Denizde yüzeriz.|,doga
+park|A1|noun|Park|park|/pɑːrk/|/pɑːk/|Let's meet in the park.|Parkta buluşalım.|
+room|A1|noun|Oda|oda|/ruːm/|/ruːm/|My room is upstairs.|Odam üst katta.|
+lemon|A1|noun|Limon|limon|/ˈlem.ən/|/ˈlem.ən/|Tea with lemon, please.|Limonlu çay lütfen.|,mutfak
+nine|A1|num|Dokuz|dokuz|/naɪn/|/naɪn/|The shop opens at nine.|Dükkân dokuzda açılıyor.|
+song|A1|noun|Şarkı|şarkı|/sɑːŋ/|/sɒŋ/|I love this song.|Bu şarkıya bayılıyorum.|
+game|A1|noun|Oyun|oyun|/ɡeɪm/|/ɡeɪm/|Let's play a game.|Hadi bir oyun oynayalım.|
+time|A1|noun|Zaman|zaman, saat|/taɪm/|/taɪm/|What time is it?|Saat kaç?|
+name|A1|noun|İsim, ad|isim, ad|/neɪm/|/neɪm/|What is your name?|Adın ne?|
+north|A2|noun|Kuzey|kuzey|/nɔːrθ/|/nɔːθ/|Birds fly north in spring.|Kuşlar ilkbaharda kuzeye uçar.|
+earth|A2|noun|Dünya gezegeni|Dünya, toprak|/ɝːθ/|/ɜːθ/|The Earth goes around the sun.|Dünya güneşin etrafında döner.|,doga
+south|A2|noun|Güney|güney|/saʊθ/|/saʊθ/|Antalya is in the south.|Antalya güneydedir.|
+east|A2|noun|Doğu|doğu|/iːst/|/iːst/|The sun rises in the east.|Güneş doğudan doğar.|
+west|A2|noun|Batı|batı|/west/|/west/|They live in the west of the city.|Şehrin batısında yaşıyorlar.|
+kitchen|A2|noun|Mutfak|mutfak|/ˈkɪtʃ.ən/|/ˈkɪtʃ.ən/|Dad is cooking in the kitchen.|Babam mutfakta yemek pişiriyor.|,mutfak
+bridge|A2|noun|Köprü|köprü|/brɪdʒ/|/brɪdʒ/|We walked across the bridge.|Köprünün üzerinden yürüyerek geçtik.|,seyahat
+ticket|A2|noun|Bilet|bilet|/ˈtɪk.ɪt/|/ˈtɪk.ɪt/|I bought two tickets for the film.|Film için iki bilet aldım.|,seyahat
+travel|A2|verb|Seyahat etmek|seyahat etmek, gezmek|/ˈtræv.əl/|/ˈtræv.əl/|I love to travel by train.|Trenle seyahat etmeyi çok severim.|,seyahat
+market|A2|noun|Pazar|pazar, market|/ˈmɑːr.kɪt/|/ˈmɑː.kɪt/|We buy fruit at the market.|Meyveyi pazardan alırız.|,is
+cheap|A2|adj|Ucuz|ucuz|/tʃiːp/|/tʃiːp/|This shirt was very cheap.|Bu gömlek çok ucuzdu.|
+early|A2|adj|Erken|erken|/ˈɝː.li/|/ˈɜː.li/|I get up early on Mondays.|Pazartesileri erken kalkarım.|
+late|A2|adj|Geç|geç|/leɪt/|/leɪt/|Sorry, I am late.|Üzgünüm, geç kaldım.|
+angry|A2|adj|Kızgın|kızgın, öfkeli|/ˈæŋ.ɡri/|/ˈæŋ.ɡri/|Why is the teacher angry?|Öğretmen neden kızgın?|
+tired|A2|adj|Yorgun|yorgun|/taɪrd/|/taɪəd/|I am too tired to cook.|Yemek yapamayacak kadar yorgunum.|
+hungry|A2|adj|Aç (karnı)|aç, acıkmış|/ˈhʌŋ.ɡri/|/ˈhʌŋ.ɡri/|Are you hungry?|Acıktın mı?|
+empty|A2|adj|Boş|boş|/ˈemp.ti/|/ˈemp.ti/|The fridge is empty.|Buzdolabı boş.|
+heavy|A2|adj|Ağır|ağır|/ˈhev.i/|/ˈhev.i/|This bag is very heavy.|Bu çanta çok ağır.|
+quiet|A2|adj|Sessiz|sessiz, sakin|/ˈkwaɪ.ət/|/ˈkwaɪ.ət/|The library is quiet.|Kütüphane sessizdir.|
+clean|A2|adj|Temiz|temiz|/kliːn/|/kliːn/|Keep your room clean.|Odanı temiz tut.|
+dirty|A2|adj|Kirli|kirli|/ˈdɝː.t̬i/|/ˈdɜː.ti/|Your shoes are dirty.|Ayakkabıların kirli.|
+doctor|A2|noun|Doktor|doktor, hekim|/ˈdɑːk.tɚ/|/ˈdɒk.tər/|You should see a doctor.|Bir doktora görünmelisin.|
+nurse|A2|noun|Hemşire|hemşire|/nɝːs/|/nɜːs/|The nurse was very kind.|Hemşire çok nazikti.|
+farmer|A2|noun|Çiftçi|çiftçi|/ˈfɑːr.mɚ/|/ˈfɑː.mər/|The farmer grows wheat.|Çiftçi buğday yetiştiriyor.|
+driver|A2|noun|Sürücü|sürücü, şoför|/ˈdraɪ.vɚ/|/ˈdraɪ.vər/|The bus driver smiled at us.|Otobüs şoförü bize gülümsedi.|
+island|A2|noun|Ada|ada|/ˈaɪ.lənd/|/ˈaɪ.lənd/|We spent a week on an island.|Bir adada bir hafta geçirdik.|,doga,seyahat
+forest|A2|noun|Orman|orman|/ˈfɔːr.ɪst/|/ˈfɒr.ɪst/|Wolves live in the forest.|Kurtlar ormanda yaşar.|,doga
+desert|A2|noun|Çöl|çöl|/ˈdez.ɚt/|/ˈdez.ət/|It rarely rains in the desert.|Çölde nadiren yağmur yağar.|,doga
+castle|A2|noun|Kale, şato|kale, şato|/ˈkæs.əl/|/ˈkɑː.səl/|The castle is on a hill.|Kale bir tepenin üzerinde.|,seyahat
+cloud|A2|noun|Bulut|bulut|/klaʊd/|/klaʊd/|There is not a cloud in the sky.|Gökyüzünde tek bir bulut yok.|,doga
+storm|A2|noun|Fırtına|fırtına|/stɔːrm/|/stɔːm/|The storm broke many trees.|Fırtına birçok ağacı devirdi.|,doga
+wind|A2|noun|Rüzgâr|rüzgâr|/wɪnd/|/wɪnd/|The wind is very strong today.|Bugün rüzgâr çok sert.|,doga
+summer|A2|noun|Yaz (mevsim)|yaz|/ˈsʌm.ɚ/|/ˈsʌm.ər/|We go to the beach in summer.|Yazın plaja gideriz.|,doga
+winter|A2|noun|Kış|kış|/ˈwɪn.t̬ɚ/|/ˈwɪn.tər/|Winter is cold in Erzurum.|Erzurum'da kış soğuk geçer.|,doga
+autumn|A2|noun|Sonbahar|sonbahar|/ˈɑː.t̬əm/|/ˈɔː.təm/|Leaves fall in autumn.|Sonbaharda yapraklar dökülür.|,doga
+holiday|A2|noun|Tatil|tatil|/ˈhɑː.lə.deɪ/|/ˈhɒl.ə.deɪ/|Where did you go on holiday?|Tatilde nereye gittin?|,seyahat
+hotel|A2|noun|Otel|otel|/hoʊˈtel/|/həʊˈtel/|Our hotel is near the beach.|Otelimiz plaja yakın.|,seyahat
+plane|A2|noun|Uçak|uçak|/pleɪn/|/pleɪn/|The plane landed on time.|Uçak zamanında indi.|,seyahat
+ship|A2|noun|Gemi|gemi|/ʃɪp/|/ʃɪp/|The ship sails at noon.|Gemi öğlen yola çıkıyor.|,seyahat
+coin|A2|noun|Madeni para|madeni para|/kɔɪn/|/kɔɪn/|I found a coin on the floor.|Yerde bir madeni para buldum.|
+price|A2|noun|Fiyat|fiyat|/praɪs/|/praɪs/|The price is too high.|Fiyat çok yüksek.|,is
+gift|A2|noun|Hediye|hediye|/ɡɪft/|/ɡɪft/|Thank you for the lovely gift.|Güzel hediye için teşekkür ederim.|
+party|A2|noun|Parti|parti, eğlence|/ˈpɑːr.t̬i/|/ˈpɑː.ti/|Are you coming to my party?|Partime geliyor musun?|
+dance|A2|verb|Dans etmek|dans etmek|/dæns/|/dɑːns/|Let's dance together.|Hadi birlikte dans edelim.|
+smile|A2|verb|Gülümsemek|gülümsemek|/smaɪl/|/smaɪl/|Smile for the photo!|Fotoğraf için gülümse!|
+laugh|A2|verb|Gülmek|gülmek, kahkaha atmak|/læf/|/lɑːf/|His jokes make me laugh.|Onun şakaları beni güldürür.|
+cry|A2|verb|Ağlamak|ağlamak|/kraɪ/|/kraɪ/|The baby started to cry.|Bebek ağlamaya başladı.|
+borrow|A2|verb|Ödünç almak|ödünç almak|/ˈbɑː.roʊ/|/ˈbɒr.əʊ/|Can I borrow your bike?|Bisikletini ödünç alabilir miyim?|
+carry|A2|verb|Taşımak|taşımak|/ˈker.i/|/ˈkær.i/|Can you carry this box?|Bu kutuyu taşıyabilir misin?|
+catch|A2|verb|Yakalamak|yakalamak, tutmak|/kætʃ/|/kætʃ/|Catch the ball!|Topu yakala!|
+throw|A2|verb|Fırlatmak|atmak, fırlatmak|/θroʊ/|/θrəʊ/|Throw the ball to me.|Topu bana at.|
+climb|A2|verb|Tırmanmak|tırmanmak|/klaɪm/|/klaɪm/|We climbed the mountain.|Dağa tırmandık.|
+swim|A2|verb|Yüzmek|yüzmek|/swɪm/|/swɪm/|Can you swim?|Yüzme biliyor musun?|
+cook|A2|verb|Pişirmek|yemek pişirmek|/kʊk/|/kʊk/|My father loves to cook.|Babam yemek yapmayı çok sever.|,mutfak
+wash|A2|verb|Yıkamak|yıkamak|/wɑːʃ/|/wɒʃ/|Wash your hands before dinner.|Yemekten önce ellerini yıka.|
+build|A2|verb|İnşa etmek|inşa etmek, yapmak|/bɪld/|/bɪld/|They want to build a new school.|Yeni bir okul inşa etmek istiyorlar.|
+break|A2|verb|Kırmak|kırmak|/breɪk/|/breɪk/|Be careful, don't break the glass.|Dikkat et, bardağı kırma.|
+forget|A2|verb|Unutmak|unutmak|/fɚˈɡet/|/fəˈɡet/|Don't forget your keys.|Anahtarlarını unutma.|
+invite|A2|verb|Davet etmek|davet etmek|/ɪnˈvaɪt/|/ɪnˈvaɪt/|I want to invite you to dinner.|Seni akşam yemeğine davet etmek istiyorum.|
+enjoy|A2|verb|Keyif almak|keyif almak, sevmek|/ɪnˈdʒɔɪ/|/ɪnˈdʒɔɪ/|I really enjoy reading.|Kitap okumaktan gerçekten keyif alırım.|
+visit|A2|verb|Ziyaret etmek|ziyaret etmek|/ˈvɪz.ɪt/|/ˈvɪz.ɪt/|We visit our grandma on Sundays.|Pazar günleri büyükannemizi ziyaret ederiz.|,seyahat
+arrive|A2|verb|Varmak|varmak, ulaşmak|/əˈraɪv/|/əˈraɪv/|The train arrives at six.|Tren altıda varıyor.|,seyahat
+leave|A2|verb|Ayrılmak|ayrılmak, bırakmak|/liːv/|/liːv/|We leave at eight tomorrow.|Yarın sekizde yola çıkıyoruz.|
+lose|A2|verb|Kaybetmek|kaybetmek|/luːz/|/luːz/|Don't lose your ticket.|Biletini kaybetme.|,futbol
+win|A2|verb|Kazanmak|kazanmak|/wɪn/|/wɪn/|Our team will win the match.|Takımımız maçı kazanacak.|,futbol
+choose|A2|verb|Seçmek|seçmek|/tʃuːz/|/tʃuːz/|Choose a card.|Bir kart seç.|
+kind|A2|adj|Nazik|nazik, iyi kalpli|/kaɪnd/|/kaɪnd/|She is kind to everyone.|Herkese karşı naziktir.|
+brave|A2|adj|Cesur|cesur|/breɪv/|/breɪv/|The brave girl saved the cat.|Cesur kız kediyi kurtardı.|
+rich|A2|adj|Zengin|zengin|/rɪtʃ/|/rɪtʃ/|He became rich very young.|Çok genç yaşta zengin oldu.|
+poor|A2|adj|Fakir|fakir, yoksul|/pʊr/|/pɔːr/|They were poor but happy.|Fakirdiler ama mutluydular.|
+wide|A2|adj|Geniş|geniş|/waɪd/|/waɪd/|The river is very wide here.|Nehir burada çok geniş.|
+narrow|A2|adj|Dar|dar|/ˈner.oʊ/|/ˈnær.əʊ/|The streets are narrow in the old town.|Eski şehirde sokaklar dar.|
+sharp|A2|adj|Keskin|keskin|/ʃɑːrp/|/ʃɑːp/|Be careful, the knife is sharp.|Dikkat et, bıçak keskin.|
+thin|A2|adj|İnce|ince, zayıf|/θɪn/|/θɪn/|The ice is too thin to walk on.|Buz, üzerinde yürünemeyecek kadar ince.|
+thick|A2|adj|Kalın|kalın|/θɪk/|/θɪk/|This book is very thick.|Bu kitap çok kalın.|
+ill|A2|adj|Hasta|hasta|/ɪl/|/ɪl/|She was ill last week.|Geçen hafta hastaydı.|
+uncle|A2|noun|Amca, dayı|amca, dayı|/ˈʌŋ.kəl/|/ˈʌŋ.kəl/|My uncle lives in Izmir.|Amcam İzmir'de yaşıyor.|
+aunt|A2|noun|Teyze, hala|teyze, hala|/ænt/|/ɑːnt/|My aunt makes great cakes.|Teyzem harika kekler yapar.|
+cousin|A2|noun|Kuzen|kuzen|/ˈkʌz.ən/|/ˈkʌz.ən/|My cousin is my age.|Kuzenim benimle yaşıt.|
+wallet|A2|noun|Cüzdan|cüzdan|/ˈwɑː.lɪt/|/ˈwɒl.ɪt/|I left my wallet at home.|Cüzdanımı evde unuttum.|,seyahat
+pocket|A2|noun|Cep|cep|/ˈpɑː.kɪt/|/ˈpɒk.ɪt/|My phone is in my pocket.|Telefonum cebimde.|
+river|A2|noun|Nehir|nehir, ırmak|/ˈrɪv.ɚ/|/ˈrɪv.ər/|The river flows into the sea.|Nehir denize dökülür.|,doga
+lake|A2|noun|Göl|göl|/leɪk/|/leɪk/|We swam in the lake.|Gölde yüzdük.|,doga
+hill|A2|noun|Tepe|tepe|/hɪl/|/hɪl/|The house is on a hill.|Ev bir tepenin üzerinde.|,doga
+village|A2|noun|Köy|köy|/ˈvɪl.ɪdʒ/|/ˈvɪl.ɪdʒ/|My grandparents live in a village.|Büyükannemle büyükbabam bir köyde yaşıyor.|
+honey|A2|noun|Bal|bal|/ˈhʌn.i/|/ˈhʌn.i/|Bees make honey.|Arılar bal yapar.|,mutfak
+onion|A2|noun|Soğan|soğan|/ˈʌn.jən/|/ˈʌn.jən/|Cut the onion into small pieces.|Soğanı küçük parçalar halinde doğra.|,mutfak
+racer|B1|noun|Yarışçı|yarışçı|/ˈreɪ.sɚ/|/ˈreɪ.sər/|The young racer crossed the line first.|Genç yarışçı bitiş çizgisini ilk geçti.|
+advice|B1|noun|Tavsiye|tavsiye, öğüt|/ədˈvaɪs/|/ədˈvaɪs/|Can I give you some advice?|Sana bir tavsiye verebilir miyim?|
+career|B1|noun|Kariyer|kariyer, meslek hayatı|/kəˈrɪr/|/kəˈrɪər/|She started her career as a nurse.|Kariyerine hemşire olarak başladı.|,is
+debate|B1|noun|Tartışma|tartışma, münazara|/dɪˈbeɪt/|/dɪˈbeɪt/|There was a long debate about it.|Bu konuda uzun bir tartışma oldu.|
+effort|B1|noun|Çaba|çaba, gayret|/ˈef.ɚt/|/ˈef.ət/|Learning a language takes effort.|Bir dil öğrenmek çaba ister.|
+guilty|B1|adj|Suçlu|suçlu|/ˈɡɪl.ti/|/ˈɡɪl.ti/|I feel guilty about lying.|Yalan söylediğim için kendimi suçlu hissediyorum.|
+honest|B1|adj|Dürüst|dürüst|/ˈɑː.nɪst/|/ˈɒn.ɪst/|Please be honest with me.|Lütfen bana karşı dürüst ol.|
+income|B1|noun|Gelir|gelir|/ˈɪn.kʌm/|/ˈɪn.kʌm/|Their income is quite low.|Gelirleri oldukça düşük.|,is
+jealous|B1|adj|Kıskanç|kıskanç|/ˈdʒel.əs/|/ˈdʒel.əs/|He is jealous of his brother.|Erkek kardeşini kıskanıyor.|
+manage|B1|verb|Yönetmek|yönetmek, başarmak|/ˈmæn.ɪdʒ/|/ˈmæn.ɪdʒ/|She manages a small hotel.|Küçük bir oteli yönetiyor.|,is
+nervous|B1|adj|Gergin|gergin, sinirli|/ˈnɝː.vəs/|/ˈnɜː.vəs/|I always get nervous before exams.|Sınavlardan önce hep gerilirim.|
+offer|B1|verb|Teklif etmek|teklif etmek, sunmak|/ˈɑː.fɚ/|/ˈɒf.ər/|They offered me a job.|Bana bir iş teklif ettiler.|,is
+proud|B1|adj|Gururlu|gururlu|/praʊd/|/praʊd/|I am proud of you.|Seninle gurur duyuyorum.|
+rescue|B1|verb|Kurtarmak|kurtarmak|/ˈres.kjuː/|/ˈres.kjuː/|Firefighters rescued the family.|İtfaiyeciler aileyi kurtardı.|
+reward|B1|noun|Ödül|ödül|/rɪˈwɔːrd/|/rɪˈwɔːd/|There is a reward for the lost dog.|Kayıp köpek için ödül var.|
+shelter|B1|noun|Barınak|barınak, sığınak|/ˈʃel.tɚ/|/ˈʃel.tər/|We found shelter from the rain.|Yağmurdan korunacak bir yer bulduk.|
+signal|B1|noun|Sinyal|sinyal, işaret|/ˈsɪɡ.nəl/|/ˈsɪɡ.nəl/|There is no phone signal here.|Burada telefon çekmiyor.|,teknoloji
+silent|B1|adj|Sessiz|sessiz|/ˈsaɪ.lənt/|/ˈsaɪ.lənt/|The room went silent.|Odaya sessizlik çöktü.|
+solve|B1|verb|Çözmek|çözmek|/sɑːlv/|/sɒlv/|Can you solve this puzzle?|Bu bulmacayı çözebilir misin?|
+spare|B1|adj|Yedek|yedek, boş (zaman)|/sper/|/speər/|What do you do in your spare time?|Boş zamanlarında ne yaparsın?|
+steady|B1|adj|Sabit, düzenli|sabit, istikrarlı|/ˈsted.i/|/ˈsted.i/|Keep the ladder steady.|Merdiveni sabit tut.|
+tidy|B1|adj|Düzenli|düzenli, toplu|/ˈtaɪ.di/|/ˈtaɪ.di/|Her desk is always tidy.|Masası her zaman derli topludur.|
+tough|B1|adj|Zorlu, sert|zor, dayanıklı|/tʌf/|/tʌf/|It was a tough decision.|Zor bir karardı.|
+wander|B1|verb|Dolaşmak|dolaşmak, gezinmek|/ˈwɑːn.dɚ/|/ˈwɒn.dər/|We wandered around the old town.|Eski şehirde dolaştık.|
+warn|B1|verb|Uyarmak|uyarmak|/wɔːrn/|/wɔːn/|I warned you about the dog.|Seni köpek konusunda uyarmıştım.|
+whisper|B1|verb|Fısıldamak|fısıldamak|/ˈwɪs.pɚ/|/ˈwɪs.pər/|She whispered his name.|Onun adını fısıldadı.|
+worth|B1|adj|Değer|değerinde, değer|/wɝːθ/|/wɜːθ/|The film is worth watching.|Film izlenmeye değer.|
+attempt|B1|noun|Deneme, girişim|girişim, deneme|/əˈtempt/|/əˈtempt/|He passed on his second attempt.|İkinci denemesinde geçti.|
+avoid|B1|verb|Kaçınmak|kaçınmak|/əˈvɔɪd/|/əˈvɔɪd/|Try to avoid sugar.|Şekerden kaçınmaya çalış.|
+coast|B1|noun|Sahil|sahil, kıyı|/koʊst/|/kəʊst/|We drove along the coast.|Sahil boyunca araba sürdük.|,doga,seyahat
+crowd|B1|noun|Kalabalık|kalabalık|/kraʊd/|/kraʊd/|A huge crowd watched the match.|Büyük bir kalabalık maçı izledi.|,futbol
+damage|B1|noun|Hasar|hasar, zarar|/ˈdæm.ɪdʒ/|/ˈdæm.ɪdʒ/|The storm caused a lot of damage.|Fırtına büyük hasara yol açtı.|
+deny|B1|verb|İnkâr etmek|inkâr etmek, reddetmek|/dɪˈnaɪ/|/dɪˈnaɪ/|He denied taking the money.|Parayı aldığını inkâr etti.|
+earn|B1|verb|Kazanmak (para)|kazanmak|/ɝːn/|/ɜːn/|She earns a good salary.|İyi bir maaş kazanıyor.|
+edge|B1|noun|Kenar|kenar, uç|/edʒ/|/edʒ/|Don't stand on the edge.|Kenarda durma.|
+escape|B1|verb|Kaçmak|kaçmak, kurtulmak|/ɪˈskeɪp/|/ɪˈskeɪp/|The bird escaped from its cage.|Kuş kafesinden kaçtı.|
+fault|B1|noun|Kusur, hata|kusur, hata|/fɑːlt/|/fɒlt/|It wasn't my fault.|Benim suçum değildi.|
+goal|B1|noun|Hedef, gol|hedef, gol|/ɡoʊl/|/ɡəʊl/|My goal is to speak English well.|Hedefim İngilizceyi iyi konuşmak.|,futbol
+harm|B1|noun|Zarar|zarar|/hɑːrm/|/hɑːm/|Too much sun can do harm.|Fazla güneş zarar verebilir.|
+hire|B1|verb|Kiralamak|kiralamak, işe almak|/haɪr/|/haɪər/|We hired a car for the week.|Bir haftalığına araba kiraladık.|,is
+injury|B1|noun|Yaralanma|yara, yaralanma|/ˈɪn.dʒɚ.i/|/ˈɪn.dʒər.i/|He missed the match with an injury.|Sakatlığı yüzünden maçı kaçırdı.|,futbol
+lazy|B1|adj|Tembel|tembel|/ˈleɪ.zi/|/ˈleɪ.zi/|Don't be lazy, help me!|Tembellik etme, bana yardım et!|
+loan|B1|noun|Borç, kredi|borç, kredi|/loʊn/|/ləʊn/|They took a loan from the bank.|Bankadan kredi çektiler.|,is
+loyal|B1|adj|Sadık|sadık|/ˈlɔɪ.əl/|/ˈlɔɪ.əl/|Dogs are loyal animals.|Köpekler sadık hayvanlardır.|
+mild|B1|adj|Ilıman|ılıman, hafif|/maɪld/|/maɪld/|The winter was mild this year.|Bu yıl kış ılıman geçti.|,doga
+mood|B1|noun|Ruh hâli|ruh hâli, keyif|/muːd/|/muːd/|She is in a good mood today.|Bugün keyfi yerinde.|
+novel|B1|noun|Roman|roman|/ˈnɑː.vəl/|/ˈnɒv.əl/|I'm reading a great novel.|Harika bir roman okuyorum.|
+occur|B1|verb|Meydana gelmek|olmak, meydana gelmek|/əˈkɝː/|/əˈkɜːr/|The accident occurred at night.|Kaza gece meydana geldi.|
+plenty|B1|noun|Bolca|bol, çok|/ˈplen.t̬i/|/ˈplen.ti/|We have plenty of time.|Bolca vaktimiz var.|
+polite|B1|adj|Kibar|kibar, nazik|/pəˈlaɪt/|/pəˈlaɪt/|Be polite to the guests.|Misafirlere karşı kibar ol.|
+rare|B1|adj|Nadir|nadir, ender|/rer/|/reər/|This is a rare bird.|Bu nadir bir kuş.|
+rely|B1|verb|Güvenmek|güvenmek, bel bağlamak|/rɪˈlaɪ/|/rɪˈlaɪ/|You can rely on me.|Bana güvenebilirsin.|
+rude|B1|adj|Kaba|kaba, terbiyesiz|/ruːd/|/ruːd/|It is rude to interrupt.|Birinin sözünü kesmek kabalıktır.|
+scare|B1|verb|Korkutmak|korkutmak|/sker/|/skeər/|Did the noise scare you?|Ses seni korkuttu mu?|
+shy|B1|adj|Utangaç|utangaç, çekingen|/ʃaɪ/|/ʃaɪ/|He is too shy to speak.|Konuşamayacak kadar utangaç.|
+smooth|B1|adj|Pürüzsüz|pürüzsüz, düz|/smuːð/|/smuːð/|The baby has smooth skin.|Bebeğin cildi pürüzsüz.|
+stare|B1|verb|Dik dik bakmak|dik dik bakmak|/ster/|/steər/|Don't stare at people.|İnsanlara dik dik bakma.|
+sweat|B1|verb|Terlemek|terlemek|/swet/|/swet/|I sweat a lot in summer.|Yazın çok terlerim.|
+theft|B1|noun|Hırsızlık|hırsızlık|/θeft/|/θeft/|He was arrested for theft.|Hırsızlıktan tutuklandı.|
+trust|B1|verb|Güvenmek|güvenmek|/trʌst/|/trʌst/|I trust my friends.|Arkadaşlarıma güvenirim.|
+upset|B1|adj|Üzgün, kırgın|üzgün, kırgın|/ʌpˈset/|/ʌpˈset/|She was upset about the news.|Haber yüzünden üzgündü.|
+vote|B1|verb|Oy vermek|oy vermek|/voʊt/|/vəʊt/|Did you vote yesterday?|Dün oy kullandın mı?|
+waste|B1|verb|Boşa harcamak|israf etmek|/weɪst/|/weɪst/|Don't waste water.|Suyu boşa harcama.|
+yell|B1|verb|Bağırmak|bağırmak|/jel/|/jel/|Please don't yell at me.|Lütfen bana bağırma.|
+habit|B1|noun|Alışkanlık|alışkanlık|/ˈhæb.ɪt/|/ˈhæb.ɪt/|Smoking is a bad habit.|Sigara içmek kötü bir alışkanlıktır.|
+fair|B1|adj|Adil|adil, hakça|/fer/|/feər/|That's not fair!|Bu adil değil!|
+heron|B2|noun|Balıkçıl (kuş)|balıkçıl|/ˈher.ən/|/ˈher.ən/|A heron stood still in the shallow water.|Bir balıkçıl sığ suda kıpırdamadan duruyordu.|,doga
+ulcer|B2|noun|Mide yarası|ülser, mide yarası|/ˈʌl.sɚ/|/ˈʌl.sər/|Stress can make a stomach ulcer worse.|Stres mide ülserini kötüleştirebilir.|
+absorb|B2|verb|Emmek|emmek, özümsemek|/əbˈzɔːrb/|/əbˈzɔːb/|Plants absorb water through their roots.|Bitkiler suyu kökleriyle emer.|
+adapt|B2|verb|Uyum sağlamak|uyum sağlamak, uyarlamak|/əˈdæpt/|/əˈdæpt/|Animals adapt to their environment.|Hayvanlar çevrelerine uyum sağlar.|
+anxious|B2|adj|Endişeli|endişeli, kaygılı|/ˈæŋk.ʃəs/|/ˈæŋk.ʃəs/|She felt anxious before the interview.|Mülakattan önce endişeliydi.|
+assess|B2|verb|Değerlendirmek|değerlendirmek|/əˈses/|/əˈses/|Teachers assess students regularly.|Öğretmenler öğrencileri düzenli olarak değerlendirir.|
+bias|B2|noun|Önyargı|önyargı, taraflılık|/ˈbaɪ.əs/|/ˈbaɪ.əs/|The report shows a clear bias.|Rapor açık bir önyargı gösteriyor.|
+blunt|B2|adj|Kör (bıçak)|kör, açık sözlü|/blʌnt/|/blʌnt/|This knife is blunt.|Bu bıçak kör.|
+cease|B2|verb|Sona ermek|durmak, sona ermek|/siːs/|/siːs/|The rain ceased at noon.|Yağmur öğlen dindi.|
+clumsy|B2|adj|Sakar|sakar, beceriksiz|/ˈklʌm.zi/|/ˈklʌm.zi/|I'm so clumsy, I broke a cup again.|Çok sakarım, yine bir fincan kırdım.|
+cozy|B2|adj|Rahat, sıcak|rahat, sıcacık|/ˈkoʊ.zi/|/ˈkəʊ.zi/|It's a small but cozy flat.|Küçük ama sıcacık bir daire.|
+crave|B2|verb|Can çekmek|çok istemek, can çekmek|/kreɪv/|/kreɪv/|I crave chocolate at night.|Geceleri canım çikolata çeker.|
+dense|B2|adj|Yoğun, sık|yoğun, sık|/dens/|/dens/|We walked through dense fog.|Yoğun sisin içinden yürüdük.|
+devote|B2|verb|Adamak|adamak, vakfetmek|/dɪˈvoʊt/|/dɪˈvəʊt/|She devoted her life to science.|Hayatını bilime adadı.|
+dread|B2|verb|Çok korkmak|dehşetle beklemek|/dred/|/dred/|I dread going to the dentist.|Dişçiye gitmekten ödüm kopuyor.|
+eager|B2|adj|İstekli|istekli, hevesli|/ˈiː.ɡɚ/|/ˈiː.ɡər/|The students were eager to learn.|Öğrenciler öğrenmeye hevesliydi.|
+emerge|B2|verb|Ortaya çıkmak|ortaya çıkmak, belirmek|/ɪˈmɝːdʒ/|/ɪˈmɜːdʒ/|The sun emerged from the clouds.|Güneş bulutların arasından çıktı.|
+endure|B2|verb|Katlanmak|dayanmak, katlanmak|/ɪnˈdʊr/|/ɪnˈdʒʊər/|They endured a long winter.|Uzun bir kışa katlandılar.|
+fierce|B2|adj|Vahşi, şiddetli|vahşi, şiddetli|/fɪrs/|/fɪəs/|A fierce dog guarded the gate.|Kapıyı vahşi bir köpek koruyordu.|
+flaw|B2|noun|Kusur|kusur, defo|/flɑː/|/flɔː/|There is a flaw in your plan.|Planında bir kusur var.|
+fragile|B2|adj|Kırılgan|kırılgan, narin|/ˈfrædʒ.əl/|/ˈfrædʒ.aɪl/|Be careful, the vase is fragile.|Dikkat et, vazo kırılgan.|
+grasp|B2|verb|Kavramak|kavramak, sıkıca tutmak|/ɡræsp/|/ɡrɑːsp/|It took me a while to grasp the idea.|Fikri kavramam biraz zaman aldı.|
+greed|B2|noun|Açgözlülük|açgözlülük, hırs|/ɡriːd/|/ɡriːd/|Greed led him to steal.|Açgözlülük onu hırsızlığa sürükledi.|
+grief|B2|noun|Keder|keder, yas|/ɡriːf/|/ɡriːf/|She was full of grief after the loss.|Kaybın ardından derin bir kedere boğuldu.|
+hazard|B2|noun|Tehlike|tehlike, risk|/ˈhæz.ɚd/|/ˈhæz.əd/|Ice on the road is a hazard.|Yoldaki buz bir tehlikedir.|
+hollow|B2|adj|İçi boş|içi boş, oyuk|/ˈhɑː.loʊ/|/ˈhɒl.əʊ/|The tree trunk was hollow.|Ağaç gövdesinin içi boştu.|
+humble|B2|adj|Alçakgönüllü|alçakgönüllü, mütevazı|/ˈhʌm.bəl/|/ˈhʌm.bəl/|Despite his fame, he stayed humble.|Ünlü olmasına rağmen alçakgönüllü kaldı.|
+ignite|B2|verb|Tutuşturmak|tutuşturmak, ateşlemek|/ɪɡˈnaɪt/|/ɪɡˈnaɪt/|A small spark can ignite a fire.|Küçük bir kıvılcım yangın başlatabilir.|
+immune|B2|adj|Bağışık|bağışık, muaf|/ɪˈmjuːn/|/ɪˈmjuːn/|You are immune after the vaccine.|Aşıdan sonra bağışıklık kazanırsın.|
+keen|B2|adj|Hevesli|hevesli, meraklı|/kiːn/|/kiːn/|He is keen on football.|Futbola çok meraklı.|
+linger|B2|verb|Oyalanmak|oyalanmak, kalmak|/ˈlɪŋ.ɡɚ/|/ˈlɪŋ.ɡər/|The smell lingered for days.|Koku günlerce gitmedi.|
+merge|B2|verb|Birleşmek|birleşmek|/mɝːdʒ/|/mɜːdʒ/|The two companies merged.|İki şirket birleşti.|
+modest|B2|adj|Mütevazı|mütevazı, alçakgönüllü|/ˈmɑː.dɪst/|/ˈmɒd.ɪst/|They live in a modest house.|Mütevazı bir evde yaşıyorlar.|
+myth|B2|noun|Efsane|efsane, mit|/mɪθ/|/mɪθ/|It's a myth that bats are blind.|Yarasaların kör olduğu bir efsane.|
+notion|B2|noun|Kavram, fikir|kavram, fikir|/ˈnoʊ.ʃən/|/ˈnəʊ.ʃən/|I have no notion of what he means.|Ne demek istediği hakkında hiçbir fikrim yok.|
+obey|B2|verb|İtaat etmek|itaat etmek, uymak|/oʊˈbeɪ/|/əʊˈbeɪ/|You must obey the rules.|Kurallara uymak zorundasın.|
+pace|B2|noun|Tempo, hız|tempo, hız|/peɪs/|/peɪs/|Walk at your own pace.|Kendi hızında yürü.|
+peer|B2|noun|Akran|akran, emsal|/pɪr/|/pɪər/|Teens care about their peers.|Gençler akranlarını önemser.|
+pledge|B2|noun|Söz, taahhüt|söz, taahhüt|/pledʒ/|/pledʒ/|He made a pledge to help.|Yardım edeceğine söz verdi.|
+prone|B2|adj|Eğilimli|eğilimli, yatkın|/proʊn/|/prəʊn/|He is prone to colds.|Kolay soğuk algınlığına yakalanır.|
+quest|B2|noun|Arayış|arayış, macera|/kwest/|/kwest/|Their quest for gold failed.|Altın arayışları başarısız oldu.|
+rage|B2|noun|Öfke|öfke, hiddet|/reɪdʒ/|/reɪdʒ/|He was shaking with rage.|Öfkeden titriyordu.|
+rebel|B2|noun|Asi|asi, isyancı|/ˈreb.əl/|/ˈreb.əl/|She was a rebel as a teenager.|Gençken asi biriydi.|
+refuge|B2|noun|Sığınak|sığınak, barınak|/ˈref.juːdʒ/|/ˈref.juːdʒ/|They took refuge in a cave.|Bir mağaraya sığındılar.|
+remedy|B2|noun|Çare, ilaç|çare, deva|/ˈrem.ə.di/|/ˈrem.ə.di/|Honey is a remedy for sore throats.|Bal, boğaz ağrısına iyi gelir.|
+rigid|B2|adj|Katı, sert|katı, esnemez|/ˈrɪdʒ.ɪd/|/ˈrɪdʒ.ɪd/|The rules are too rigid.|Kurallar çok katı.|
+ritual|B2|noun|Ritüel|ritüel, âdet|/ˈrɪtʃ.u.əl/|/ˈrɪtʃ.u.əl/|Morning coffee is my daily ritual.|Sabah kahvesi benim günlük ritüelim.|
+scarce|B2|adj|Kıt, az|kıt, nadir|/skers/|/skeəs/|Water is scarce in the desert.|Çölde su kıttır.|
+scorn|B2|noun|Küçümseme|küçümseme, hor görme|/skɔːrn/|/skɔːn/|She looked at him with scorn.|Ona küçümseyerek baktı.|
+shrink|B2|verb|Küçülmek|küçülmek, çekmek|/ʃrɪŋk/|/ʃrɪŋk/|My sweater shrank in the wash.|Kazağım yıkamada çekti.|
+siege|B2|noun|Kuşatma|kuşatma|/siːdʒ/|/siːdʒ/|The city was under siege.|Şehir kuşatma altındaydı.|
+soar|B2|verb|Süzülmek|yükselmek, süzülmek|/sɔːr/|/sɔːr/|Eagles soar high in the sky.|Kartallar gökyüzünde yükseklerde süzülür.|
+spine|B2|noun|Omurga|omurga, sırt|/spaɪn/|/spaɪn/|Sit up straight to protect your spine.|Omurganı korumak için dik otur.|
+stern|B2|adj|Sert, katı|sert, haşin|/stɝːn/|/stɜːn/|The teacher gave a stern warning.|Öğretmen sert bir uyarıda bulundu.|
+strive|B2|verb|Çabalamak|çabalamak, uğraşmak|/straɪv/|/straɪv/|We strive to improve every day.|Her gün daha iyi olmak için çabalıyoruz.|
+subtle|B2|adj|İnce, belirsiz|ince, zor fark edilen|/ˈsʌt̬.əl/|/ˈsʌt.əl/|There is a subtle difference.|İnce bir fark var.|
+swift|B2|adj|Hızlı, çabuk|hızlı, çabuk|/swɪft/|/swɪft/|We need a swift decision.|Hızlı bir karara ihtiyacımız var.|
+thrive|B2|verb|Gelişmek|gelişmek, serpilmek|/θraɪv/|/θraɪv/|Plants thrive in this climate.|Bitkiler bu iklimde gürbüz gelişir.|
+timid|B2|adj|Ürkek|ürkek, çekingen|/ˈtɪm.ɪd/|/ˈtɪm.ɪd/|The timid boy hid behind his mum.|Ürkek çocuk annesinin arkasına saklandı.|
+toxic|B2|adj|Zehirli|zehirli, toksik|/ˈtɑːk.sɪk/|/ˈtɒk.sɪk/|These berries are toxic.|Bu yaban meyveleri zehirlidir.|
+trait|B2|noun|Özellik|özellik, nitelik|/treɪt/|/treɪt/|Patience is a rare trait.|Sabır nadir bulunan bir özelliktir.|
+urge|B2|noun|Dürtü|dürtü, istek|/ɝːdʒ/|/ɜːdʒ/|I felt an urge to laugh.|İçimden gülmek geldi.|
+vast|B2|adj|Engin, uçsuz|engin, çok geniş|/væst/|/vɑːst/|The ocean is vast.|Okyanus uçsuz bucaksızdır.|
+vital|B2|adj|Hayati|hayati, çok önemli|/ˈvaɪ.t̬əl/|/ˈvaɪ.təl/|Water is vital for life.|Su yaşam için hayati önem taşır.|
+vivid|B2|adj|Canlı, parlak|canlı, parlak|/ˈvɪv.ɪd/|/ˈvɪv.ɪd/|She has vivid memories of her childhood.|Çocukluğuna dair canlı anıları var.|
+wary|B2|adj|Temkinli|temkinli, ihtiyatlı|/ˈwer.i/|/ˈweə.ri/|Be wary of strangers.|Yabancılara karşı temkinli ol.|
+weary|B2|adj|Bitkin|bitkin, yorgun|/ˈwɪr.i/|/ˈwɪə.ri/|The weary travellers finally arrived.|Bitkin yolcular sonunda vardı.|
+yield|B2|verb|Sağlamak, vermek|ürün vermek, boyun eğmek|/jiːld/|/jiːld/|The trees yield a lot of fruit.|Ağaçlar bol meyve verir.|
+abolish|C1|verb|Kaldırmak (yasa)|yürürlükten kaldırmak|/əˈbɑː.lɪʃ/|/əˈbɒl.ɪʃ/|Many countries abolished the death penalty.|Birçok ülke idam cezasını kaldırdı.|yds
+acquire|C1|verb|Edinmek|edinmek, elde etmek|/əˈkwaɪr/|/əˈkwaɪər/|Children acquire language quickly.|Çocuklar dili hızla edinir.|yds
+adverse|C1|adj|Olumsuz, ters|olumsuz, ters|/ædˈvɝːs/|/ˈæd.vɜːs/|The drug has adverse effects.|İlacın olumsuz yan etkileri var.|yds
+allege|C1|verb|İddia etmek|iddia etmek|/əˈledʒ/|/əˈledʒ/|They allege that he lied.|Onun yalan söylediğini iddia ediyorlar.|yds
+amend|C1|verb|Değiştirmek|değiştirmek, düzeltmek|/əˈmend/|/əˈmend/|The law was amended last year.|Yasa geçen yıl değiştirildi.|yds
+augment|C1|verb|Artırmak|artırmak, çoğaltmak|/ɑːɡˈment/|/ɔːɡˈment/|He works nights to augment his income.|Gelirini artırmak için geceleri çalışıyor.|yds
+banish|C1|verb|Sürgün etmek|sürgün etmek, kovmak|/ˈbæn.ɪʃ/|/ˈbæn.ɪʃ/|The king banished him from the land.|Kral onu ülkeden sürgün etti.|yds
+candid|C1|adj|Açık sözlü|samimi, açık sözlü|/ˈkæn.dɪd/|/ˈkæn.dɪd/|Thank you for your candid answer.|Samimi cevabın için teşekkür ederim.|yds
+coerce|C1|verb|Zorlamak|zorlamak, baskı yapmak|/koʊˈɝːs/|/kəʊˈɜːs/|He was coerced into signing.|İmza atmaya zorlandı.|yds
+comply|C1|verb|Uymak|uymak, riayet etmek|/kəmˈplaɪ/|/kəmˈplaɪ/|All staff must comply with the rules.|Tüm personel kurallara uymak zorundadır.|yds
+concede|C1|verb|Kabul etmek|kabullenmek, teslim etmek|/kənˈsiːd/|/kənˈsiːd/|He conceded that he was wrong.|Haksız olduğunu kabul etti.|yds
+curtail|C1|verb|Kısıtlamak|kısıtlamak, kısmak|/kɚˈteɪl/|/kɜːˈteɪl/|The budget was curtailed.|Bütçe kısıldı.|yds
+deplete|C1|verb|Tüketmek|tüketmek, azaltmak|/dɪˈpliːt/|/dɪˈpliːt/|We are depleting natural resources.|Doğal kaynakları tüketiyoruz.|yds
+deter|C1|verb|Caydırmak|caydırmak, vazgeçirmek|/dɪˈtɝː/|/dɪˈtɜːr/|High fines deter crime.|Yüksek para cezaları suçu caydırır.|yds
+dismal|C1|adj|İç karartıcı|kasvetli, iç karartıcı|/ˈdɪz.məl/|/ˈdɪz.məl/|The weather was dismal all week.|Hava bütün hafta kasvetliydi.|yds
+disrupt|C1|verb|Sekteye uğratmak|bozmak, aksatmak|/dɪsˈrʌpt/|/dɪsˈrʌpt/|The strike disrupted flights.|Grev uçuşları aksattı.|yds
+elicit|C1|verb|Ortaya çıkarmak|ortaya çıkarmak, almak|/iˈlɪs.ɪt/|/iˈlɪs.ɪt/|The question elicited no answer.|Soruya hiç yanıt gelmedi.|yds
+emit|C1|verb|Yaymak|yaymak, salmak|/iˈmɪt/|/iˈmɪt/|Cars emit harmful gases.|Arabalar zararlı gazlar yayar.|yds
+endorse|C1|verb|Onaylamak|desteklemek, onaylamak|/ɪnˈdɔːrs/|/ɪnˈdɔːs/|The plan was endorsed by the board.|Plan yönetim kurulu tarafından onaylandı.|yds
+enhance|C1|verb|Geliştirmek|artırmak, iyileştirmek|/ɪnˈhæns/|/ɪnˈhɑːns/|Good lighting enhances the room.|İyi aydınlatma odayı güzelleştirir.|yds
+entail|C1|verb|Gerektirmek|gerektirmek, içermek|/ɪnˈteɪl/|/ɪnˈteɪl/|The job entails a lot of travel.|Bu iş çok seyahat gerektiriyor.|yds
+erode|C1|verb|Aşındırmak|aşındırmak, aşınmak|/ɪˈroʊd/|/ɪˈrəʊd/|The sea erodes the cliffs.|Deniz falezleri aşındırır.|yds
+evade|C1|verb|Kaçmak, atlatmak|kaçmak, sakınmak|/ɪˈveɪd/|/ɪˈveɪd/|He tried to evade taxes.|Vergiden kaçmaya çalıştı.|yds
+exempt|C1|adj|Muaf|muaf, bağışık|/ɪɡˈzempt/|/ɪɡˈzempt/|Students are exempt from the fee.|Öğrenciler ücretten muaftır.|yds
+foster|C1|verb|Teşvik etmek|teşvik etmek, beslemek|/ˈfɑː.stɚ/|/ˈfɒs.tər/|Schools should foster creativity.|Okullar yaratıcılığı teşvik etmeli.|yds
+hamper|C1|verb|Engellemek|engellemek, sekteye uğratmak|/ˈhæm.pɚ/|/ˈhæm.pər/|Bad weather hampered the rescue.|Kötü hava kurtarma çalışmalarını engelledi.|yds
+hinder|C1|verb|Engel olmak|engel olmak, geciktirmek|/ˈhɪn.dɚ/|/ˈhɪn.dər/|Noise hinders concentration.|Gürültü konsantrasyonu engeller.|yds
+impair|C1|verb|Zayıflatmak|bozmak, zayıflatmak|/ɪmˈper/|/ɪmˈpeər/|Alcohol impairs your judgement.|Alkol muhakeme yeteneğini bozar.|yds
+induce|C1|verb|Neden olmak|yol açmak, ikna etmek|/ɪnˈduːs/|/ɪnˈdʒuːs/|This drug may induce sleep.|Bu ilaç uyku yapabilir.|yds
+infer|C1|verb|Sonuç çıkarmak|çıkarım yapmak|/ɪnˈfɝː/|/ɪnˈfɜːr/|What can we infer from the data?|Verilerden ne sonuç çıkarabiliriz?|yds
+inhibit|C1|verb|Engellemek|engellemek, bastırmak|/ɪnˈhɪb.ɪt/|/ɪnˈhɪb.ɪt/|Fear can inhibit learning.|Korku öğrenmeyi engelleyebilir.|yds
+lucid|C1|adj|Berrak, açık|açık, anlaşılır|/ˈluː.sɪd/|/ˈluː.sɪd/|She gave a lucid explanation.|Açık ve anlaşılır bir açıklama yaptı.|yds
+obscure|C1|adj|Belirsiz|belirsiz, az bilinen|/əbˈskjʊr/|/əbˈskjʊər/|The origin of the word is obscure.|Kelimenin kökeni belirsiz.|yds
+omit|C1|verb|Atlamak|atlamak, çıkarmak|/oʊˈmɪt/|/əʊˈmɪt/|Don't omit any details.|Hiçbir ayrıntıyı atlama.|yds
+prevail|C1|verb|Üstün gelmek|galip gelmek, hâkim olmak|/prɪˈveɪl/|/prɪˈveɪl/|Justice will prevail.|Adalet galip gelecek.|yds
+refute|C1|verb|Çürütmek|çürütmek, yalanlamak|/rɪˈfjuːt/|/rɪˈfjuːt/|He refuted the claims.|İddiaları çürüttü.|yds
+render|C1|verb|Hâle getirmek|kılmak, hâle getirmek|/ˈren.dɚ/|/ˈren.dər/|The news rendered her speechless.|Haber onu suskun bıraktı.|yds
+revoke|C1|verb|İptal etmek|iptal etmek, geri almak|/rɪˈvoʊk/|/rɪˈvəʊk/|His licence was revoked.|Ehliyeti iptal edildi.|yds
+sever|C1|verb|Koparmak|kesmek, koparmak|/ˈsev.ɚ/|/ˈsev.ər/|They severed all ties.|Tüm bağları kopardılar.|yds
+shrewd|C1|adj|Kurnaz, zeki|kurnaz, akıllı|/ʃruːd/|/ʃruːd/|She is a shrewd businesswoman.|O, kurnaz bir iş kadınıdır.|yds
+stifle|C1|verb|Bastırmak|bastırmak, boğmak|/ˈstaɪ.fəl/|/ˈstaɪ.fəl/|He stifled a yawn.|Esnemesini bastırdı.|yds
+sustain|C1|verb|Sürdürmek|sürdürmek, desteklemek|/səˈsteɪn/|/səˈsteɪn/|We cannot sustain this pace.|Bu tempoyu sürdüremeyiz.|yds
+thwart|C1|verb|Engellemek|engellemek, boşa çıkarmak|/θwɔːrt/|/θwɔːt/|Police thwarted the robbery.|Polis soygunu engelledi.|yds
+verify|C1|verb|Doğrulamak|doğrulamak|/ˈver.ə.faɪ/|/ˈver.ɪ.faɪ/|Please verify your answer.|Lütfen cevabını doğrula.|yds
+wane|C1|verb|Azalmak|azalmak, zayıflamak|/weɪn/|/weɪn/|Interest in the show waned.|Diziye olan ilgi azaldı.|yds
+yearn|C1|verb|Özlem duymak|özlemek, hasret çekmek|/jɝːn/|/jɜːn/|She yearned for home.|Evine hasret çekiyordu.|yds
+deem|C1|verb|Saymak, addetmek|saymak, addetmek|/diːm/|/diːm/|The plan was deemed too risky.|Plan fazla riskli bulundu.|yds
+vague|C1|adj|Belirsiz|belirsiz, muğlak|/veɪɡ/|/veɪɡ/|His answer was vague.|Cevabı belirsizdi.|yds
+mere|C1|adj|Sadece, salt|salt, sadece|/mɪr/|/mɪər/|It was a mere accident.|Sadece bir kazaydı.|yds
+avid|C1|adj|Tutkulu|hevesli, tutkulu|/ˈæv.ɪd/|/ˈæv.ɪd/|He is an avid reader.|Tutkulu bir okurdur.|yds
+aid|B2|noun|Yardım, destek|yardım, destek, yardım malzemesi|/eɪd/|/eɪd/|The country sent food aid to the flood victims.|Ülke sel mağdurlarına gıda yardımı gönderdi.|ielts,yds,yokdil
+era|B2|noun|Çağ, devir|çağ, devir, dönem|/ˈɪrə/|/ˈɪərə/|The discovery marked the start of a new era in medicine.|Bu keşif tıpta yeni bir çağın başlangıcı oldu.|toefl,yds,yokdil
+cue|C1|noun|İşaret, ipucu|işaret, ipucu, uyarı|/kjuː/|/kjuː/|Infants respond to social cues from their parents.|Bebekler ebeveynlerinden gelen sosyal işaretlere tepki verir.|yokdil
+vie|C1|verb|Yarışmak|yarışmak, rekabet etmek|/vaɪ/|/vaɪ/|Several firms vie for a share of the market.|Birçok firma pazardan pay almak için yarışıyor.|c1,yds
+ban|B2|verb|Yasaklamak|yasaklamak, men etmek|/bæn/|/bæn/|Many cities have banned smoking in public places.|Birçok şehir halka açık yerlerde sigara içmeyi yasakladı.|futbol,ielts,yds,yokdil
+bid|B2|noun|Teklif (ihale)|teklif, girişim, çaba|/bɪd/|/bɪd/|The company made a bid to buy its rival.|Şirket rakibini satın almak için teklif verdi.|yds
+hue|C1|noun|Renk tonu|renk tonu, renk|/hjuː/|/hjuː/|The leaves change hue as the temperature drops.|Sıcaklık düştükçe yapraklar renk tonu değiştirir.|c1,toefl,yokdil
+lax|C1|adj|Gevşek (kural)|gevşek, özensiz, ihmalkâr|/læks/|/læks/|Lax safety rules led to the accident.|Gevşek güvenlik kuralları kazaya yol açtı.|c1,yds
+sow|C1|verb|Tohum ekmek|tohum ekmek, ekmek|/soʊ/|/səʊ/|Farmers sow wheat in the autumn.|Çiftçiler buğdayı sonbaharda eker.|yokdil
+sue|B2|verb|Dava açmak|dava açmak, mahkemeye vermek|/suː/|/suː/|The patient decided to sue the hospital.|Hasta hastaneye dava açmaya karar verdi.|yds,yokdil
+fad|C1|noun|Geçici moda|geçici moda, heves|/fæd/|/fæd/|Some diets are just a passing fad.|Bazı diyetler sadece geçici bir modadır.|ielts,yds
+ego|B2|noun|Benlik, ego|benlik, ego, özsaygı|/ˈiːɡoʊ/|/ˈiːɡəʊ/|Freud divided the mind into the id, the ego and the superego.|Freud zihni id, ego ve süperego olarak ayırdı.|toefl,yokdil
+hub|C1|noun|Merkez (ağ)|merkez, odak noktası|/hʌb/|/hʌb/|The city is a major hub for trade.|Şehir ticaret için önemli bir merkezdir.|yds
+lag|C1|noun|Gecikme|gecikme, gerileme|/læɡ/|/læɡ/|There is a time lag between infection and symptoms.|Enfeksiyon ile belirtiler arasında bir zaman gecikmesi vardır.|yokdil
+rot|B2|verb|Çürümek|çürümek, bozulmak|/rɑːt/|/rɒt/|Sugar causes teeth to rot.|Şeker dişlerin çürümesine neden olur.|yokdil
+sum|B2|noun|Toplam, meblağ|toplam, meblağ, tutar|/sʌm/|/sʌm/|A large sum was spent on research.|Araştırmaya büyük bir meblağ harcandı.|ielts,yds,yokdil
+net|B2|adj|Net (kazanç)|net, safi|/net/|/net/|The firm's net profit rose by ten percent.|Firmanın net kârı yüzde on arttı.|futbol,yds
+apt|C1|adj|Yerinde, uygun|uygun, yerinde, eğilimli|/æpt/|/æpt/|That is an apt description of the problem.|Bu, sorunun yerinde bir tanımıdır.|c1,yds
+mar|C1|verb|Gölgelemek|gölgelemek, bozmak, lekelemek|/mɑːr/|/mɑː/|Violence marred the elections.|Şiddet seçimleri gölgeledi.|yds
+err|C1|verb|Hata yapmak|hata yapmak, yanılmak|/ɝː/|/ɜː/|It is better to err on the side of caution.|Hata yapacaksan temkinli yönde yapmak daha iyidir.|yds
+vex|C1|verb|Canını sıkmak|canını sıkmak, kızdırmak, uğraştırmak|/veks/|/veks/|The question has vexed scientists for decades.|Bu soru on yıllardır bilim insanlarını uğraştırıyor.|c1,yds,yokdil
+rid|B2|verb|Arındırmak|kurtarmak, arındırmak|/rɪd/|/rɪd/|The new law aims to rid the city of pollution.|Yeni yasa şehri kirlilikten arındırmayı amaçlıyor.|yds
+arc|C1|noun|Yay, kavis|yay, kavis|/ɑːrk/|/ɑːk/|The ball flew through the air in a high arc.|Top havada yüksek bir yay çizerek uçtu.|yokdil
+ore|C1|noun|Maden cevheri|maden cevheri, filiz|/ɔːr/|/ɔː/|Iron ore is mined in the region.|Bölgede demir cevheri çıkarılıyor.|toefl,yokdil
+dye|B2|noun|Kumaş boyası|boya, kumaş boyası|/daɪ/|/daɪ/|Natural dyes were made from plants.|Doğal boyalar bitkilerden yapılırdı.|toefl,yokdil
+gut|B2|noun|Bağırsak|bağırsak, mide|/ɡʌt/|/ɡʌt/|Bacteria in the gut help us digest food.|Bağırsaktaki bakteriler yiyecekleri sindirmemize yardım eder.|yokdil
+dim|B2|adj|Loş, sönük|loş, sönük, belirsiz|/dɪm/|/dɪm/|Reading in dim light may strain the eyes.|Loş ışıkta okumak gözleri yorabilir.|yokdil
+via|B2|prep|Yoluyla|yoluyla, aracılığıyla, üzerinden|/ˈvaɪə/|/ˈvaɪə/|The virus spreads via contaminated water.|Virüs kirlenmiş su yoluyla yayılır.|yds,yokdil
+per|B2|prep|Başına (her)|başına, her biri için|/pɝː/|/pɜː/|Income per person has doubled.|Kişi başına gelir iki katına çıktı.|yds,yokdil
+vow|C1|noun|Yemin, ahit|yemin, ahit, söz|/vaʊ/|/vaʊ/|He made a vow to help the poor.|Yoksullara yardım etmeye yemin etti.|c1,yds
+awe|C1|noun|Huşu|huşu, hayranlık, saygı|/ɑː/|/ɔː/|They gazed at the stars in awe.|Yıldızlara huşu içinde baktılar.|c1,yds
+ire|C1|noun|Hiddet|öfke, hiddet|/aɪr/|/aɪə/|The decision drew the ire of local people.|Karar yerel halkın hiddetini çekti.|yds
+pry|C1|verb|Burnunu sokmak|burnunu sokmak, kurcalamak|/praɪ/|/praɪ/|Journalists should not pry into private lives.|Gazeteciler özel hayatlara burnunu sokmamalı.|yds
+bulk|B2|noun|Büyük kısım|büyük kısım, çoğunluk, hacim|/bʌlk/|/bʌlk/|The bulk of the budget goes to health care.|Bütçenin büyük kısmı sağlık hizmetlerine gider.|yds,yokdil
+cite|C1|verb|Alıntılamak|alıntı yapmak, kaynak göstermek|/saɪt/|/saɪt/|The study is cited in many papers.|Bu çalışma birçok makalede kaynak olarak gösteriliyor.|yds,yokdil
+core|B2|noun|Öz, çekirdek|öz, çekirdek, merkez|/kɔːr/|/kɔː/|The Earth's core is extremely hot.|Dünya'nın çekirdeği son derece sıcaktır.|toefl,yokdil
+crop|B2|noun|Ekin, mahsul|ekin, mahsul, ürün|/krɑːp/|/krɒp/|Drought destroyed most of the crops.|Kuraklık ekinlerin çoğunu yok etti.|yds,yokdil
+deed|C1|noun|Eylem, amel|eylem, iş, tapu|/diːd/|/diːd/|He was praised for his good deeds.|İyi eylemleri için övüldü.|yds
+dose|B2|noun|Doz|doz, miktar|/doʊs/|/dəʊs/|The doctor reduced the dose of the drug.|Doktor ilacın dozunu azalttı.|yokdil
+feat|C1|noun|Büyük başarı|büyük başarı, marifet|/fiːt/|/fiːt/|Climbing the peak was a remarkable feat.|Zirveye tırmanmak olağanüstü bir başarıydı.|yds
+gene|B2|noun|Gen|gen|/dʒiːn/|/dʒiːn/|This gene controls eye color.|Bu gen göz rengini kontrol eder.|toefl,yokdil
+halt|C1|verb|Durdurmak|durdurmak, durmak|/hɔːlt/|/hɔːlt/|The new drug may halt the spread of cancer.|Yeni ilaç kanserin yayılmasını durdurabilir.|yds,yokdil
+mode|B2|noun|Biçim, mod|biçim, yol, tarz|/moʊd/|/məʊd/|Cycling is a healthy mode of transport.|Bisiklet sağlıklı bir ulaşım biçimidir.|yokdil
+norm|C1|noun|Toplumsal norm|norm, kural, ölçü|/nɔːrm/|/nɔːm/|Social norms differ between cultures.|Toplumsal normlar kültürden kültüre değişir.|yokdil
+oust|C1|verb|Görevden almak|görevden almak, devirmek|/aʊst/|/aʊst/|The army ousted the president.|Ordu cumhurbaşkanını görevden uzaklaştırdı.|yds
+peak|B2|noun|Zirve|zirve, doruk, en yüksek nokta|/piːk/|/piːk/|Traffic reaches its peak at six o'clock.|Trafik saat altıda zirveye ulaşır.|doga,lgs,yokdil
+plea|C1|noun|Rica, yakarış|yakarış, rica, savunma|/pliː/|/pliː/|They ignored his plea for help.|Yardım için yakarışını görmezden geldiler.|yds
+pose|B2|verb|Teşkil etmek|teşkil etmek, oluşturmak, (soru) sormak|/poʊz/|/pəʊz/|Obesity poses a serious risk to health.|Obezite sağlık için ciddi bir risk teşkil eder.|yds,yokdil
+rift|C1|noun|Yarık, ayrılık|yarık, çatlak, anlaşmazlık|/rɪft/|/rɪft/|The dispute caused a rift between the two parties.|Anlaşmazlık iki parti arasında bir ayrılığa neden oldu.|yds
+soil|B2|noun|Toprak|toprak, zemin|/sɔɪl/|/sɔɪl/|Plants need rich soil to grow.|Bitkilerin büyümek için verimli toprağa ihtiyacı vardır.|doga,yokdil
+span|C1|noun|Süre, aralık|süre, aralık, ömür|/spæn/|/spæn/|Our attention span is getting shorter.|Dikkat süremiz giderek kısalıyor.|yds,yokdil
+sole|C1|adj|Tek, yegâne|tek, yegâne, biricik|/soʊl/|/səʊl/|Smoking is not the sole cause of lung disease.|Sigara akciğer hastalığının tek nedeni değildir.|yds,yokdil
+spur|C1|verb|Kamçılamak|teşvik etmek, kamçılamak, hızlandırmak|/spɝː/|/spɜː/|Low interest rates spurred economic growth.|Düşük faiz oranları ekonomik büyümeyi kamçıladı.|c1,yds
+tide|B2|noun|Gelgit|gelgit, akış, eğilim|/taɪd/|/taɪd/|The moon controls the tides.|Ay gelgitleri kontrol eder.|toefl,yokdil
+toll|C1|noun|Bedel, kayıp|kayıp sayısı, bedel, geçiş ücreti|/toʊl/|/təʊl/|The death toll from the earthquake rose to 500.|Depremde ölü sayısı 500'e yükseldi.|yds,yokdil
+vary|B2|verb|Değişmek|değişmek, farklılık göstermek|/ˈveri/|/ˈveəri/|Symptoms vary from person to person.|Belirtiler kişiden kişiye değişir.|ielts,toefl,yds,yokdil
+veto|C1|verb|Veto etmek|veto etmek, reddetmek|/ˈviːtoʊ/|/ˈviːtəʊ/|The president vetoed the new bill.|Cumhurbaşkanı yeni yasa tasarısını veto etti.|yds
+void|C1|noun|Boşluk|boşluk, hiçlik|/vɔɪd/|/vɔɪd/|His death left a void in the team.|Onun ölümü takımda bir boşluk bıraktı.|yokdil
+wage|B2|noun|Ücret, maaş|ücret, maaş|/weɪdʒ/|/weɪdʒ/|Workers demanded higher wages.|İşçiler daha yüksek ücret talep etti.|ielts,is,yokdil
+axis|C1|noun|Eksen|eksen|/ˈæksɪs/|/ˈæksɪs/|The Earth spins on its axis.|Dünya kendi ekseni etrafında döner.|yokdil
+tier|C1|noun|Kademe, katman|kademe, katman, sıra|/tɪr/|/tɪə/|The health system has three tiers of care.|Sağlık sisteminde üç bakım kademesi vardır.|yokdil
+acid|B2|noun|Asit|asit|/ˈæsɪd/|/ˈæsɪd/|Lemon juice contains citric acid.|Limon suyu sitrik asit içerir.|yokdil
+bond|B2|noun|Bağ|bağ, tahvil|/bɑːnd/|/bɒnd/|There is a strong bond between mother and child.|Anne ile çocuk arasında güçlü bir bağ vardır.|yds,yokdil
+curb|C1|verb|Dizginlemek|dizginlemek, sınırlamak, frenlemek|/kɝːb/|/kɜːb/|New measures aim to curb inflation.|Yeni önlemler enflasyonu dizginlemeyi amaçlıyor.|c1,yds,yokdil
+dire|C1|adj|Vahim, korkunç|vahim, korkunç, acil|/daɪr/|/daɪə/|The refugees are in dire need of water.|Mültecilerin suya acil ihtiyacı var.|c1,yds
+duly|C1|adv|Gereğince|gereğince, usulüne uygun olarak|/ˈduːli/|/ˈdjuːli/|The forms were duly signed.|Formlar usulüne uygun şekilde imzalandı.|yds
+heed|C1|verb|Kulak vermek|dikkate almak, kulak vermek|/hiːd/|/hiːd/|Few people heeded the doctor's warning.|Pek az kişi doktorun uyarısına kulak verdi.|c1,yds
+lure|C1|verb|Cezbetmek|cezbetmek, kandırıp çekmek|/lʊr/|/lʊə/|Low taxes lure foreign investors.|Düşük vergiler yabancı yatırımcıları cezbeder.|c1,yds
+onus|C1|noun|Yükümlülük|yükümlülük, sorumluluk|/ˈoʊnəs/|/ˈəʊnəs/|The onus is on the government to act.|Harekete geçme yükümlülüğü hükümete aittir.|yds
+pact|C1|noun|Pakt, antlaşma|pakt, antlaşma, anlaşma|/pækt/|/pækt/|The two nations signed a trade pact.|İki ülke bir ticaret antlaşması imzaladı.|c1,yds
+pave|C1|verb|Döşemek (yol)|(yol) döşemek, zemin hazırlamak|/peɪv/|/peɪv/|The discovery paved the way for new vaccines.|Keşif yeni aşılara zemin hazırladı.|yds,yokdil
+reap|C1|verb|Hasat etmek|biçmek, hasat etmek, (fayda) elde etmek|/riːp/|/riːp/|Countries that invest in education reap the benefits.|Eğitime yatırım yapan ülkeler bunun meyvesini toplar.|yds
+scan|B2|noun|Tarama (tıp)|tarama, görüntüleme|/skæn/|/skæn/|A brain scan showed no damage.|Beyin taraması herhangi bir hasar göstermedi.|teknoloji,yokdil
+seek|B2|verb|Peşinde olmak|aramak, peşinde olmak, istemek|/siːk/|/siːk/|Patients should seek medical advice.|Hastalar tıbbi tavsiye istemelidir.|yds,yokdil
+shed|C1|verb|Dökmek|dökmek, atmak, (ışık) tutmak|/ʃed/|/ʃed/|Snakes shed their skin several times a year.|Yılanlar yılda birkaç kez derilerini döker.|yokdil
+stem|C1|verb|Kaynaklanmak|kaynaklanmak, ileri gelmek|/stem/|/stem/|Many health problems stem from poor diet.|Birçok sağlık sorunu kötü beslenmeden kaynaklanır.|yds,yokdil
+sway|C1|verb|Sallanmak|sallanmak, etkilemek, fikrini çelmek|/sweɪ/|/sweɪ/|Voters are easily swayed by the media.|Seçmenler medyadan kolayca etkilenir.|yds
+tend|B2|verb|Eğilimli olmak|eğiliminde olmak, bakmak|/tend/|/tend/|Older people tend to sleep less.|Yaşlılar daha az uyuma eğilimindedir.|yds,yokdil
+thus|B2|adv|Böylece|böylece, bu nedenle, dolayısıyla|/ðʌs/|/ðʌs/|The drug lowers blood pressure and thus reduces risk.|İlaç kan basıncını düşürür ve böylece riski azaltır.|yds,yokdil
+vein|B2|noun|Toplardamar|toplardamar, damar|/veɪn/|/veɪn/|Blood returns to the heart through the veins.|Kan kalbe toplardamarlar yoluyla döner.|yokdil
+zeal|C1|noun|Şevk|şevk, gayret, coşku|/ziːl/|/ziːl/|She worked with great zeal.|Büyük bir şevkle çalıştı.|c1,yds
+akin|C1|adj|Benzer, akraba|benzer, yakın|/əˈkɪn/|/əˈkɪn/|The feeling is akin to fear.|Bu his korkuya benzer.|c1,yds
+apex|C1|noun|Tepe noktası|doruk, tepe, zirve|/ˈeɪpeks/|/ˈeɪpeks/|Lions are apex predators.|Aslanlar besin zincirinin tepesindeki avcılardır.|yokdil
+flux|C1|noun|Değişkenlik|sürekli değişim, akış|/flʌks/|/flʌks/|The economy is in a state of flux.|Ekonomi sürekli bir değişim içinde.|yds,yokdil
+gist|C1|noun|Ana fikir|ana fikir, öz|/dʒɪst/|/dʒɪst/|Read the text quickly to get the gist.|Ana fikri anlamak için metni hızlıca okuyun.|c1,yds,yokdil
+lest|C1|conj|Olmasın diye|-mesin diye, korkusuyla|/lest/|/lest/|He wrote it down lest he forget.|Unutmamak için not aldı.|yds
+rife|C1|adj|Yaygın (kötü)|yaygın, kol gezen, dolu|/raɪf/|/raɪf/|Corruption was rife in the system.|Sistemde yolsuzluk kol geziyordu.|c1,yds
+amid|C1|prep|Ortasında|ortasında, arasında|/əˈmɪd/|/əˈmɪd/|Prices rose amid fears of war.|Savaş korkuları ortasında fiyatlar yükseldi.|yds,yokdil
+alter|B2|verb|Değiştirmek|değiştirmek, farklılaştırmak|/ˈɔːltər/|/ˈɔːltə/|Climate change may alter the habitats of many species.|İklim değişikliği birçok türün yaşam alanlarını değiştirebilir.|ielts,toefl,yds,yokdil
+amass|C1|verb|Biriktirmek|biriktirmek, yığmak, toplamak|/əˈmæs/|/əˈmæs/|Scientists have amassed a lot of evidence.|Bilim insanları çok sayıda kanıt topladı.|yds,yokdil
+ample|C1|adj|Bol, yeterli|bol, yeterli, geniş|/ˈæmpəl/|/ˈæmpl/|There is ample evidence that exercise improves mood.|Egzersizin ruh halini iyileştirdiğine dair bol kanıt var.|c1,yds,yokdil
+avert|C1|verb|Önüne geçmek|önlemek, önüne geçmek, (göz) kaçırmak|/əˈvɝːt/|/əˈvɜːt/|Quick action averted a disaster.|Hızlı müdahale bir felaketin önüne geçti.|c1,yokdil
+crude|C1|adj|Ham (petrol)|ham, işlenmemiş, kaba|/kruːd/|/kruːd/|The price of crude oil fell sharply.|Ham petrol fiyatı keskin bir şekilde düştü.|c1,yokdil
+decay|B2|noun|Çürüme|çürüme, bozulma, gerileme|/dɪˈkeɪ/|/dɪˈkeɪ/|Fluoride helps prevent tooth decay.|Florür diş çürümesini önlemeye yardımcı olur.|yokdil
+defer|C1|verb|Ertelemek|ertelemek, (birine) uymak|/dɪˈfɝː/|/dɪˈfɜː/|The committee deferred its decision until May.|Komite kararını mayısa kadar erteledi.|c1,yds
+depth|B2|noun|Derinlik|derinlik|/depθ/|/depθ/|These fish live at a depth of 200 meters.|Bu balıklar 200 metre derinlikte yaşar.|yokdil
+ensue|C1|verb|Sonra gelmek|ardından gelmek, sonucu olarak doğmak|/ɪnˈsuː/|/ɪnˈsjuː/|A long debate ensued.|Bunu uzun bir tartışma izledi.|yds
+erect|C1|verb|Dikmek (yapı)|dikmek, inşa etmek, kurmak|/ɪˈrekt/|/ɪˈrekt/|A statue was erected in his honor.|Onun onuruna bir heykel dikildi.|yds
+evoke|C1|verb|Çağrıştırmak|çağrıştırmak, uyandırmak|/ɪˈvoʊk/|/ɪˈvəʊk/|The smell evoked memories of childhood.|Koku çocukluk anılarını çağrıştırdı.|c1,yds,yokdil
+exert|C1|verb|Güç uygulamak|(güç, etki) uygulamak, sarf etmek|/ɪɡˈzɝːt/|/ɪɡˈzɜːt/|The moon exerts a pull on the oceans.|Ay okyanuslar üzerinde bir çekim kuvveti uygular.|c1,yds,yokdil
+fraud|C1|noun|Dolandırıcılık|dolandırıcılık, sahtekârlık|/frɔːd/|/frɔːd/|He was jailed for tax fraud.|Vergi dolandırıcılığından hapse girdi.|ielts,yds
+grant|B2|noun|Hibe, ödenek|hibe, ödenek, burs|/ɡrænt/|/ɡrɑːnt/|The team received a grant for cancer research.|Ekip kanser araştırması için hibe aldı.|ielts,toefl,yds,yokdil
+imply|B2|verb|İma etmek|ima etmek, anlamına gelmek|/ɪmˈplaɪ/|/ɪmˈplaɪ/|The results imply that the drug is safe.|Sonuçlar ilacın güvenli olduğunu ima ediyor.|ielts,toefl,yds,yokdil
+incur|C1|verb|Zarara girmek|(zarar, masraf) uğramak, girmek|/ɪnˈkɝː/|/ɪnˈkɜː/|The company incurred heavy losses.|Şirket ağır zarara uğradı.|yds
+input|B2|noun|Girdi|girdi, katkı|/ˈɪnpʊt/|/ˈɪnpʊt/|We need input from all departments.|Tüm bölümlerden katkıya ihtiyacımız var.|yds,yokdil
+lapse|C1|noun|Gaflet, aksama|aksama, kısa süreli unutkanlık, zaman aralığı|/læps/|/læps/|A lapse in memory is common with age.|Yaşla birlikte hafıza aksamaları yaygınlaşır.|c1,yokdil
+mimic|C1|verb|Taklit etmek|taklit etmek, benzemek|/ˈmɪmɪk/|/ˈmɪmɪk/|Some insects mimic the colors of leaves.|Bazı böcekler yaprakların renklerini taklit eder.|yokdil
+niche|C1|noun|Niş (pazar)|niş, uygun yer, özel alan|/nɪtʃ/|/niːʃ/|Each species occupies its own niche.|Her tür kendi nişini işgal eder.|c1,yokdil
+obese|B2|adj|Aşırı şişman|obez, aşırı şişman|/oʊˈbiːs/|/əʊˈbiːs/|Obese children face greater health risks.|Obez çocuklar daha büyük sağlık riskleriyle karşı karşıyadır.|ielts,yokdil
+overt|C1|adj|Açık, aleni|açık, aleni, gizlenmeyen|/oʊˈvɝːt/|/əʊˈvɜːt/|There was no overt sign of illness.|Açık bir hastalık belirtisi yoktu.|yds
+phase|B2|noun|Evre, aşama|evre, aşama|/feɪz/|/feɪz/|The drug is in the final phase of testing.|İlaç test sürecinin son aşamasında.|ielts,toefl,yds,yokdil
+prior|B2|adj|Önceki|önceki, öncelikli|/ˈpraɪər/|/ˈpraɪə/|No prior knowledge is needed for this course.|Bu ders için önceden bilgi gerekmiyor.|yokdil
+probe|C1|verb|Soruşturmak|araştırmak, incelemek, soruşturmak|/proʊb/|/prəʊb/|Police are probing the cause of the fire.|Polis yangının nedenini soruşturuyor.|yds
+proxy|C1|noun|Vekil|vekil, temsilci, gösterge|/ˈprɑːksi/|/ˈprɒksi/|Income is often used as a proxy for social class.|Gelir genellikle sosyal sınıfın göstergesi olarak kullanılır.|yokdil
+quota|C1|noun|Kota|kota, pay|/ˈkwoʊtə/|/ˈkwəʊtə/|The country has strict import quotas.|Ülkenin katı ithalat kotaları var.|yokdil
+ratio|C1|noun|Oran|oran|/ˈreɪʃioʊ/|/ˈreɪʃiəʊ/|The ratio of teachers to students is one to twenty.|Öğretmenlerin öğrencilere oranı yirmide birdir.|yds,yokdil
+frail|C1|adj|Çelimsiz|zayıf, çelimsiz, narin|/freɪl/|/freɪl/|Frail elderly patients need extra care.|Zayıf yaşlı hastaların ek bakıma ihtiyacı vardır.|c1,yokdil
+renew|B2|verb|Yenilemek|yenilemek, uzatmak|/rɪˈnuː/|/rɪˈnjuː/|You must renew your passport every ten years.|Pasaportunuzu her on yılda bir yenilemelisiniz.|ielts,yokdil
+rigor|C1|noun|Titizlik|titizlik, kesinlik, sertlik|/ˈrɪɡər/|/ˈrɪɡə/|The study lacks scientific rigor.|Çalışma bilimsel titizlikten yoksun.|yds,yokdil
+scope|C1|noun|Kapsam|kapsam, alan, olanak|/skoʊp/|/skəʊp/|This issue is beyond the scope of the study.|Bu konu çalışmanın kapsamı dışındadır.|ielts,toefl,yds,yokdil
+seize|C1|verb|Ele geçirmek|ele geçirmek, el koymak, yakalamak|/siːz/|/siːz/|Police seized a large amount of drugs.|Polis büyük miktarda uyuşturucuya el koydu.|yds
+shift|B2|noun|Kayma, değişim|kayma, değişim, vardiya|/ʃɪft/|/ʃɪft/|There has been a shift in public opinion.|Kamuoyunda bir kayma oldu.|ielts,is,yds,yokdil
+spawn|C1|verb|Yumurtlamak|yumurtlamak, doğurmak, yol açmak|/spɑːn/|/spɔːn/|Salmon return to rivers to spawn.|Somonlar yumurtlamak için nehirlere döner.|yokdil
+stark|C1|adj|Çarpıcı, sert|belirgin, çarpıcı, sert|/stɑːrk/|/stɑːk/|There is a stark contrast between rich and poor.|Zenginlerle yoksullar arasında çarpıcı bir tezat var.|yds
+surge|C1|noun|Ani artış|ani artış, dalga, kabarma|/sɝːdʒ/|/sɜːdʒ/|Hospitals saw a surge in flu cases.|Hastaneler grip vakalarında ani bir artış gördü.|yds,yokdil
+taper|C1|verb|İncelmek|incelmek, yavaş yavaş azalmak|/ˈteɪpər/|/ˈteɪpə/|The dose is tapered off over two weeks.|Doz iki hafta boyunca yavaş yavaş azaltılır.|yokdil
+tenet|C1|noun|Temel ilke|ilke, temel inanç, öğreti|/ˈtenɪt/|/ˈtenɪt/|Equality is a basic tenet of democracy.|Eşitlik demokrasinin temel ilkesidir.|yds
+unify|C1|verb|Birleştirmek|birleştirmek, bütünleştirmek|/ˈjuːnɪfaɪ/|/ˈjuːnɪfaɪ/|The leader tried to unify the country.|Lider ülkeyi birleştirmeye çalıştı.|yds
+urban|B2|adj|Kentsel|kentsel, şehre ait|/ˈɝːbən/|/ˈɜːbən/|Urban areas suffer from air pollution.|Kentsel alanlar hava kirliliğinden muzdariptir.|ielts,toefl,yds,yokdil
+utter|C1|adj|Tam, mutlak|tam, mutlak, katıksız|/ˈʌtər/|/ˈʌtə/|The project was an utter failure.|Proje tam bir başarısızlıktı.|yds
+valid|B2|adj|Geçerli|geçerli, sağlam|/ˈvælɪd/|/ˈvælɪd/|The test gives valid and reliable results.|Test geçerli ve güvenilir sonuçlar verir.|yds,yokdil
+vigor|C1|noun|Dinçlik|dinçlik, canlılık, güç|/ˈvɪɡər/|/ˈvɪɡə/|Regular exercise restores physical vigor.|Düzenli egzersiz fiziksel dinçliği geri kazandırır.|yokdil
+abide|C1|verb|Riayet etmek|uymak, riayet etmek, katlanmak|/əˈbaɪd/|/əˈbaɪd/|All members must abide by the rules.|Tüm üyeler kurallara uymalıdır.|c1,yds
+adopt|B2|verb|Benimsemek|benimsemek, evlat edinmek, kabul etmek|/əˈdɑːpt/|/əˈdɒpt/|Many schools have adopted new teaching methods.|Birçok okul yeni öğretim yöntemlerini benimsedi.|yds,yokdil
+arise|B2|verb|Baş göstermek|ortaya çıkmak, baş göstermek, doğmak|/əˈraɪz/|/əˈraɪz/|Problems may arise during treatment.|Tedavi sırasında sorunlar baş gösterebilir.|yds,yokdil
+asset|B2|noun|Değerli varlık|varlık, mal, değerli kişi ya da şey|/ˈæset/|/ˈæset/|Her language skills are a great asset.|Onun dil becerileri büyük bir değerdir.|ielts,yds
+axiom|C1|noun|Aksiyom|aksiyom, belit|/ˈæksiəm/|/ˈæksiəm/|It is an axiom that health is wealth.|Sağlığın en büyük zenginlik olduğu bir aksiyomdur.|yds
+cling|C1|verb|Yapışmak|yapışmak, sıkıca tutunmak, bağlı kalmak|/klɪŋ/|/klɪŋ/|Some people cling to old beliefs.|Bazı insanlar eski inançlara sıkıca bağlı kalır.|c1,yokdil
+dwell|C1|verb|Barınmak|barınmak, oturmak, (üzerinde) durmak|/dwel/|/dwel/|Early humans dwelt in caves.|İlk insanlar mağaralarda barınırdı.|c1,yds
+elite|C1|noun|Seçkinler|seçkinler, elit|/eɪˈliːt/|/eɪˈliːt/|The ruling elite controlled the economy.|Yönetici seçkinler ekonomiyi kontrol ediyordu.|yokdil
+gauge|C1|verb|Ölçüp tartmak|ölçmek, tahmin etmek, kestirmek|/ɡeɪdʒ/|/ɡeɪdʒ/|It is hard to gauge public opinion.|Kamuoyunu ölçüp tartmak zordur.|yds,yokdil
+hoard|C1|verb|İstiflemek|istiflemek, biriktirmek|/hɔːrd/|/hɔːd/|People began to hoard food before the storm.|İnsanlar fırtınadan önce yiyecek istiflemeye başladı.|c1,yds
+inept|C1|adj|Yeteneksiz|beceriksiz, yeteneksiz|/ɪˈnept/|/ɪˈnept/|The government was criticized as inept.|Hükümet beceriksiz olmakla eleştirildi.|c1,yds
+irony|C1|noun|İroni|ironi, tezat|/ˈaɪrəni/|/ˈaɪrəni/|The irony is that the cure made him sicker.|İronik olan, tedavinin onu daha da hasta etmesiydi.|yds
+merit|C1|noun|Liyakat|liyakat, değer, erdem|/ˈmerɪt/|/ˈmerɪt/|Jobs should be given on merit.|İşler liyakate göre verilmelidir.|yds
+pivot|C1|noun|Mihver|mihver, dönüm noktası, merkez|/ˈpɪvət/|/ˈpɪvət/|The city was the pivot of the region's trade.|Şehir bölge ticaretinin mihveriydi.|yds
+quell|C1|verb|Bastırmak|bastırmak, yatıştırmak|/kwel/|/kwel/|The army was sent to quell the riots.|Ayaklanmaları bastırmak için ordu gönderildi.|yds
+realm|C1|noun|Diyar, alem|alan, saha, krallık, alem|/relm/|/relm/|The idea belongs to the realm of fantasy.|Bu fikir hayal alemine aittir.|yds
+scant|C1|adj|Yetersiz, kıt|az, kıt, yetersiz|/skænt/|/skænt/|The plan pays scant attention to the poor.|Plan yoksullara pek az dikkat gösteriyor.|yds,yokdil
+sheer|C1|adj|Salt, katıksız|salt, katıksız, dik|/ʃɪr/|/ʃɪə/|The sheer size of the problem shocked them.|Sorunun salt büyüklüğü onları şaşırttı.|yds
+slump|C1|noun|Ani düşüş|ani düşüş, durgunluk|/slʌmp/|/slʌmp/|There was a slump in house prices.|Konut fiyatlarında ani bir düşüş yaşandı.|yokdil
+toxin|C1|noun|Toksin, zehir|toksin, zehir|/ˈtɑːksɪn/|/ˈtɒksɪn/|The liver removes toxins from the blood.|Karaciğer kandaki toksinleri temizler.|yokdil
+wield|C1|verb|Güç kullanmak|(güç, nüfuz) kullanmak, elinde tutmak|/wiːld/|/wiːld/|Large firms wield great influence over policy.|Büyük firmalar politika üzerinde büyük nüfuz kullanır.|yds
+hence|C1|adv|Bu yüzden|bu yüzden, dolayısıyla, bundan dolayı|/hens/|/hens/|The drug is cheap and hence widely used.|İlaç ucuz ve bu yüzden yaygın olarak kullanılıyor.|yds,yokdil
+accord|C1|noun|Mutabakat|anlaşma, mutabakat, uyum|/əˈkɔːrd/|/əˈkɔːd/|The two sides reached an accord on trade.|İki taraf ticaret konusunda mutabakata vardı.|yds
+adhere|C1|verb|Bağlı kalmak|bağlı kalmak, uymak, yapışmak|/ədˈhɪr/|/ədˈhɪə/|Patients must adhere to the treatment plan.|Hastalar tedavi planına bağlı kalmalıdır.|yds,yokdil
+affirm|C1|verb|Teyit etmek|onaylamak, teyit etmek|/əˈfɝːm/|/əˈfɜːm/|The court affirmed the earlier ruling.|Mahkeme önceki kararı teyit etti.|yds
+assert|C1|verb|İleri sürmek|ileri sürmek, iddia etmek, savunmak|/əˈsɝːt/|/əˈsɜːt/|The author asserts that poverty causes crime.|Yazar yoksulluğun suça yol açtığını ileri sürüyor.|yds,yokdil
+assign|B2|verb|Atamak (görev)|atamak, görevlendirmek, vermek|/əˈsaɪn/|/əˈsaɪn/|Patients were randomly assigned to two groups.|Hastalar rastgele iki gruba atandı.|yds,yokdil
+attain|C1|verb|Erişmek|erişmek, ulaşmak, elde etmek|/əˈteɪn/|/əˈteɪn/|Few students attain the highest grade.|Az sayıda öğrenci en yüksek nota erişiyor.|yds,yokdil
+compel|C1|verb|Mecbur etmek|zorlamak, mecbur etmek|/kəmˈpel/|/kəmˈpel/|The law compels firms to reduce emissions.|Yasa firmaları emisyonlarını azaltmaya mecbur ediyor.|yds
+convey|C1|verb|İletmek|iletmek, aktarmak, taşımak|/kənˈveɪ/|/kənˈveɪ/|Nerves convey signals to the brain.|Sinirler sinyalleri beyne iletir.|yds,yokdil
+deduce|C1|verb|Çıkarsamak|çıkarsamak, sonuç çıkarmak|/dɪˈduːs/|/dɪˈdjuːs/|From the data we can deduce the cause.|Verilerden nedeni çıkarsayabiliriz.|yds,yokdil
+denote|C1|verb|Simgelemek|belirtmek, simgelemek, anlamına gelmek|/dɪˈnoʊt/|/dɪˈnəʊt/|In the chart, red denotes high risk.|Grafikte kırmızı yüksek riski simgeler.|yokdil
+depict|C1|verb|Tasvir etmek|tasvir etmek, betimlemek, resmetmek|/dɪˈpɪkt/|/dɪˈpɪkt/|The novel depicts life in a small village.|Roman küçük bir köydeki yaşamı tasvir ediyor.|c1,yds
+derive|C1|verb|Türetmek|türetmek, elde etmek, kaynaklanmak|/dɪˈraɪv/|/dɪˈraɪv/|Many drugs are derived from plants.|Birçok ilaç bitkilerden türetilir.|ielts,toefl,yds,yokdil
+detect|B2|verb|Saptamak|saptamak, tespit etmek, algılamak|/dɪˈtekt/|/dɪˈtekt/|The test can detect cancer at an early stage.|Test kanseri erken evrede saptayabilir.|yokdil
+devise|C1|verb|Tasarlamak|tasarlamak, geliştirmek, icat etmek|/dɪˈvaɪz/|/dɪˈvaɪz/|Scientists devised a new way to measure pollution.|Bilim insanları kirliliği ölçmek için yeni bir yöntem tasarladı.|yds,yokdil
+dilute|C1|verb|Seyreltmek|seyreltmek, sulandırmak, zayıflatmak|/daɪˈluːt/|/daɪˈluːt/|The acid must be diluted with water.|Asit suyla seyreltilmelidir.|yokdil
+divert|C1|verb|Saptırmak|saptırmak, başka yöne çevirmek|/daɪˈvɝːt/|/daɪˈvɜːt/|Funds were diverted from education to defense.|Fonlar eğitimden savunmaya kaydırıldı.|c1,yds
+inhale|C1|verb|Solumak|solumak, içine çekmek|/ɪnˈheɪl/|/ɪnˈheɪl/|Workers inhaled toxic dust for years.|İşçiler yıllarca zehirli toz soludu.|yokdil
+ensure|B2|verb|Garanti etmek|sağlamak, garanti etmek|/ɪnˈʃʊr/|/ɪnˈʃɔː/|Doctors must ensure that patients understand the risks.|Doktorlar hastaların riskleri anlamasını sağlamalıdır.|yds,yokdil
+entity|C1|noun|Birim, varlık|varlık, birim, kuruluş|/ˈentəti/|/ˈentəti/|The two firms merged into a single entity.|İki firma birleşerek tek bir kuruluş oldu.|yds
+evolve|B2|verb|Evrimleşmek|evrimleşmek, gelişmek|/iˈvɑːlv/|/iˈvɒlv/|Humans evolved over millions of years.|İnsanlar milyonlarca yıl boyunca evrimleşti.|ielts,toefl,yokdil
+exceed|C1|verb|Aşmak|aşmak, geçmek|/ɪkˈsiːd/|/ɪkˈsiːd/|The dose should not exceed 20 milligrams a day.|Doz günde 20 miligramı aşmamalıdır.|yds,yokdil
+extent|B2|noun|Boyut, derece|boyut, derece, kapsam|/ɪkˈstent/|/ɪkˈstent/|The extent of the damage is not yet known.|Hasarın boyutu henüz bilinmiyor.|yds,yokdil
+fossil|B2|noun|Fosil|fosil|/ˈfɑːsəl/|/ˈfɒsl/|They found the fossil of an ancient fish.|Antik bir balığın fosilini buldular.|toefl,yokdil
+impose|C1|verb|Dayatmak|dayatmak, uygulamak, (vergi) koymak|/ɪmˈpoʊz/|/ɪmˈpəʊz/|The government imposed a tax on sugar.|Hükümet şekere vergi koydu.|yds,yokdil
+incite|C1|verb|Kışkırtmak|kışkırtmak, tahrik etmek|/ɪnˈsaɪt/|/ɪnˈsaɪt/|He was accused of inciting violence.|Şiddete kışkırtmakla suçlandı.|yds
+infect|B2|verb|Bulaştırmak|bulaştırmak, enfekte etmek|/ɪnˈfekt/|/ɪnˈfekt/|The virus can infect both humans and animals.|Virüs hem insanlara hem hayvanlara bulaşabilir.|yokdil
+intact|C1|adj|Hasarsız|sağlam, bozulmamış, hasarsız|/ɪnˈtækt/|/ɪnˈtækt/|The ancient tomb was found intact.|Antik mezar hasarsız halde bulundu.|yds,yokdil
+invoke|C1|verb|Dayanak yapmak|başvurmak, dayanak göstermek, çağrıştırmak|/ɪnˈvoʊk/|/ɪnˈvəʊk/|The judge invoked an old law.|Yargıç eski bir yasayı dayanak gösterdi.|yds
+mutual|B2|adj|Karşılıklı|karşılıklı, ortak|/ˈmjuːtʃuəl/|/ˈmjuːtʃuəl/|The two countries signed a deal for mutual benefit.|İki ülke karşılıklı yarar için bir anlaşma imzaladı.|yokdil
+obtain|B2|verb|Elde etmek|elde etmek, edinmek|/əbˈteɪn/|/əbˈteɪn/|The data were obtained from hospital records.|Veriler hastane kayıtlarından elde edildi.|yds,yokdil
+offset|C1|verb|Dengelemek|dengelemek, telafi etmek|/ˌɔːfˈset/|/ˌɒfˈset/|Higher prices were offset by lower taxes.|Yüksek fiyatlar düşük vergilerle dengelendi.|yokdil
+output|B2|noun|Çıktı, üretim|çıktı, üretim, verim|/ˈaʊtpʊt/|/ˈaʊtpʊt/|Industrial output fell by five percent.|Sanayi üretimi yüzde beş düştü.|yds,yokdil
+parity|C1|noun|Eşdeğerlik|eşitlik, denklik, eşdeğerlik|/ˈpærəti/|/ˈpærəti/|Women still lack pay parity with men.|Kadınlar hâlâ erkeklerle ücret eşitliğinden yoksun.|yds
+plight|C1|noun|Kötü durum|kötü durum, çile, zor durum|/plaɪt/|/plaɪt/|The report highlights the plight of refugees.|Rapor mültecilerin kötü durumunu vurguluyor.|yokdil
+potent|C1|adj|Etkili (ilaç)|güçlü, etkili, tesirli|/ˈpoʊtənt/|/ˈpəʊtnt/|This is a potent drug with side effects.|Bu, yan etkileri olan güçlü bir ilaçtır.|yokdil
+prompt|C1|verb|Tetiklemek|tetiklemek, sevk etmek, neden olmak|/prɑːmpt/|/prɒmpt/|The findings prompted further research.|Bulgular yeni araştırmalara yol açtı.|yds,yokdil
+pursue|C1|verb|Peşine düşmek|sürdürmek, peşinden koşmak, izlemek|/pərˈsuː/|/pəˈsjuː/|She decided to pursue a career in medicine.|Tıpta kariyer peşinde koşmaya karar verdi.|yokdil
+recede|C1|verb|Geri çekilmek|geri çekilmek, azalmak|/rɪˈsiːd/|/rɪˈsiːd/|The floodwaters slowly receded.|Sel suları yavaş yavaş çekildi.|yokdil
+refine|C1|verb|Arıtmak|arıtmak, rafine etmek, geliştirmek|/rɪˈfaɪn/|/rɪˈfaɪn/|Crude oil is refined into gasoline.|Ham petrol arıtılarak benzine dönüştürülür.|yokdil
+reside|C1|verb|İkamet etmek|oturmak, ikamet etmek, bulunmak|/rɪˈzaɪd/|/rɪˈzaɪd/|Most of the population resides in cities.|Nüfusun çoğu şehirlerde ikamet ediyor.|yokdil
+retain|C1|verb|Muhafaza etmek|korumak, muhafaza etmek, tutmak|/rɪˈteɪn/|/rɪˈteɪn/|Clay soil retains water well.|Killi toprak suyu iyi tutar.|yds,yokdil
+robust|C1|adj|Sağlam, güçlü|sağlam, dayanıklı, güçlü|/roʊˈbʌst/|/rəʊˈbʌst/|The study provides robust evidence.|Çalışma sağlam kanıtlar sunuyor.|c1,yds,yokdil
+sector|B2|noun|Sektör|sektör, kesim, alan|/ˈsektər/|/ˈsektə/|The health sector employs millions of people.|Sağlık sektörü milyonlarca kişiyi istihdam ediyor.|yds,yokdil
+sparse|C1|adj|Seyrek|seyrek, dağınık, az|/spɑːrs/|/spɑːs/|Vegetation is sparse in the desert.|Çölde bitki örtüsü seyrektir.|yokdil
+strain|C1|noun|Suş (virüs)|suş, tür, gerginlik, baskı|/streɪn/|/streɪn/|A new strain of the virus has appeared.|Virüsün yeni bir suşu ortaya çıktı.|yokdil
+tissue|B2|noun|Doku|doku, kâğıt mendil|/ˈtɪʃuː/|/ˈtɪʃuː/|Muscle tissue repairs itself after exercise.|Kas dokusu egzersizden sonra kendini onarır.|yokdil
+uphold|C1|verb|Savunmak|savunmak, korumak, onaylamak|/ʌpˈhoʊld/|/ʌpˈhəʊld/|Courts must uphold the law.|Mahkemeler hukuku korumalıdır.|yds
+virtue|C1|noun|Erdem|erdem, fazilet|/ˈvɝːtʃuː/|/ˈvɜːtʃuː/|Patience is a virtue.|Sabır bir erdemdir.|yds
+whilst|C1|conj|İken|iken, oysa, -dığı halde|/waɪlst/|/waɪlst/|Some patients improved, whilst others did not.|Bazı hastalar iyileşti, oysa diğerleri iyileşmedi.|yds,yokdil
+albeit|C1|conj|Gerçi|gerçi, -se de, her ne kadar|/ɔːlˈbiːɪt/|/ɔːlˈbiːɪt/|Prices fell, albeit slowly.|Fiyatlar yavaş da olsa düştü.|yds,yokdil
+namely|B2|adv|Şöyle ki|yani, şöyle ki, adıyla|/ˈneɪmli/|/ˈneɪmli/|Two factors, namely diet and exercise, matter most.|İki faktör, yani diyet ve egzersiz, en önemlisidir.|yds,yokdil
+merely|B2|adv|Sırf, yalnızca|sadece, yalnızca, salt|/ˈmɪrli/|/ˈmɪəli/|This is merely the first step.|Bu yalnızca ilk adım.|yds,yokdil
+solely|C1|adv|Tek başına|yalnızca, tek başına, sadece|/ˈsoʊlli/|/ˈsəʊlli/|The decision was based solely on cost.|Karar yalnızca maliyete dayanıyordu.|yds,yokdil
+barely|B2|adv|Zar zor|zar zor, ancak, neredeyse hiç|/ˈberli/|/ˈbeəli/|The patient could barely breathe.|Hasta zar zor nefes alabiliyordu.|yds,yokdil
+vastly|C1|adv|Büyük ölçüde|büyük ölçüde, fazlasıyla|/ˈvæstli/|/ˈvɑːstli/|Living conditions have vastly improved.|Yaşam koşulları büyük ölçüde iyileşti.|yokdil
+thereby|C1|adv|Bu sayede|bu sayede, böylelikle|/ˌðerˈbaɪ/|/ˌðeəˈbaɪ/|Exercise strengthens the heart, thereby lowering risk.|Egzersiz kalbi güçlendirir, bu sayede riski azaltır.|yds,yokdil
+notably|C1|adv|Bilhassa|özellikle, bilhassa, dikkat çekici şekilde|/ˈnoʊtəbli/|/ˈnəʊtəbli/|Some countries, notably Japan, have very low birth rates.|Bazı ülkelerde, bilhassa Japonya'da, doğum oranları çok düşüktür.|yds,yokdil
+largely|B2|adv|Çoğunlukla|büyük ölçüde, çoğunlukla|/ˈlɑːrdʒli/|/ˈlɑːdʒli/|The disease is largely preventable.|Hastalık büyük ölçüde önlenebilir.|yds,yokdil
+whereas|B2|conj|Halbuki|oysa, halbuki, -e karşın|/werˈæz/|/weərˈæz/|Some species are thriving, whereas others are declining.|Bazı türler çoğalıyor, halbuki diğerleri azalıyor.|yds,yokdil
+dwindle|C1|verb|Azalıp gitmek|azalıp gitmek, küçülmek|/ˈdwɪndəl/|/ˈdwɪndl/|Fish stocks have dwindled due to overfishing.|Aşırı avlanma nedeniyle balık stokları azalıp gitti.|yds,yokdil
+diffuse|C1|verb|Yayılmak (gaz)|yaymak, yayılmak, dağılmak|/dɪˈfjuːz/|/dɪˈfjuːz/|Oxygen diffuses from the lungs into the blood.|Oksijen akciğerlerden kana yayılır.|yokdil
+warrant|C1|verb|Gerektirmek|gerektirmek, haklı çıkarmak|/ˈwɔːrənt/|/ˈwɒrənt/|The results warrant further study.|Sonuçlar daha fazla çalışmayı gerektiriyor.|yds,yokdil
+exploit|C1|verb|Sömürmek|sömürmek, istismar etmek, yararlanmak|/ɪkˈsplɔɪt/|/ɪkˈsplɔɪt/|Some firms exploit cheap labor.|Bazı firmalar ucuz işgücünü sömürür.|yds
+discern|C1|verb|Ayırt etmek|ayırt etmek, sezmek, fark etmek|/dɪˈsɝːn/|/dɪˈsɜːn/|It is hard to discern a pattern in the data.|Verilerde bir örüntüyü ayırt etmek zordur.|yds,yokdil
+undergo|C1|verb|Geçirmek|geçirmek, (ameliyat, değişim) geçirmek|/ˌʌndərˈɡoʊ/|/ˌʌndəˈɡəʊ/|He will undergo heart surgery next week.|Gelecek hafta kalp ameliyatı geçirecek.|yokdil
+impetus|C1|noun|İtici güç|itici güç, ivme, teşvik|/ˈɪmpɪtəs/|/ˈɪmpɪtəs/|The crisis gave new impetus to reform.|Kriz reforma yeni bir itici güç kazandırdı.|yokdil
+pan|A2|noun|Tava|tava|/pæn/|/pæn/|Heat some oil in a pan.|Bir tavada biraz yağ ısıt.|lgs,mutfak
+cup|A2|noun|Fincan|fincan, bardak|/kʌp/|/kʌp/|Would you like a cup of coffee?|Bir fincan kahve ister misin?|lgs,mutfak
+mix|A2|verb|Karıştırmak|karıştırmak, harmanlamak|/mɪks/|/mɪks/|Mix the flour and the eggs.|Unu ve yumurtaları karıştır.|lgs
+fry|A2|verb|Kızartmak|kızartmak|/fraɪ/|/fraɪ/|My mom fries potatoes for dinner.|Annem akşam yemeği için patates kızartır.|lgs,mutfak
+oil|A2|noun|Yağ|yağ, sıvı yağ|/ɔɪl/|/ɔɪl/|Add a little olive oil to the salad.|Salataya biraz zeytinyağı ekle.|lgs,mutfak
+pie|A2|noun|Turta|turta, börek|/paɪ/|/paɪ/|Grandma made an apple pie for us.|Büyükannem bize elmalı turta yaptı.|lgs
+jam|A2|noun|Reçel|reçel|/dʒæm/|/dʒæm/|I eat bread with butter and jam.|Ekmeği tereyağı ve reçelle yerim.|lgs,mutfak
+nut|A2|noun|Kuruyemiş|kuruyemiş, fındık, ceviz|/nʌt/|/nʌt/|Some people are allergic to nuts.|Bazı insanlar kuruyemişe alerjiktir.|lgs
+map|A2|noun|Harita|harita|/mæp/|/mæp/|We used a map to find the museum.|Müzeyi bulmak için harita kullandık.|lgs,seyahat
+app|A2|noun|Uygulama|uygulama (mobil)|/æp/|/æp/|I downloaded a new app on my phone.|Telefonuma yeni bir uygulama indirdim.|lgs,teknoloji
+tip|B1|noun|Bahşiş|bahşiş, ipucu|/tɪp/|/tɪp/|We left a small tip for the waiter.|Garsona küçük bir bahşiş bıraktık.|lgs,seyahat
+mop|B1|verb|Paspaslamak|paspaslamak, paspas|/mɑːp/|/mɒp/|I mop the kitchen floor on Sundays.|Pazar günleri mutfak zeminini paspaslarım.|lgs
+pot|A2|noun|Tencere|tencere, kap|/pɑːt/|/pɒt/|Put the pasta in a big pot.|Makarnayı büyük bir tencereye koy.|lgs,mutfak
+fun|A2|noun|Eğlence|eğlence, keyif|/fʌn/|/fʌn/|We had a lot of fun at the camp.|Kampta çok eğlendik.|lgs
+fog|A2|noun|Sis|sis|/fɑːɡ/|/fɒɡ/|The fog was so thick that we couldn't see the road.|Sis o kadar yoğundu ki yolu göremiyorduk.|doga,lgs
+ice|A2|noun|Buz|buz|/aɪs/|/aɪs/|The lake was covered with ice.|Göl buzla kaplıydı.|doga,lgs
+hut|B1|noun|Kulübe|kulübe|/hʌt/|/hʌt/|We stayed in a small hut in the mountains.|Dağlarda küçük bir kulübede kaldık.|lgs
+bin|B1|noun|Çöp kutusu|çöp kutusu|/bɪn/|/bɪn/|Please throw the paper in the bin.|Lütfen kâğıdı çöp kutusuna at.|lgs
+tap|B1|noun|Musluk|musluk|/tæp/|/tæp/|Turn off the tap when you brush your teeth.|Dişlerini fırçalarken musluğu kapat.|lgs
+mug|B1|noun|Kupa|kupa (bardak)|/mʌɡ/|/mʌɡ/|He drinks hot chocolate from a big mug.|Büyük bir kupadan sıcak çikolata içer.|lgs
+lab|B1|noun|Laboratuvar|laboratuvar|/læb/|/læb/|We did an experiment in the science lab.|Fen laboratuvarında bir deney yaptık.|lgs
+hug|A2|verb|Sarılmak|sarılmak, kucaklamak|/hʌɡ/|/hʌɡ/|She hugged her friend at the airport.|Havalimanında arkadaşına sarıldı.|lgs
+lie|A2|noun|Yalan|yalan|/laɪ/|/laɪ/|A true friend never tells you a lie.|Gerçek bir arkadaş sana asla yalan söylemez.|lgs
+ash|B1|noun|Kül|kül|/æʃ/|/æʃ/|The volcano covered the town in ash.|Yanardağ kasabayı külle kapladı.|lgs
+mud|B1|noun|Çamur|çamur|/mʌd/|/mʌd/|After the flood, the streets were full of mud.|Selden sonra sokaklar çamurla doluydu.|doga,lgs
+bake|A2|verb|Fırınlamak|fırında pişirmek|/beɪk/|/beɪk/|We bake cookies every weekend.|Her hafta sonu kurabiye pişiririz.|lgs,mutfak
+boil|A2|verb|Kaynatmak|kaynatmak, haşlamak|/bɔɪl/|/bɔɪl/|Boil the water before you add the rice.|Pirinci eklemeden önce suyu kaynat.|lgs,mutfak
+peel|B1|verb|Soymak|soymak (kabuk)|/piːl/|/piːl/|Peel the potatoes and cut them into pieces.|Patatesleri soy ve parçalara kes.|lgs,mutfak
+chop|B1|verb|Doğramak|doğramak, kıymak|/tʃɑːp/|/tʃɒp/|Chop the onions into small pieces.|Soğanları küçük parçalara doğra.|lgs,mutfak
+bowl|A2|noun|Kase|kase, çanak|/boʊl/|/bəʊl/|I had a bowl of soup for lunch.|Öğle yemeğinde bir kase çorba içtim.|lgs,mutfak
+fork|A2|noun|Çatal|çatal|/fɔːrk/|/fɔːk/|Can I have a fork, please?|Bir çatal alabilir miyim, lütfen?|lgs,mutfak
+oven|A2|noun|Fırın|fırın|/ˈʌvən/|/ˈʌvən/|Put the cake in the oven for forty minutes.|Keki kırk dakika fırına koy.|lgs,mutfak
+meal|A2|noun|Öğün|öğün, yemek|/miːl/|/miːl/|Breakfast is the most important meal of the day.|Kahvaltı günün en önemli öğünüdür.|lgs,mutfak
+soup|A2|noun|Çorba|çorba|/suːp/|/suːp/|Lentil soup is very popular in Turkey.|Mercimek çorbası Türkiye'de çok sevilir.|lgs,mutfak
+sink|B1|noun|Lavabo|lavabo, eviye|/sɪŋk/|/sɪŋk/|Put the dirty dishes in the sink.|Kirli bulaşıkları lavaboya koy.|lgs,mutfak
+chat|A2|verb|Sohbet etmek|sohbet etmek, yazışmak|/tʃæt/|/tʃæt/|I chat with my cousin online every night.|Her gece kuzenimle internetten sohbet ederim.|lgs,teknoloji
+post|B1|noun|Gönderi|gönderi, paylaşım|/poʊst/|/pəʊst/|Her last post got a lot of likes.|Son gönderisi çok beğeni aldı.|futbol,lgs
+link|B1|noun|Bağlantı|bağlantı, link|/lɪŋk/|/lɪŋk/|Click on the link to watch the video.|Videoyu izlemek için bağlantıya tıkla.|lgs,teknoloji
+user|B1|noun|Kullanıcı|kullanıcı|/ˈjuːzər/|/ˈjuːzə/|This app has millions of users.|Bu uygulamanın milyonlarca kullanıcısı var.|lgs,teknoloji
+file|A2|noun|Dosya|dosya|/faɪl/|/faɪl/|I saved the file on my computer.|Dosyayı bilgisayarıma kaydettim.|is,lgs,teknoloji
+text|A2|verb|Mesaj atmak|mesaj atmak, metin|/tekst/|/tekst/|Text me when you get home.|Eve varınca bana mesaj at.|lgs,teknoloji
+joke|A2|noun|Şaka|şaka, fıkra|/dʒoʊk/|/dʒəʊk/|He always tells funny jokes.|Her zaman komik şakalar yapar.|lgs
+teen|B1|noun|Ergen|ergen, genç (13-19 yaş)|/tiːn/|/tiːn/|Many teens spend hours on their phones.|Birçok ergen saatlerini telefonda geçirir.|lgs
+mall|A2|noun|AVM|alışveriş merkezi|/mɔːl/|/mɔːl/|Let's meet at the mall on Saturday.|Cumartesi AVM'de buluşalım.|lgs
+exam|A2|noun|Sınav|sınav|/ɪɡˈzæm/|/ɪɡˈzæm/|I'm studying hard for the exam.|Sınav için çok çalışıyorum.|lgs
+cave|A2|noun|Mağara|mağara|/keɪv/|/keɪv/|We explored a dark cave.|Karanlık bir mağarayı keşfettik.|doga,lgs
+rope|B1|noun|Halat|halat, ip|/roʊp/|/rəʊp/|Hold the rope tightly.|Halata sıkıca tutun.|lgs
+hike|B1|noun|Doğa yürüyüşü|doğa yürüyüşü, yürüyüş|/haɪk/|/haɪk/|We went on a long hike in the forest.|Ormanda uzun bir doğa yürüyüşüne çıktık.|lgs,seyahat
+dive|B1|verb|Dalmak|dalmak|/daɪv/|/daɪv/|He dived into the cold water.|Soğuk suya daldı.|futbol,lgs
+raft|B1|noun|Sal|sal|/ræft/|/rɑːft/|They crossed the river on a raft.|Nehri bir salla geçtiler.|lgs
+camp|A2|verb|Kamp yapmak|kamp yapmak, kamp|/kæmp/|/kæmp/|We camped by the lake last summer.|Geçen yaz gölün kenarında kamp yaptık.|lgs,seyahat
+tent|A2|noun|Çadır|çadır|/tent/|/tent/|We put up our tent near the river.|Çadırımızı nehrin yakınına kurduk.|lgs,seyahat
+wild|A2|adj|Vahşi|vahşi, yabani|/waɪld/|/waɪld/|We saw wild animals on the safari.|Safaride vahşi hayvanlar gördük.|doga,lgs
+trip|A2|noun|Gezi|gezi, yolculuk|/trɪp/|/trɪp/|Our school trip to Cappadocia was amazing.|Kapadokya'ya okul gezimiz harikaydı.|lgs,seyahat
+hero|A2|noun|Kahraman|kahraman|/ˈhɪroʊ/|/ˈhɪərəʊ/|The firefighter became a local hero.|İtfaiyeci yerel bir kahraman oldu.|lgs
+ruin|B1|noun|Harabe|harabe, yıkıntı, mahvetmek|/ˈruːɪn/|/ˈruːɪn/|We visited the ruins of an old temple.|Eski bir tapınağın harabelerini ziyaret ettik.|lgs,seyahat
+dust|B1|verb|Toz almak|toz almak, toz|/dʌst/|/dʌst/|I dust the shelves every week.|Her hafta rafların tozunu alırım.|lgs
+iron|A2|verb|Ütülemek|ütülemek, ütü, demir|/ˈaɪərn/|/ˈaɪən/|Can you iron my shirt?|Gömleğimi ütüleyebilir misin?|lgs
+feed|A2|verb|Beslemek|beslemek, yem vermek|/fiːd/|/fiːd/|It's my job to feed the cat.|Kediyi beslemek benim görevim.|lgs
+mess|B1|noun|Dağınıklık|dağınıklık, karmaşa|/mes/|/mes/|Your room is a mess!|Odan darmadağın!|lgs
+heat|A2|noun|Isı|ısı, sıcaklık|/hiːt/|/hiːt/|Metals expand with heat.|Metaller ısıyla genleşir.|lgs
+germ|B1|noun|Mikrop|mikrop|/dʒɜːrm/|/dʒɜːm/|Washing your hands kills germs.|Ellerini yıkamak mikropları öldürür.|lgs
+hail|B1|noun|Dolu|dolu (yağış)|/heɪl/|/heɪl/|The hail damaged many cars.|Dolu birçok arabaya zarar verdi.|lgs
+wave|A2|noun|Dalga|dalga|/weɪv/|/weɪv/|Huge waves hit the shore.|Dev dalgalar kıyıya çarptı.|doga,lgs
+lava|B1|noun|Lav|lav|/ˈlɑːvə/|/ˈlɑːvə/|Hot lava flowed down the mountain.|Sıcak lav dağdan aşağı aktı.|lgs
+melt|B1|verb|Erimek|erimek, eritmek|/melt/|/melt/|The ice melts quickly in the sun.|Buz güneşte çabucak erir.|lgs
+spoon|A2|noun|Kaşık|kaşık|/spuːn/|/spuːn/|Stir your tea with a spoon.|Çayını kaşıkla karıştır.|lgs,mutfak
+knife|A2|noun|Bıçak|bıçak|/naɪf/|/naɪf/|Be careful with that sharp knife.|O keskin bıçakla dikkatli ol.|lgs,mutfak
+flour|A2|noun|Un|un|/ˈflaʊər/|/ˈflaʊə/|You need two cups of flour for this cake.|Bu kek için iki su bardağı un gerekir.|lgs,mutfak
+taste|A2|verb|Tatmak|tatmak, tadına bakmak, tat|/teɪst/|/teɪst/|Taste the soup and add some salt.|Çorbanın tadına bak ve biraz tuz ekle.|lgs
+spicy|A2|adj|Baharatlı|baharatlı, acılı|/ˈspaɪsi/|/ˈspaɪsi/|Adana kebab is quite spicy.|Adana kebabı oldukça acılıdır.|lgs,mutfak
+serve|B1|verb|Servis etmek|servis etmek, sunmak, hizmet etmek|/sɜːrv/|/sɜːv/|Serve the soup hot.|Çorbayı sıcak servis et.|lgs
+reply|A2|verb|Yanıtlamak|yanıtlamak, cevap vermek|/rɪˈplaɪ/|/rɪˈplaɪ/|She didn't reply to my message.|Mesajıma yanıt vermedi.|lgs
+click|A2|verb|Tıklamak|tıklamak|/klɪk/|/klɪk/|Click the button to start the game.|Oyunu başlatmak için düğmeye tıkla.|lgs,teknoloji
+share|A2|verb|Paylaşmak|paylaşmak|/ʃer/|/ʃeə/|Good friends share their secrets.|İyi arkadaşlar sırlarını paylaşır.|is,lgs
+virus|B1|noun|Virüs|virüs|/ˈvaɪrəs/|/ˈvaɪərəs/|A virus damaged my computer.|Bir virüs bilgisayarıma zarar verdi.|lgs,teknoloji
+voice|A2|noun|Ses|ses (insan sesi)|/vɔɪs/|/vɔɪs/|She has a beautiful voice.|Çok güzel bir sesi var.|lgs
+funny|A2|adj|Komik|komik, eğlenceli|/ˈfʌni/|/ˈfʌni/|My best friend is really funny.|En iyi arkadaşım gerçekten komik.|lgs
+argue|B1|verb|Tartışmak|tartışmak, atışmak|/ˈɑːrɡjuː/|/ˈɑːɡjuː/|My brother and I sometimes argue about games.|Kardeşimle bazen oyunlar hakkında tartışırız.|lgs
+fight|A2|noun|Kavga|kavga, dövüş|/faɪt/|/faɪt/|They had a fight but made up quickly.|Kavga ettiler ama çabuk barıştılar.|lgs
+bully|B1|noun|Zorba|zorba, kabadayı|/ˈbʊli/|/ˈbʊli/|Never be afraid to report a bully.|Bir zorbayı bildirmekten asla korkma.|lgs
+hobby|A2|noun|Hobi|hobi, uğraş|/ˈhɑːbi/|/ˈhɒbi/|My hobby is taking photos.|Hobim fotoğraf çekmek.|lgs
+grade|B1|noun|Not (sınav)|not, sınıf|/ɡreɪd/|/ɡreɪd/|She got a good grade in math.|Matematikte iyi bir not aldı.|lgs
+cliff|B1|noun|Uçurum|uçurum, yalıyar|/klɪf/|/klɪf/|Don't stand too close to the cliff.|Uçuruma çok yakın durma.|doga,lgs
+risky|B1|adj|Riskli|riskli, tehlikeli|/ˈrɪski/|/ˈrɪski/|Climbing without a rope is risky.|İpsiz tırmanmak risklidir.|lgs
+guide|A2|noun|Rehber|rehber, kılavuz|/ɡaɪd/|/ɡaɪd/|Our guide told us about the old city.|Rehberimiz bize eski şehri anlattı.|lgs,seyahat
+local|B1|adj|Yerel|yerel, yöresel|/ˈloʊkəl/|/ˈləʊkəl/|Try the local food when you travel.|Seyahat ettiğinde yerel yemekleri dene.|lgs,seyahat
+sight|B1|noun|Görülecek yer|görülecek yer, manzara, görme|/saɪt/|/saɪt/|We saw all the famous sights of Rome.|Roma'nın tüm ünlü yerlerini gördük.|lgs,seyahat
+chore|B1|noun|Ev işi|ev işi, angarya|/tʃɔːr/|/tʃɔː/|Washing the dishes is my least favorite chore.|Bulaşık yıkamak en sevmediğim ev işi.|lgs
+sweep|B1|verb|Süpürmek|süpürmek|/swiːp/|/swiːp/|Can you sweep the floor, please?|Lütfen yeri süpürebilir misin?|lgs
+messy|A2|adj|Dağınık|dağınık, pis|/ˈmesi/|/ˈmesi/|My brother's room is always messy.|Kardeşimin odası hep dağınık.|lgs
+orbit|B1|noun|Yörünge|yörünge|/ˈɔːrbɪt/|/ˈɔːbɪt/|The Moon moves in an orbit around the Earth.|Ay, Dünya'nın etrafında bir yörüngede döner.|lgs
+prove|B1|verb|Kanıtlamak|kanıtlamak, ispatlamak|/pruːv/|/pruːv/|The experiment proved her idea.|Deney onun fikrini kanıtladı.|lgs
+flood|B1|noun|Sel|sel, taşkın|/flʌd/|/flʌd/|The flood destroyed many homes.|Sel birçok evi yıktı.|doga,lgs
+erupt|B1|verb|Püskürmek|püskürmek (yanardağ), patlak vermek|/ɪˈrʌpt/|/ɪˈrʌpt/|The volcano erupted last night.|Yanardağ dün gece püskürdü.|lgs
+flame|B1|noun|Alev|alev|/fleɪm/|/fleɪm/|The flames rose high into the sky.|Alevler gökyüzüne yükseldi.|lgs
+smoke|A2|noun|Duman|duman|/smoʊk/|/sməʊk/|We saw smoke coming from the forest.|Ormandan duman yükseldiğini gördük.|lgs
+crack|B1|noun|Çatlak|çatlak, yarık|/kræk/|/kræk/|There is a crack in the wall after the earthquake.|Depremden sonra duvarda bir çatlak var.|lgs
+recipe|A2|noun|Tarif|yemek tarifi|/ˈresəpi/|/ˈresəpi/|Can you give me the recipe for this cake?|Bu kekin tarifini verir misin?|lgs,mutfak
+pepper|A2|noun|Biber|biber, karabiber|/ˈpepər/|/ˈpepə/|Add salt and pepper to taste.|Damak tadına göre tuz ve biber ekle.|lgs,mutfak
+garlic|A2|noun|Sarımsak|sarımsak|/ˈɡɑːrlɪk/|/ˈɡɑːlɪk/|This sauce has too much garlic.|Bu sosta çok fazla sarımsak var.|lgs,mutfak
+butter|A2|noun|Tereyağı|tereyağı|/ˈbʌtər/|/ˈbʌtə/|Melt the butter in a pan.|Tereyağını tavada erit.|lgs,mutfak
+fridge|A2|noun|Buzdolabı|buzdolabı|/frɪdʒ/|/frɪdʒ/|Put the milk back in the fridge.|Sütü buzdolabına geri koy.|lgs,mutfak
+online|A2|adv|Çevrim içi|çevrim içi, internetten|/ˌɑːnˈlaɪn/|/ˌɒnˈlaɪn/|I bought my new shoes online.|Yeni ayakkabılarımı internetten aldım.|lgs,teknoloji
+upload|B1|verb|Yüklemek|yüklemek (internete)|/ˌʌpˈloʊd/|/ˌʌpˈləʊd/|She uploaded the photos to her blog.|Fotoğrafları bloguna yükledi.|lgs,teknoloji
+delete|B1|verb|Silmek|silmek|/dɪˈliːt/|/dɪˈliːt/|I deleted the old messages.|Eski mesajları sildim.|lgs,teknoloji
+browse|B1|verb|Göz atmak|göz atmak, gezinmek|/braʊz/|/braʊz/|I browsed the internet for gift ideas.|Hediye fikri bulmak için internette gezindim.|lgs
+screen|A2|noun|Ekran|ekran|/skriːn/|/skriːn/|Don't sit too close to the screen.|Ekrana çok yakın oturma.|lgs,teknoloji
+secret|A2|noun|Sır|sır, gizli|/ˈsiːkrət/|/ˈsiːkrət/|Can you keep a secret?|Sır tutabilir misin?|lgs
+gossip|B1|noun|Dedikodu|dedikodu|/ˈɡɑːsɪp/|/ˈɡɒsɪp/|Don't believe the gossip about her.|Onun hakkındaki dedikodulara inanma.|lgs
+lonely|A2|adj|Yalnız|yalnız, kimsesiz|/ˈloʊnli/|/ˈləʊnli/|He felt lonely in the new city.|Yeni şehirde kendini yalnız hissetti.|lgs
+boring|A2|adj|Sıkıcı|sıkıcı|/ˈbɔːrɪŋ/|/ˈbɔːrɪŋ/|The film was so boring that I fell asleep.|Film o kadar sıkıcıydı ki uyuyakaldım.|lgs
+puzzle|A2|noun|Yapboz|yapboz, bulmaca|/ˈpʌzəl/|/ˈpʌzəl/|We finished a 1000-piece puzzle.|Bin parçalık bir yapbozu bitirdik.|lgs
+jungle|A2|noun|Tropik orman|cangıl, balta girmemiş orman|/ˈdʒʌŋɡəl/|/ˈdʒʌŋɡəl/|Tigers live in the jungle.|Kaplanlar tropik ormanda yaşar.|lgs
+valley|A2|noun|Vadi|vadi|/ˈvæli/|/ˈvæli/|A small river runs through the valley.|Vadiden küçük bir nehir geçiyor.|doga,lgs
+helmet|B1|noun|Kask|kask, miğfer|/ˈhelmɪt/|/ˈhelmɪt/|Always wear a helmet when you ride a bike.|Bisiklete binerken her zaman kask tak.|lgs
+museum|A2|noun|Müze|müze|/mjuˈziːəm/|/mjuˈziːəm/|We visited the history museum.|Tarih müzesini ziyaret ettik.|lgs,seyahat
+abroad|B1|adv|Yurt dışında|yurt dışında, yurt dışına|/əˈbrɔːd/|/əˈbrɔːd/|She wants to study abroad.|Yurt dışında okumak istiyor.|lgs,seyahat
+flight|A2|noun|Uçuş|uçuş|/flaɪt/|/flaɪt/|Our flight to Antalya was delayed.|Antalya uçuşumuz rötar yaptı.|lgs,seyahat
+magnet|B1|noun|Mıknatıs|mıknatıs|/ˈmæɡnət/|/ˈmæɡnət/|A magnet attracts iron.|Mıknatıs demiri çeker.|lgs
+planet|A2|noun|Gezegen|gezegen|/ˈplænɪt/|/ˈplænɪt/|Mars is called the red planet.|Mars'a kızıl gezegen denir.|lgs
+invent|B1|verb|İcat etmek|icat etmek, uydurmak|/ɪnˈvent/|/ɪnˈvent/|Who invented the telephone?|Telefonu kim icat etti?|lgs
+freeze|B1|verb|Donmak|donmak, dondurmak|/friːz/|/friːz/|Water freezes at zero degrees.|Su sıfır derecede donar.|lgs
+forgive|B1|verb|Affetmek|affetmek, bağışlamak|/fərˈɡɪv/|/fəˈɡɪv/|Please forgive me for being late.|Geç kaldığım için lütfen beni affet.|lgs
+selfish|B1|adj|Bencil|bencil|/ˈselfɪʃ/|/ˈselfɪʃ/|Don't be selfish; share with your friends.|Bencil olma; arkadaşlarınla paylaş.|lgs
+explore|B1|verb|Keşfetmek|keşfetmek, araştırmak|/ɪkˈsplɔːr/|/ɪkˈsplɔː/|We explored the old streets of Mardin.|Mardin'in eski sokaklarını keşfettik.|lgs
+volcano|B1|noun|Yanardağ|yanardağ, volkan|/vɑːlˈkeɪnoʊ/|/vɒlˈkeɪnəʊ/|Mount Etna is an active volcano.|Etna Dağı aktif bir yanardağdır.|lgs
+laundry|B1|noun|Çamaşır|çamaşır, çamaşırhane|/ˈlɔːndri/|/ˈlɔːndri/|I help my mom with the laundry.|Çamaşırlarda anneme yardım ederim.|lgs
+gravity|B1|noun|Yer çekimi|yer çekimi|/ˈɡrævəti/|/ˈɡrævəti/|Gravity keeps us on the ground.|Yer çekimi bizi yerde tutar.|lgs
+fee|B1|noun|Harç|ücret, harç|/fiː/|/fiː/|University fees have risen sharply.|Üniversite harçları keskin bir şekilde arttı.|ielts,is,toefl
+data|B1|noun|Veri|veri, bilgi|/ˈdeɪtə/|/ˈdeɪtə/|The researchers collected data from 2,000 people.|Araştırmacılar 2.000 kişiden veri topladı.|ielts,teknoloji,toefl
+rate|B1|noun|Oran|oran, hız, ücret|/reɪt/|/reɪt/|The birth rate is falling in Europe.|Avrupa'da doğum oranı düşüyor.|ielts,toefl
+role|B1|noun|Rol|rol, görev|/roʊl/|/rəʊl/|Parents play a key role in education.|Ebeveynler eğitimde kilit bir rol oynar.|ielts,is,toefl
+trend|B1|noun|Eğilim|eğilim, trend|/trend/|/trend/|There is a growing trend toward working from home.|Evden çalışmaya doğru artan bir eğilim var.|ielts,toefl
+cycle|B2|noun|Döngü|döngü, devir|/ˈsaɪkəl/|/ˈsaɪkəl/|The water cycle moves water around the planet.|Su döngüsü suyu gezegen çevresinde dolaştırır.|ielts,toefl
+claim|B1|noun|İddia|iddia, talep|/kleɪm/|/kleɪm/|There is no evidence for this claim.|Bu iddia için hiçbir kanıt yok.|ielts,toefl
+essay|B1|noun|Kompozisyon|kompozisyon, deneme yazısı|/ˈeseɪ/|/ˈeseɪ/|You have forty minutes to write the essay.|Kompozisyonu yazmak için kırk dakikan var.|ielts,toefl
+tutor|B1|noun|Özel öğretmen|özel öğretmen, danışman öğretmen|/ˈtuːtər/|/ˈtjuːtə/|Her tutor helps her with chemistry.|Özel öğretmeni ona kimyada yardım ediyor.|ielts,toefl
+skill|B1|noun|Beceri|beceri, yetenek|/skɪl/|/skɪl/|Teamwork is an important skill at work.|Takım çalışması iş yerinde önemli bir beceridir.|ielts,is,toefl
+solar|B1|adj|Güneşe ait|güneşle ilgili, güneş (enerjisi)|/ˈsoʊlər/|/ˈsəʊlə/|Solar power is becoming cheaper every year.|Güneş enerjisi her yıl daha da ucuzluyor.|ielts,toefl
+ozone|B2|noun|Ozon|ozon|/ˈoʊzoʊn/|/ˈəʊzəʊn/|The ozone layer protects us from the sun.|Ozon tabakası bizi güneşten korur.|ielts,toefl
+rural|B2|adj|Kırsal|kırsal|/ˈrʊrəl/|/ˈrʊərəl/|Many young people leave rural areas.|Birçok genç kırsal bölgeleri terk ediyor.|ielts,toefl
+campus|B1|noun|Kampüs|kampüs, yerleşke|/ˈkæmpəs/|/ˈkæmpəs/|First-year students live on campus.|Birinci sınıf öğrencileri kampüste yaşar.|ielts,toefl
+thesis|C1|noun|Tez|tez|/ˈθiːsɪs/|/ˈθiːsɪs/|He wrote his thesis on bird migration.|Tezini kuş göçü üzerine yazdı.|ielts,toefl
+degree|B1|noun|Diploma|diploma, lisans derecesi, derece|/dɪˈɡriː/|/dɪˈɡriː/|She has a degree in biology.|Biyoloji diploması var.|ielts,toefl
+theory|B1|noun|Kuram|kuram, teori|/ˈθiːəri/|/ˈθɪəri/|Darwin's theory changed science forever.|Darwin'in kuramı bilimi sonsuza dek değiştirdi.|ielts,toefl
+survey|B1|noun|Anket|anket, araştırma|/ˈsɜːrveɪ/|/ˈsɜːveɪ/|A survey of 500 students was carried out.|500 öğrenciyle bir anket yapıldı.|ielts,toefl
+sample|B2|noun|Numune|örnek, numune, örneklem|/ˈsæmpəl/|/ˈsɑːmpəl/|They tested a sample of the river water.|Nehir suyundan bir numune test ettiler.|ielts,toefl
+carbon|B2|noun|Karbon|karbon|/ˈkɑːrbən/|/ˈkɑːbən/|Trees absorb carbon from the air.|Ağaçlar havadaki karbonu emer.|ielts,toefl
+growth|B1|noun|Büyüme|büyüme, artış|/ɡroʊθ/|/ɡrəʊθ/|The country saw rapid economic growth.|Ülke hızlı bir ekonomik büyüme yaşadı.|ielts,toefl
+global|B2|adj|Küresel|küresel|/ˈɡloʊbəl/|/ˈɡləʊbəl/|Global warming affects every country.|Küresel ısınma her ülkeyi etkiler.|ielts,toefl
+method|B1|noun|Yöntem|yöntem, metot|/ˈmeθəd/|/ˈmeθəd/|This teaching method works well.|Bu öğretim yöntemi iyi işliyor.|ielts,toefl
+factor|B2|noun|Etken|etken, faktör|/ˈfæktər/|/ˈfæktə/|Diet is a key factor in health.|Beslenme sağlıkta kilit bir etkendir.|ielts,toefl
+impact|B2|noun|Etki|etki, çarpma|/ˈɪmpækt/|/ˈɪmpækt/|Tourism has a big impact on the region.|Turizmin bölge üzerinde büyük bir etkisi var.|ielts,toefl
+source|B1|noun|Kaynak|kaynak|/sɔːrs/|/sɔːs/|Wind is a clean source of energy.|Rüzgâr temiz bir enerji kaynağıdır.|ielts,toefl
+region|B1|noun|Bölge|bölge, yöre|/ˈriːdʒən/|/ˈriːdʒən/|This region gets very little rain.|Bu bölge çok az yağmur alır.|ielts,toefl
+assume|B2|verb|Varsaymak|varsaymak, üstlenmek|/əˈsuːm/|/əˈsjuːm/|Scientists assume the climate will keep warming.|Bilim insanları iklimin ısınmaya devam edeceğini varsayıyor.|ielts,toefl
+crisis|B2|noun|Kriz|kriz, bunalım|/ˈkraɪsɪs/|/ˈkraɪsɪs/|The world faces a water crisis.|Dünya bir su kriziyle karşı karşıya.|ielts,toefl
+mental|B2|adj|Zihinsel|zihinsel, ruhsal|/ˈmentəl/|/ˈmentəl/|Exercise is good for mental health.|Egzersiz ruh sağlığı için iyidir.|ielts,toefl
+lecture|B1|noun|Konferans|ders (üniversite), konferans|/ˈlektʃər/|/ˈlektʃə/|The professor gave a lecture on volcanoes.|Profesör yanardağlar hakkında bir ders verdi.|ielts,toefl
+tuition|B2|noun|Öğrenim ücreti|öğrenim ücreti, özel ders|/tuˈɪʃən/|/tjuˈɪʃən/|Tuition at private universities is expensive.|Özel üniversitelerde öğrenim ücreti pahalı.|ielts,toefl
+species|B2|noun|Canlı türü|tür (canlı)|/ˈspiːʃiːz/|/ˈspiːʃiːz/|This species of frog lives only in Brazil.|Bu kurbağa türü yalnızca Brezilya'da yaşar.|ielts,toefl
+habitat|B2|noun|Yaşam alanı|doğal yaşam alanı|/ˈhæbɪtæt/|/ˈhæbɪtæt/|Forests are the natural habitat of many birds.|Ormanlar birçok kuşun doğal yaşam alanıdır.|ielts,toefl
+climate|B1|noun|İklim|iklim|/ˈklaɪmət/|/ˈklaɪmət/|Climate change is a global problem.|İklim değişikliği küresel bir sorundur.|ielts,toefl
+predict|B1|verb|Tahmin etmek|tahmin etmek, öngörmek|/prɪˈdɪkt/|/prɪˈdɪkt/|Experts predict a very hot summer.|Uzmanlar çok sıcak bir yaz öngörüyor.|ielts,toefl
+extinct|B2|adj|Nesli tükenmiş|nesli tükenmiş, sönmüş (yanardağ)|/ɪkˈstɪŋkt/|/ɪkˈstɪŋkt/|Dinosaurs became extinct millions of years ago.|Dinozorların nesli milyonlarca yıl önce tükendi.|ielts,toefl
+glacier|B2|noun|Buzul|buzul|/ˈɡleɪʃər/|/ˈɡlæsiə/|The glacier is melting faster every year.|Buzul her yıl daha hızlı eriyor.|ielts,toefl
+emotion|B1|noun|Duygu|duygu, his|/ɪˈmoʊʃən/|/ɪˈməʊʃən/|Music can affect our emotions.|Müzik duygularımızı etkileyebilir.|ielts,toefl
+tax|B1|noun|Vergi|vergi|/tæks/|/tæks/|The government plans to raise taxes on fuel.|Hükümet yakıt vergilerini artırmayı planlıyor.|ielts,is
+gap|B1|noun|Açık, boşluk|boşluk, açık, fark|/ɡæp/|/ɡæp/|The gap between rich and poor is growing.|Zengin ile fakir arasındaki uçurum büyüyor.|ielts
+law|B1|noun|Yasa|yasa, kanun, hukuk|/lɔː/|/lɔː/|The new law protects workers' rights.|Yeni yasa işçi haklarını koruyor.|ielts
+fuel|B1|noun|Yakıt|yakıt|/ˈfjuːəl/|/ˈfjuːəl/|Fuel prices rose sharply last year.|Geçen yıl yakıt fiyatları keskin şekilde arttı.|ielts
+smog|B2|noun|Kirli sis|duman ve sis, hava kirliliği|/smɑːɡ/|/smɒɡ/|Heavy smog covered the city all week.|Yoğun kirli sis bütün hafta şehri kapladı.|ielts
+firm|B1|noun|Firma|firma, şirket|/fɜːrm/|/fɜːm/|She works for a law firm in London.|Londra'da bir hukuk firmasında çalışıyor.|ielts,is
+rent|B1|noun|Kira|kira, kiralamak|/rent/|/rent/|Rent is very high in big cities.|Büyük şehirlerde kira çok yüksek.|ielts
+fund|B2|noun|Fon|fon, kaynak, sermaye|/fʌnd/|/fʌnd/|The school set up a fund for poor students.|Okul yoksul öğrenciler için bir fon kurdu.|ielts,is
+duty|B1|noun|Yükümlülük|görev, yükümlülük, gümrük vergisi|/ˈduːti/|/ˈdjuːti/|It is our duty to protect the environment.|Çevreyi korumak bizim görevimiz.|ielts
+diet|B1|noun|Diyet|diyet, beslenme düzeni|/ˈdaɪət/|/ˈdaɪət/|A healthy diet includes fruit and vegetables.|Sağlıklı bir beslenme düzeni meyve ve sebze içerir.|ielts
+cure|B1|verb|Tedavi etmek|tedavi etmek, iyileştirmek, çare|/kjʊr/|/kjʊə/|Doctors hope to cure the disease soon.|Doktorlar hastalığı yakında tedavi etmeyi umuyor.|ielts
+heal|B1|verb|İyileşmek|iyileşmek, iyileştirmek|/hiːl/|/hiːl/|The wound healed in two weeks.|Yara iki haftada iyileşti.|ielts
+pill|B1|noun|Hap|hap, tablet|/pɪl/|/pɪl/|Take one pill after each meal.|Her yemekten sonra bir hap al.|ielts
+drug|B1|noun|İlaç|ilaç, uyuşturucu|/drʌɡ/|/drʌɡ/|The new drug reduces pain quickly.|Yeni ilaç ağrıyı hızla azaltıyor.|ielts
+riot|B2|noun|Ayaklanma|ayaklanma, kargaşa|/ˈraɪət/|/ˈraɪət/|The riot started after the election.|Ayaklanma seçimden sonra başladı.|ielts
+fine|B1|noun|Para cezası|para cezası|/faɪn/|/faɪn/|He had to pay a fine for speeding.|Hız sınırını aştığı için para cezası ödedi.|ielts
+jail|B1|noun|Cezaevi|hapishane, cezaevi|/dʒeɪl/|/dʒeɪl/|He spent two years in jail.|İki yıl cezaevinde kaldı.|ielts
+task|B1|noun|Görev|görev, iş|/tæsk/|/tɑːsk/|Each team member has a different task.|Her ekip üyesinin farklı bir görevi var.|ielts,is
+staff|B1|noun|Personel|personel, kadro|/stæf/|/stɑːf/|The hospital needs more medical staff.|Hastanenin daha fazla sağlık personeline ihtiyacı var.|ielts,is
+bonus|B1|noun|İkramiye|ikramiye, prim|/ˈboʊnəs/|/ˈbəʊnəs/|All workers got a bonus at the end of the year.|Tüm çalışanlar yıl sonunda ikramiye aldı.|ielts,is
+union|B2|noun|Sendika|sendika, birlik|/ˈjuːnjən/|/ˈjuːniən/|The union asked for higher wages.|Sendika daha yüksek ücret talep etti.|ielts,is
+rival|B2|noun|Rakip|rakip|/ˈraɪvəl/|/ˈraɪvəl/|The company lost customers to its rival.|Şirket müşterilerini rakibine kaptırdı.|futbol,ielts,is
+trade|B1|noun|Ticaret|ticaret, alışveriş|/treɪd/|/treɪd/|Trade between the two countries has grown.|İki ülke arasındaki ticaret büyüdü.|ielts,is
+brand|B1|noun|Marka|marka|/brænd/|/brænd/|Young people often prefer famous brands.|Gençler genellikle ünlü markaları tercih eder.|ielts,is
+crime|B1|noun|Suç|suç|/kraɪm/|/kraɪm/|Crime rates have fallen in the city.|Şehirde suç oranları düştü.|ielts
+youth|B1|noun|Gençlik|gençlik, genç|/juːθ/|/juːθ/|The town built a new youth centre.|Kasaba yeni bir gençlik merkezi inşa etti.|ielts
+equal|B1|adj|Eşit|eşit|/ˈiːkwəl/|/ˈiːkwəl/|Men and women should get equal pay.|Kadınlar ve erkekler eşit ücret almalı.|ielts
+unity|B2|noun|Birlik|birlik, bütünlük|/ˈjuːnəti/|/ˈjuːnəti/|The festival celebrates national unity.|Festival ulusal birliği kutluyor.|ielts
+bribe|B2|noun|Rüşvet|rüşvet|/braɪb/|/braɪb/|The officer was caught taking a bribe.|Memur rüşvet alırken yakalandı.|ielts
+media|B1|noun|Medya|medya, basın|/ˈmiːdiə/|/ˈmiːdiə/|The media has a strong influence on young people.|Medyanın gençler üzerinde güçlü bir etkisi var.|ielts
+ideal|B1|adj|İdeal|ideal, kusursuz|/aɪˈdiːəl/|/aɪˈdɪəl/|This is an ideal place to raise children.|Burası çocuk yetiştirmek için ideal bir yer.|ielts
+moral|B2|adj|Ahlaki|ahlaki, ahlak dersi|/ˈmɔːrəl/|/ˈmɒrəl/|Doctors often face difficult moral choices.|Doktorlar sık sık zor ahlaki seçimlerle karşılaşır.|ielts
+boost|B2|verb|Canlandırmak|artırmak, desteklemek, canlandırmak|/buːst/|/buːst/|Tourism can boost the local economy.|Turizm yerel ekonomiyi canlandırabilir.|ielts
+fever|B1|noun|Yüksek ateş|ateş (hastalık)|/ˈfiːvər/|/ˈfiːvə/|The child had a high fever all night.|Çocuğun bütün gece yüksek ateşi vardı.|ielts
+cough|B1|noun|Öksürük|öksürük, öksürmek|/kɔːf/|/kɒf/|Smoking can cause a bad cough.|Sigara kötü bir öksürüğe yol açabilir.|ielts
+organ|B2|noun|Organ|organ|/ˈɔːrɡən/|/ˈɔːɡən/|The heart is a vital organ.|Kalp hayati bir organdır.|ielts
+liver|B2|noun|Karaciğer|karaciğer|/ˈlɪvər/|/ˈlɪvə/|Too much alcohol damages the liver.|Fazla alkol karaciğere zarar verir.|ielts
+cable|B1|noun|Kablo|kablo|/ˈkeɪbəl/|/ˈkeɪbəl/|A new cable brings fast internet to the island.|Yeni bir kablo adaya hızlı internet getiriyor.|ielts,teknoloji
+drone|B2|noun|Dron|dron, insansız hava aracı|/droʊn/|/drəʊn/|Drones are used to deliver medicine.|Dronlar ilaç teslim etmek için kullanılıyor.|ielts,teknoloji
+salary|B1|noun|Maaş|maaş|/ˈsæləri/|/ˈsæləri/|Teachers want a higher salary.|Öğretmenler daha yüksek maaş istiyor.|ielts,is
+employ|B1|verb|İstihdam etmek|istihdam etmek, işe almak, kullanmak|/ɪmˈplɔɪ/|/ɪmˈplɔɪ/|The factory employs 500 people.|Fabrika 500 kişiyi istihdam ediyor.|ielts,is
+retire|B1|verb|Emekli olmak|emekli olmak|/rɪˈtaɪər/|/rɪˈtaɪə/|My father retired at the age of sixty.|Babam altmış yaşında emekli oldu.|ielts,is
+resign|B2|verb|İstifa etmek|istifa etmek|/rɪˈzaɪn/|/rɪˈzaɪn/|The minister resigned after the scandal.|Bakan skandalın ardından istifa etti.|ielts,is
+profit|B1|noun|Kâr|kâr, kazanç|/ˈprɑːfɪt/|/ˈprɒfɪt/|The company made a large profit this year.|Şirket bu yıl büyük bir kâr elde etti.|ielts,is
+client|B1|noun|Müşteri|müşteri, müvekkil, danışan|/ˈklaɪənt/|/ˈklaɪənt/|The lawyer met her client in the morning.|Avukat sabah müvekkiliyle görüştü.|ielts,is
+budget|B1|noun|Bütçe|bütçe|/ˈbʌdʒɪt/|/ˈbʌdʒɪt/|The education budget was cut again.|Eğitim bütçesi yine kesildi.|ielts,is
+invest|B1|verb|Yatırım yapmak|yatırım yapmak|/ɪnˈvest/|/ɪnˈvest/|The country should invest in clean energy.|Ülke temiz enerjiye yatırım yapmalı.|ielts,is
+export|B1|verb|İhraç etmek|ihraç etmek, ihracat|/ɪkˈspɔːrt/|/ɪkˈspɔːt/|Turkey exports cars to many countries.|Türkiye birçok ülkeye otomobil ihraç ediyor.|ielts,is
+device|B1|noun|Cihaz|cihaz, aygıt|/dɪˈvaɪs/|/dɪˈvaɪs/|Children spend hours on electronic devices.|Çocuklar elektronik cihazlarda saatler geçiriyor.|ielts,teknoloji
+update|B1|verb|Güncellemek|güncellemek, güncelleme|/ʌpˈdeɪt/|/ʌpˈdeɪt/|Update your software to stay safe.|Güvende kalmak için yazılımını güncelle.|ielts,teknoloji
+access|B2|noun|Erişim|erişim, giriş|/ˈækses/|/ˈækses/|Everyone should have access to clean water.|Herkesin temiz suya erişimi olmalı.|ielts
+hacker|B2|noun|Siber korsan|bilgisayar korsanı|/ˈhækər/|/ˈhækə/|Hackers stole the data of millions of users.|Siber korsanlar milyonlarca kullanıcının verilerini çaldı.|ielts,teknoloji
+clinic|B1|noun|Klinik|klinik, poliklinik|/ˈklɪnɪk/|/ˈklɪnɪk/|The clinic offers free health checks.|Klinik ücretsiz sağlık taraması sunuyor.|ielts
+kidney|B2|noun|Böbrek|böbrek|/ˈkɪdni/|/ˈkɪdni/|Drinking enough water is good for your kidneys.|Yeterince su içmek böbreklerin için iyidir.|ielts
+census|C1|noun|Nüfus sayımı|nüfus sayımı|/ˈsensəs/|/ˈsensəs/|The census showed that the population had doubled.|Nüfus sayımı nüfusun iki katına çıktığını gösterdi.|ielts
+gender|B2|noun|Cinsiyet|cinsiyet, toplumsal cinsiyet|/ˈdʒendər/|/ˈdʒendə/|Pay should not depend on gender.|Ücret cinsiyete bağlı olmamalı.|ielts
+policy|B2|noun|Politika|politika, plan, poliçe|/ˈpɑːləsi/|/ˈpɒləsi/|The government changed its energy policy.|Hükümet enerji politikasını değiştirdi.|ielts
+reform|B2|noun|Reform|reform, iyileştirme|/rɪˈfɔːrm/|/rɪˈfɔːm/|The country needs education reform.|Ülkenin eğitim reformuna ihtiyacı var.|ielts
+donate|B2|verb|Bağış yapmak|bağışlamak, bağış yapmak|/ˈdoʊneɪt/|/dəʊˈneɪt/|Many people donate money to charity.|Birçok kişi hayır kurumlarına para bağışlar.|ielts
+litter|B2|noun|Sokak çöpü|yere atılan çöp, çöp atmak|/ˈlɪtər/|/ˈlɪtə/|The park was full of litter after the concert.|Konserden sonra park çöplerle doluydu.|ielts
+reduce|B1|verb|Azaltmak|azaltmak, düşürmek|/rɪˈduːs/|/rɪˈdjuːs/|We must reduce our use of plastic.|Plastik kullanımımızı azaltmalıyız.|ielts
+poverty|B2|noun|Yoksulluk|yoksulluk, fakirlik|/ˈpɑːvərti/|/ˈpɒvəti/|Millions of people still live in poverty.|Milyonlarca insan hâlâ yoksulluk içinde yaşıyor.|ielts
+migrant|B2|noun|Göçmen|göçmen|/ˈmaɪɡrənt/|/ˈmaɪɡrənt/|Many migrants move to cities to find work.|Birçok göçmen iş bulmak için şehirlere taşınıyor.|ielts
+vaccine|B2|noun|Aşı|aşı|/vækˈsiːn/|/ˈvæksiːn/|The vaccine protects children from measles.|Aşı çocukları kızamıktan korur.|ielts
+privacy|B2|noun|Mahremiyet|gizlilik, mahremiyet|/ˈpraɪvəsi/|/ˈprɪvəsi/|Social media can be a threat to privacy.|Sosyal medya mahremiyet için bir tehdit olabilir.|ielts
+gem|B2|noun|Değerli taş|değerli taş, mücevher|/dʒem/|/dʒem/|Diamonds are the hardest gems.|Elmaslar en sert değerli taşlardır.|toefl
+ink|B1|noun|Mürekkep|mürekkep|/ɪŋk/|/ɪŋk/|Ancient scribes made ink from soot.|Eski katipler mürekkebi isten yapardı.|toefl
+fin|B2|noun|Yüzgeç|yüzgeç|/fɪn/|/fɪn/|Sharks use their fins to steer.|Köpekbalıkları yön değiştirmek için yüzgeçlerini kullanır.|toefl
+bat|B1|noun|Yarasa|yarasa, sopa|/bæt/|/bæt/|Bats find food using sound.|Yarasalar ses kullanarak yiyecek bulur.|toefl
+owl|B1|noun|Baykuş|baykuş|/aʊl/|/aʊl/|Owls hunt mostly at night.|Baykuşlar çoğunlukla geceleri avlanır.|doga,toefl
+ape|B2|noun|İnsansı maymun|insansı maymun|/eɪp/|/eɪp/|Chimpanzees are apes, not monkeys.|Şempanzeler maymun değil, insansı maymundur.|toefl
+ant|B1|noun|Karınca|karınca|/ænt/|/ænt/|Ants live in large, organized colonies.|Karıncalar büyük ve düzenli koloniler hâlinde yaşar.|doga,toefl
+bee|B1|noun|Arı|arı|/biː/|/biː/|Bees carry pollen from flower to flower.|Arılar çiçekten çiçeğe polen taşır.|doga,toefl
+eel|C1|noun|Yılan balığı|yılan balığı|/iːl/|/iːl/|Some eels can produce electricity.|Bazı yılan balıkları elektrik üretebilir.|toefl
+oak|B1|noun|Meşe|meşe ağacı|/oʊk/|/əʊk/|An oak tree can live for hundreds of years.|Bir meşe ağacı yüzlerce yıl yaşayabilir.|toefl
+cell|B1|noun|Hücre|hücre|/sel/|/sel/|The human body has trillions of cells.|İnsan vücudunda trilyonlarca hücre vardır.|toefl
+moss|B2|noun|Yosun|yosun|/mɔːs/|/mɒs/|Moss often grows in damp, shady places.|Yosun genellikle nemli ve gölgeli yerlerde büyür.|toefl
+prey|C1|noun|Av (hayvan)|av, avlanan hayvan|/preɪ/|/preɪ/|The lion waited silently for its prey.|Aslan sessizce avını bekledi.|toefl
+nest|B1|noun|Yuva|kuş yuvası, yuva|/nest/|/nest/|The bird built its nest in the tree.|Kuş yuvasını ağaca yaptı.|doga,toefl
+hive|C1|noun|Arı kovanı|arı kovanı, kovan|/haɪv/|/haɪv/|A single hive can hold 50,000 bees.|Tek bir kovanda 50.000 arı olabilir.|toefl
+seed|B1|noun|Tohum|tohum|/siːd/|/siːd/|Birds spread seeds over long distances.|Kuşlar tohumları uzak mesafelere yayar.|doga,toefl
+root|B1|noun|Kök|kök|/ruːt/|/ruːt/|The roots take water from the soil.|Kökler topraktan su alır.|doga,toefl
+gill|C1|noun|Solungaç|solungaç|/ɡɪl/|/ɡɪl/|Fish breathe through their gills.|Balıklar solungaçlarıyla nefes alır.|toefl
+dune|C1|noun|Kum tepesi|kum tepesi, kumul|/duːn/|/djuːn/|Wind shapes the sand dunes of the Sahara.|Rüzgâr Sahra'nın kum tepelerini şekillendirir.|toefl
+clay|B2|noun|Kil|kil, balçık|/kleɪ/|/kleɪ/|Early pots were made of clay.|İlk çömlekler kilden yapılırdı.|toefl
+tomb|B2|noun|Mezar|mezar, türbe|/tuːm/|/tuːm/|Archaeologists opened the king's tomb.|Arkeologlar kralın mezarını açtı.|toefl
+poet|B1|noun|Şair|şair|/ˈpoʊət/|/ˈpəʊɪt/|Homer is one of the earliest known poets.|Homeros bilinen en eski şairlerden biridir.|toefl
+plot|B1|noun|Olay örgüsü|olay örgüsü, entrika, arsa|/plɑːt/|/plɒt/|The novel has a complex plot.|Romanın karmaşık bir olay örgüsü var.|toefl
+dorm|B1|noun|Yurt|öğrenci yurdu|/dɔːrm/|/dɔːm/|My dorm is next to the library.|Yurdum kütüphanenin yanında.|toefl
+quiz|B1|noun|Kısa sınav|kısa sınav, bilgi yarışması|/kwɪz/|/kwɪz/|We have a biology quiz on Friday.|Cuma günü biyoloji kısa sınavımız var.|toefl
+dean|C1|noun|Dekan|dekan|/diːn/|/diːn/|The dean welcomed the new students.|Dekan yeni öğrencileri karşıladı.|toefl
+herd|B2|noun|Sürü|sürü|/hɜːrd/|/hɜːd/|A herd of elephants crossed the river.|Bir fil sürüsü nehri geçti.|toefl
+larva|C1|noun|Larva|larva, kurtçuk|/ˈlɑːrvə/|/ˈlɑːvə/|A caterpillar is the larva of a butterfly.|Tırtıl, kelebeğin larvasıdır.|toefl
+petal|B2|noun|Taç yaprağı|taç yaprağı|/ˈpetəl/|/ˈpetəl/|Bright petals attract insects.|Parlak taç yaprakları böcekleri çeker.|toefl
+shell|B1|noun|Kabuk|kabuk, deniz kabuğu|/ʃel/|/ʃel/|A turtle can hide inside its shell.|Kaplumbağa kabuğunun içine saklanabilir.|toefl
+nerve|B2|noun|Sinir|sinir|/nɜːrv/|/nɜːv/|Nerves carry signals to the brain.|Sinirler sinyalleri beyne taşır.|toefl
+skull|B2|noun|Kafatası|kafatası|/skʌl/|/skʌl/|Scientists found an ancient human skull.|Bilim insanları eski bir insan kafatası buldu.|toefl
+venom|C1|noun|Yılan zehri|zehir (hayvan), ağı|/ˈvenəm/|/ˈvenəm/|Some snake venom is used in medicine.|Bazı yılan zehirleri tıpta kullanılır.|toefl
+breed|B2|verb|Üremek|üremek, yetiştirmek, cins|/briːd/|/briːd/|Salmon return to rivers to breed.|Somonlar üremek için nehirlere döner.|toefl
+coral|B2|noun|Mercan|mercan|/ˈkɔːrəl/|/ˈkɒrəl/|Coral reefs are rich in marine life.|Mercan resifleri deniz canlıları açısından zengindir.|toefl
+whale|B1|noun|Balina|balina|/weɪl/|/weɪl/|The blue whale is the largest animal on Earth.|Mavi balina dünyadaki en büyük hayvandır.|doga,toefl
+flora|C1|noun|Bitki örtüsü|bitki örtüsü, flora|/ˈflɔːrə/|/ˈflɔːrə/|The island's flora includes rare orchids.|Adanın bitki örtüsünde nadir orkideler bulunur.|toefl
+crust|B2|noun|Yer kabuğu|yer kabuğu, kabuk|/krʌst/|/krʌst/|The Earth's crust is broken into large plates.|Yer kabuğu büyük levhalara bölünmüştür.|toefl
+magma|C1|noun|Magma|magma|/ˈmæɡmə/|/ˈmæɡmə/|Magma rises from deep inside the Earth.|Magma yerin derinliklerinden yükselir.|toefl
+basin|B2|noun|Havza|havza, leğen|/ˈbeɪsən/|/ˈbeɪsən/|The Amazon basin is home to many species.|Amazon havzası birçok türe ev sahipliği yapar.|toefl
+layer|B1|noun|Katman|katman, tabaka|/ˈleɪər/|/ˈleɪə/|Each layer of rock tells a story.|Her kaya katmanı bir hikâye anlatır.|toefl
+tribe|B2|noun|Kabile|kabile, aşiret|/traɪb/|/traɪb/|Some tribes in the Amazon still live in isolation.|Amazon'daki bazı kabileler hâlâ dış dünyadan uzak yaşıyor.|toefl
+reign|C1|noun|Saltanat|saltanat, hüküm sürmek|/reɪn/|/reɪn/|The empire grew during her long reign.|İmparatorluk onun uzun saltanatı boyunca büyüdü.|toefl
+nomad|C1|noun|Göçebe|göçebe|/ˈnoʊmæd/|/ˈnəʊmæd/|Nomads moved with their animals in search of grass.|Göçebeler otlak bulmak için hayvanlarıyla göç ederdi.|toefl
+relic|C1|noun|Kalıntı|kalıntı, kutsal emanet|/ˈrelɪk/|/ˈrelɪk/|The museum displays relics from ancient Egypt.|Müze antik Mısır'dan kalıntılar sergiliyor.|toefl
+mural|C1|noun|Duvar resmi|duvar resmi|/ˈmjʊrəl/|/ˈmjʊərəl/|Mexican artists painted huge murals.|Meksikalı sanatçılar dev duvar resimleri yaptı.|toefl
+genre|B2|noun|Sanat türü|tür (sanat, edebiyat)|/ˈʒɑːnrə/|/ˈʒɒnrə/|Jazz is a musical genre born in America.|Caz, Amerika'da doğmuş bir müzik türüdür.|toefl
+motif|C1|noun|Motif|motif, desen, ana tema|/moʊˈtiːf/|/məʊˈtiːf/|Tulips are a common motif in Ottoman art.|Lale, Osmanlı sanatında yaygın bir motiftir.|toefl
+carve|B2|verb|Oymak|oymak, yontmak|/kɑːrv/|/kɑːv/|Ancient people carved images into stone.|Eski insanlar taşa resimler oydu.|toefl
+verse|B2|noun|Dize, kıta|dize, kıta, şiir|/vɜːrs/|/vɜːs/|The poem has four verses.|Şiirin dört kıtası var.|toefl
+theme|B1|noun|Tema|tema, ana konu|/θiːm/|/θiːm/|Love is the main theme of the play.|Aşk, oyunun ana temasıdır.|toefl
+major|B1|noun|Ana dal|ana dal, bölüm|/ˈmeɪdʒər/|/ˈmeɪdʒə/|My major is psychology.|Ana dalım psikoloji.|toefl
+fungus|C1|noun|Mantar|mantar (organizma)|/ˈfʌŋɡəs/|/ˈfʌŋɡəs/|A fungus is neither a plant nor an animal.|Mantar ne bitki ne de hayvandır.|toefl
+insect|B1|noun|Böcek|böcek|/ˈɪnsekt/|/ˈɪnsekt/|Insects have six legs.|Böceklerin altı bacağı vardır.|doga,toefl
+mammal|B2|noun|Memeli|memeli hayvan|/ˈmæməl/|/ˈmæməl/|Dolphins are mammals, not fish.|Yunuslar balık değil, memelidir.|toefl
+pollen|C1|noun|Polen|polen, çiçek tozu|/ˈpɑːlən/|/ˈpɒlən/|Many people are allergic to pollen.|Birçok insan polene alerjiktir.|toefl
+crater|C1|noun|Krater|krater|/ˈkreɪtər/|/ˈkreɪtə/|The Moon is covered with craters.|Ay kraterlerle kaplıdır.|toefl
+empire|B2|noun|İmparatorluk|imparatorluk|/ˈempaɪər/|/ˈempaɪə/|The Ottoman Empire lasted over 600 years.|Osmanlı İmparatorluğu 600 yıldan fazla sürdü.|toefl
+throne|C1|noun|Taht|taht|/θroʊn/|/θrəʊn/|The young prince came to the throne at sixteen.|Genç prens on altı yaşında tahta çıktı.|toefl
+treaty|B2|noun|Antlaşma|antlaşma|/ˈtriːti/|/ˈtriːti/|The treaty ended years of war.|Antlaşma yıllarca süren savaşı sona erdirdi.|toefl
+canvas|B2|noun|Tuval|tuval, branda bezi|/ˈkænvəs/|/ˈkænvəs/|Van Gogh painted on canvas with thick strokes.|Van Gogh tuvale kalın fırça darbeleriyle resim yaptı.|toefl
+trauma|C1|noun|Travma|travma, sarsıntı|/ˈtraʊmə/|/ˈtrɔːmə/|Childhood trauma can affect adult life.|Çocukluk travması yetişkin yaşamını etkileyebilir.|toefl
+phobia|C1|noun|Fobi|fobi, aşırı korku|/ˈfoʊbiə/|/ˈfəʊbiə/|A phobia is an extreme, irrational fear.|Fobi, aşırı ve mantıksız bir korkudur.|toefl
+recall|B2|verb|Anımsamak|hatırlamak, anımsamak, geri çağırmak|/rɪˈkɔːl/|/rɪˈkɔːl/|Participants had to recall a list of words.|Katılımcıların bir kelime listesini hatırlaması gerekiyordu.|toefl
+enroll|B2|verb|Kaydolmak|kaydolmak, kayıt yaptırmak|/ɪnˈroʊl/|/ɪnˈrəʊl/|You must enroll in classes before September.|Eylülden önce derslere kaydolmalısın.|toefl
+dynasty|C1|noun|Hanedan|hanedan|/ˈdaɪnəsti/|/ˈdɪnəsti/|The Ming dynasty ruled China for nearly 300 years.|Ming hanedanı Çin'i yaklaşık 300 yıl yönetti.|toefl
+ancient|B1|adj|Antik|antik, eski, kadim|/ˈeɪnʃənt/|/ˈeɪnʃənt/|Ephesus is an ancient Greek city.|Efes antik bir Yunan kentidir.|toefl
+empathy|C1|noun|Empati|empati, eş duyum|/ˈempəθi/|/ˈempəθi/|Children develop empathy at an early age.|Çocuklar erken yaşta empati geliştirir.|toefl
+plate|A1|noun|Tabak|tabak|/pleɪt/|/pleɪt/|Put the cake on a plate.|Keki bir tabağa koy.|mutfak
+tray|B1|noun|Tepsi|tepsi|/treɪ/|/treɪ/|He brought the tea on a tray.|Çayı bir tepsiyle getirdi.|mutfak
+stove|B1|noun|Ocak|ocak, soba|/stoʊv/|/stəʊv/|The pot is on the stove.|Tencere ocağın üstünde.|mutfak
+grill|B1|verb|Izgara yapmak|ızgara yapmak, ızgara|/ɡrɪl/|/ɡrɪl/|We grilled fish in the garden.|Bahçede balık ızgara yaptık.|mutfak
+roast|B1|verb|Kavurmak|kavurmak, fırında kızartmak|/roʊst/|/rəʊst/|They roast coffee beans every morning.|Her sabah kahve çekirdeği kavuruyorlar.|mutfak
+stir|B1|verb|Karıştırmak|karıştırmak|/stɝː/|/stɜː/|Stir the soup so it doesn't burn.|Yanmasın diye çorbayı karıştır.|mutfak
+slice|B1|noun|Dilim|dilim|/slaɪs/|/slaɪs/|Can I have a slice of cake?|Bir dilim kek alabilir miyim?|mutfak
+pour|B1|verb|Dökmek|dökmek, (sıvı) koymak|/pɔːr/|/pɔː/|She poured milk into the glass.|Bardağa süt koydu.|mutfak
+cheese|A1|noun|Peynir|peynir|/tʃiːz/|/tʃiːz/|We had white cheese for breakfast.|Kahvaltıda beyaz peynir yedik.|mutfak
+meat|A1|noun|Et|et|/miːt/|/miːt/|He doesn't eat meat.|O et yemez.|mutfak
+beef|A2|noun|Sığır eti|sığır eti, dana eti|/biːf/|/biːf/|The soup was made with beef.|Çorba dana etiyle yapılmıştı.|mutfak
+salad|A1|noun|Salata|salata|/ˈsæləd/|/ˈsæləd/|I'll have a salad with my lunch.|Öğle yemeğimin yanında salata alacağım.|mutfak
+sauce|A2|noun|Sos|sos|/sɑːs/|/sɔːs/|This pasta needs more sauce.|Bu makarnaya daha fazla sos lazım.|mutfak
+spice|B1|noun|Baharat|baharat|/spaɪs/|/spaɪs/|Cumin is a common spice in Turkish food.|Kimyon Türk yemeklerinde yaygın bir baharattır.|mutfak
+tomato|A1|noun|Domates|domates|/təˈmeɪt̬oʊ/|/təˈmɑːtəʊ/|Slice the tomato for the salad.|Salata için domatesi dilimle.|mutfak
+potato|A1|noun|Patates|patates|/pəˈteɪt̬oʊ/|/pəˈteɪtəʊ/|Kids love fried potatoes.|Çocuklar kızarmış patatese bayılır.|mutfak
+carrot|A1|noun|Havuç|havuç|/ˈkerət/|/ˈkærət/|Rabbits like to eat carrots.|Tavşanlar havuç yemeyi sever.|mutfak
+bean|A2|noun|Fasulye|fasulye|/biːn/|/biːn/|We cooked beans with rice.|Pilavla birlikte fasulye pişirdik.|mutfak
+olive|A2|noun|Zeytin|zeytin|/ˈɑːlɪv/|/ˈɒlɪv/|A Turkish breakfast always has olives.|Türk kahvaltısında her zaman zeytin olur.|mutfak
+grape|A2|noun|Üzüm|üzüm|/ɡreɪp/|/ɡreɪp/|These grapes are very sweet.|Bu üzümler çok tatlı.|mutfak
+pear|A2|noun|Armut|armut|/per/|/peə/|She cut the pear in half.|Armudu ikiye böldü.|mutfak
+peach|A2|noun|Şeftali|şeftali|/piːtʃ/|/piːtʃ/|Bursa is famous for its peaches.|Bursa şeftalisiyle ünlüdür.|mutfak
+cherry|A2|noun|Kiraz|kiraz|/ˈtʃeri/|/ˈtʃeri/|We picked cherries in June.|Haziranda kiraz topladık.|mutfak
+melon|A2|noun|Kavun|kavun|/ˈmelən/|/ˈmelən/|Melon is perfect on a hot day.|Kavun sıcak bir günde harika gider.|mutfak
+juice|A1|noun|Meyve suyu|meyve suyu, özsu|/dʒuːs/|/dʒuːs/|I'd like a glass of orange juice.|Bir bardak portakal suyu istiyorum.|mutfak
+coffee|A1|noun|Kahve|kahve|/ˈkɑːfi/|/ˈkɒfi/|Turkish coffee is served in a small cup.|Türk kahvesi küçük bir fincanda servis edilir.|mutfak
+dinner|A1|noun|Akşam yemeği|akşam yemeği|/ˈdɪnɚ/|/ˈdɪnə/|We have dinner at seven.|Akşam yemeğini yedide yeriz.|mutfak
+lunch|A1|noun|Öğle yemeği|öğle yemeği|/lʌntʃ/|/lʌntʃ/|Let's have lunch together.|Öğle yemeğini birlikte yiyelim.|mutfak
+yogurt|A2|noun|Yoğurt|yoğurt|/ˈjoʊɡɚt/|/ˈjɒɡət/|Ayran is made from yogurt and water.|Ayran yoğurt ve sudan yapılır.|mutfak
+raw|B1|adj|Çiğ|çiğ, işlenmemiş|/rɑː/|/rɔː/|Never eat raw chicken.|Asla çiğ tavuk yeme.|mutfak
+chef|A2|noun|Aşçı, şef|aşçı, şef|/ʃef/|/ʃef/|The chef made a special dish for us.|Şef bizim için özel bir yemek yaptı.|mutfak
+apron|B2|noun|Önlük|mutfak önlüğü, önlük|/ˈeɪprən/|/ˈeɪprən/|Wear an apron when you cook.|Yemek yaparken önlük giy.|mutfak
+lid|B1|noun|Kapak|kapak|/lɪd/|/lɪd/|Put the lid on the pot.|Tencerenin kapağını kapat.|mutfak
+kettle|A2|noun|Su ısıtıcısı|su ısıtıcısı, çaydanlık|/ˈket̬əl/|/ˈketl/|Can you switch on the kettle?|Su ısıtıcısını açabilir misin?|mutfak
+dessert|A2|noun|Tatlı|tatlı (yemek sonu)|/dɪˈzɝːt/|/dɪˈzɜːt/|Baklava is my favourite dessert.|Baklava en sevdiğim tatlıdır.|mutfak
+tour|A2|noun|Tur|tur, gezi|/tʊr/|/tʊə/|We took a boat tour of the Bosphorus.|Boğaz'da bir tekne turuna katıldık.|seyahat
+bag|A1|noun|Çanta|çanta|/bæɡ/|/bæɡ/|Don't leave your bag on the bus.|Çantanı otobüste bırakma.|seyahat
+luggage|A2|noun|Bagaj|bagaj, yolcu eşyası|/ˈlʌɡɪdʒ/|/ˈlʌɡɪdʒ/|Our luggage was lost at the airport.|Bagajımız havalimanında kayboldu.|seyahat
+visa|B1|noun|Vize|vize|/ˈviːzə/|/ˈviːzə/|Do I need a visa to visit Canada?|Kanada'yı ziyaret etmek için vize gerekir mi?|seyahat
+pilot|A2|noun|Pilot|pilot|/ˈpaɪlət/|/ˈpaɪlət/|The pilot welcomed us on board.|Pilot bizi uçakta karşıladı.|seyahat
+gate|A2|noun|Biniş kapısı|kapı, biniş kapısı|/ɡeɪt/|/ɡeɪt/|Please go to gate twelve for boarding.|Biniş için lütfen on iki numaralı kapıya gidin.|seyahat
+delay|B1|noun|Rötar|gecikme, rötar|/dɪˈleɪ/|/dɪˈleɪ/|There is a delay because of the fog.|Sis yüzünden rötar var.|seyahat
+depart|B1|verb|Kalkmak (araç)|kalkmak, hareket etmek|/dɪˈpɑːrt/|/dɪˈpɑːt/|The ferry departs at eight o'clock.|Feribot saat sekizde kalkıyor.|seyahat
+seat|A2|noun|Koltuk|koltuk, yer|/siːt/|/siːt/|I'd like a seat by the window.|Cam kenarında bir koltuk istiyorum.|seyahat
+aisle|B1|noun|Koridor|koridor (uçak, sinema)|/aɪl/|/aɪl/|I prefer an aisle seat on long flights.|Uzun uçuşlarda koridor koltuğunu tercih ederim.|seyahat
+taxi|A1|noun|Taksi|taksi|/ˈtæksi/|/ˈtæksi/|We took a taxi to the hotel.|Otele taksiyle gittik.|seyahat
+ferry|B1|noun|Feribot|feribot, vapur|/ˈferi/|/ˈferi/|We crossed to the island by ferry.|Adaya feribotla geçtik.|seyahat
+port|B1|noun|Liman|liman|/pɔːrt/|/pɔːt/|The ship stayed in port for two days.|Gemi iki gün limanda kaldı.|seyahat
+hostel|B1|noun|Hostel|hostel, öğrenci yurdu|/ˈhɑːstəl/|/ˈhɒstl/|Students often stay in a cheap hostel.|Öğrenciler genellikle ucuz bir hostelde kalır.|seyahat
+lobby|B2|noun|Lobi|lobi, giriş salonu|/ˈlɑːbi/|/ˈlɒbi/|Let's meet in the hotel lobby.|Otelin lobisinde buluşalım.|seyahat
+key|A1|noun|Anahtar|anahtar|/kiː/|/kiː/|Don't forget your room key.|Oda anahtarını unutma.|seyahat
+pier|B2|noun|İskele|iskele|/pɪr/|/pɪə/|The boat leaves from the old pier.|Tekne eski iskeleden kalkıyor.|seyahat
+pack|A2|verb|Valiz toplamak|bavul hazırlamak, paketlemek|/pæk/|/pæk/|Have you packed for the trip yet?|Gezi için valizini topladın mı?|seyahat
+photo|A1|noun|Fotoğraf|fotoğraf|/ˈfoʊt̬oʊ/|/ˈfəʊtəʊ/|Can you take a photo of us?|Bizim bir fotoğrafımızı çekebilir misin?|seyahat
+tourist|A2|noun|Turist|turist|/ˈtʊrɪst/|/ˈtʊərɪst/|Many tourists visit Istanbul every year.|Her yıl birçok turist İstanbul'u ziyaret eder.|seyahat
+statue|B1|noun|Heykel|heykel|/ˈstætʃuː/|/ˈstætʃuː/|There is a large statue in the square.|Meydanda büyük bir heykel var.|seyahat
+palace|A2|noun|Saray|saray|/ˈpæləs/|/ˈpæləs/|The palace has beautiful gardens.|Sarayın güzel bahçeleri var.|seyahat
+temple|B1|noun|Tapınak|tapınak|/ˈtempəl/|/ˈtempl/|We saw an ancient Greek temple.|Antik bir Yunan tapınağı gördük.|seyahat
+tower|A2|noun|Kule|kule|/ˈtaʊɚ/|/ˈtaʊə/|You can see the whole city from the tower.|Kuleden bütün şehri görebilirsin.|seyahat
+beach|A1|noun|Plaj|plaj, kumsal|/biːtʃ/|/biːtʃ/|We spent the whole day on the beach.|Bütün günü plajda geçirdik.|seyahat
+resort|B1|noun|Tatil köyü|tatil yeri, tatil köyü|/rɪˈzɔːrt/|/rɪˈzɔːt/|Antalya has many beach resorts.|Antalya'da birçok sahil tatil köyü var.|seyahat
+border|B1|noun|Sınır|sınır|/ˈbɔːrdɚ/|/ˈbɔːdə/|We crossed the border into Greece.|Sınırı geçip Yunanistan'a girdik.|seyahat
+customs|B1|noun|Gümrük|gümrük|/ˈkʌstəmz/|/ˈkʌstəmz/|It took an hour to get through customs.|Gümrükten geçmek bir saat sürdü.|seyahat
+queue|B1|noun|Sıra, kuyruk|sıra, kuyruk|/kjuː/|/kjuː/|There was a long queue at the ticket office.|Gişede uzun bir kuyruk vardı.|seyahat
+fare|B1|noun|Bilet ücreti|yol ücreti, bilet ücreti|/fer/|/feə/|The bus fare went up again.|Otobüs ücreti yine arttı.|seyahat
+route|B1|noun|Güzergâh|güzergâh, rota|/ruːt/|/ruːt/|Which route is the fastest?|Hangi güzergâh en hızlısı?|seyahat
+journey|A2|noun|Yolculuk|yolculuk|/ˈdʒɝːni/|/ˈdʒɜːni/|The journey from Ankara took five hours.|Ankara'dan yolculuk beş saat sürdü.|seyahat
+voyage|B2|noun|Deniz seyahati|deniz yolculuğu, uzun yolculuk|/ˈvɔɪɪdʒ/|/ˈvɔɪɪdʒ/|The voyage across the ocean took weeks.|Okyanusu geçen yolculuk haftalar sürdü.|seyahat
+cabin|B1|noun|Kabin|kabin, kamara|/ˈkæbɪn/|/ˈkæbɪn/|Our cabin on the ship was very small.|Gemideki kamaramız çok küçüktü.|seyahat
+jet|B1|noun|Jet|jet uçağı|/dʒet/|/dʒet/|A jet flew low over the city.|Bir jet şehrin üzerinden alçaktan uçtu.|seyahat
+land|A2|verb|İniş yapmak|inmek, iniş yapmak|/lænd/|/lænd/|We will land in Izmir in ten minutes.|On dakika içinde İzmir'e iniş yapacağız.|seyahat
+lounge|B1|noun|Bekleme salonu|bekleme salonu, salon|/laʊndʒ/|/laʊndʒ/|We waited in the airport lounge.|Havalimanının bekleme salonunda bekledik.|seyahat
+view|A2|noun|Manzara|manzara, görüş|/vjuː/|/vjuː/|Our room has a great view of the sea.|Odamızın harika bir deniz manzarası var.|seyahat
+guest|A2|noun|Misafir|misafir, konuk|/ɡest/|/ɡest/|Hotel guests can use the pool for free.|Otel misafirleri havuzu ücretsiz kullanabilir.|seyahat
+airport|A1|noun|Havalimanı|havalimanı, havaalanı|/ˈerpɔːrt/|/ˈeəpɔːt/|We arrived at the airport early.|Havalimanına erken vardık.|seyahat
+sail|B1|verb|Yelken açmak|yelkenliyle gitmek, denize açılmak|/seɪl/|/seɪl/|We sailed along the Aegean coast.|Ege kıyısı boyunca yelkenliyle gezdik.|seyahat
+tram|B1|noun|Tramvay|tramvay|/træm/|/træm/|Take the tram to the old town.|Eski şehre tramvayla git.|seyahat
+cruise|B1|noun|Gemi turu|gemi turu, deniz gezisi|/kruːz/|/kruːz/|They went on a cruise around the Greek islands.|Yunan adaları çevresinde bir gemi turuna çıktılar.|seyahat
+inn|B2|noun|Han|han, küçük otel|/ɪn/|/ɪn/|We stayed at an old inn in the village.|Köydeki eski bir handa kaldık.|seyahat
+deck|B1|noun|Güverte|güverte|/dek/|/dek/|We sat on the deck and watched the sea.|Güvertede oturup denizi izledik.|seyahat
+crew|B1|noun|Mürettebat|mürettebat, ekip|/kruː/|/kruː/|The crew helped passengers off the ship.|Mürettebat yolcuların gemiden inmesine yardım etti.|seyahat
+fly|A1|verb|Uçmak|uçmak, uçakla gitmek|/flaɪ/|/flaɪ/|We fly to Berlin tomorrow morning.|Yarın sabah Berlin'e uçuyoruz.|seyahat
+boss|A2|noun|Patron|patron, amir|/bɑːs/|/bɒs/|My boss let me leave early today.|Patronum bugün erken çıkmama izin verdi.|is
+team|A1|noun|Takım|takım, ekip|/tiːm/|/tiːm/|Our team works well together.|Ekibimiz birlikte iyi çalışıyor.|is,futbol
+job|A1|noun|İş|iş, meslek|/dʒɑːb/|/dʒɒb/|She got a new job at a bank.|Bir bankada yeni bir iş buldu.|is
+office|A1|noun|Ofis, büro|ofis, büro|/ˈɑːfɪs/|/ˈɒfɪs/|Our office is on the fifth floor.|Ofisimiz beşinci katta.|is
+desk|A1|noun|Çalışma masası|çalışma masası, masa|/desk/|/desk/|There are papers all over my desk.|Masamın her yerinde kâğıtlar var.|is
+folder|B1|noun|Klasör|klasör, dosya|/ˈfoʊldɚ/|/ˈfəʊldə/|Put the reports in the blue folder.|Raporları mavi klasöre koy.|is,teknoloji
+meeting|A2|noun|Toplantı|toplantı|/ˈmiːt̬ɪŋ/|/ˈmiːtɪŋ/|The meeting starts at ten.|Toplantı onda başlıyor.|is
+report|A2|noun|Rapor|rapor|/rɪˈpɔːrt/|/rɪˈpɔːt/|I need to finish this report by Friday.|Bu raporu cumaya kadar bitirmem gerek.|is
+deal|B1|noun|Anlaşma|anlaşma, iş anlaşması|/diːl/|/diːl/|The two companies signed a deal.|İki şirket bir anlaşma imzaladı.|is
+company|A1|noun|Şirket|şirket|/ˈkʌmpəni/|/ˈkʌmpəni/|She started her own company.|Kendi şirketini kurdu.|is
+launch|B2|verb|Lansman yapmak|piyasaya sürmek, başlatmak|/lɑːntʃ/|/lɔːntʃ/|They will launch a new phone in May.|Mayısta yeni bir telefon piyasaya sürecekler.|is
+expert|B1|noun|Uzman|uzman|/ˈekspɝːt/|/ˈekspɜːt/|We asked an expert for advice.|Bir uzmandan tavsiye istedik.|is
+manager|A2|noun|Müdür|müdür, yönetici|/ˈmænɪdʒɚ/|/ˈmænɪdʒə/|I'd like to speak to the manager.|Müdürle konuşmak istiyorum.|is
+leader|A2|noun|Lider|lider, önder|/ˈliːdɚ/|/ˈliːdə/|She is a natural leader.|O doğuştan bir lider.|is
+worker|A2|noun|İşçi|işçi, çalışan|/ˈwɝːkɚ/|/ˈwɜːkə/|The factory has five hundred workers.|Fabrikanın beş yüz işçisi var.|is
+cost|A2|noun|Maliyet|maliyet, masraf|/kɑːst/|/kɒst/|The cost of living is rising.|Hayat pahalılığı artıyor.|is
+debt|B1|noun|Borç|borç|/det/|/det/|They paid off all their debts.|Bütün borçlarını ödediler.|is
+bank|A1|noun|Banka|banka|/bæŋk/|/bæŋk/|I need to go to the bank.|Bankaya gitmem gerek.|is
+plan|A2|noun|Plan|plan|/plæn/|/plæn/|We need a plan for next year.|Gelecek yıl için bir plana ihtiyacımız var.|is
+memo|B2|noun|İç yazışma|not, iç yazışma|/ˈmemoʊ/|/ˈmeməʊ/|The boss sent a memo to all staff.|Patron tüm personele bir yazı gönderdi.|is
+chart|B1|noun|Çizelge|çizelge, grafik|/tʃɑːrt/|/tʃɑːt/|This chart shows our sales this year.|Bu çizelge bu yılki satışlarımızı gösteriyor.|is
+partner|A2|noun|Ortak|ortak, eş|/ˈpɑːrtnɚ/|/ˈpɑːtnə/|He is a partner in a law firm.|Bir hukuk firmasında ortak.|is
+owner|A2|noun|Sahip|sahip, mal sahibi|/ˈoʊnɚ/|/ˈəʊnə/|The owner of the shop is very friendly.|Dükkânın sahibi çok cana yakın.|is
+apply|B1|verb|Başvurmak|başvurmak, uygulamak|/əˈplaɪ/|/əˈplaɪ/|She applied for a job in Istanbul.|İstanbul'da bir işe başvurdu.|is
+agenda|B2|noun|Gündem|gündem|/əˈdʒendə/|/əˈdʒendə/|What is on the agenda for today's meeting?|Bugünkü toplantının gündeminde ne var?|is
+sale|A2|noun|Satış|satış, indirim|/seɪl/|/seɪl/|Sales were good this month.|Bu ay satışlar iyiydi.|is
+demand|B1|noun|Talep|talep, istek|/dɪˈmænd/|/dɪˈmɑːnd/|There is a high demand for nurses.|Hemşirelere büyük talep var.|is
+supply|B1|noun|Arz, tedarik|arz, tedarik, malzeme|/səˈplaɪ/|/səˈplaɪ/|Prices rise when supply is low.|Arz az olduğunda fiyatlar yükselir.|is
+import|B1|noun|İthalat|ithalat, ithal malı|/ˈɪmpɔːrt/|/ˈɪmpɔːt/|The country depends on oil imports.|Ülke petrol ithalatına bağımlı.|is
+factory|A2|noun|Fabrika|fabrika|/ˈfæktəri/|/ˈfæktri/|My uncle works in a car factory.|Amcam bir araba fabrikasında çalışıyor.|is
+product|A2|noun|Ürün|ürün|/ˈprɑːdʌkt/|/ˈprɒdʌkt/|Our new product sells very well.|Yeni ürünümüz çok iyi satıyor.|is
+stock|B2|noun|Stok|stok, hisse senedi|/stɑːk/|/stɒk/|That model is out of stock.|O model stokta yok.|is
+sign|A2|verb|İmzalamak|imzalamak|/saɪn/|/saɪn/|Please sign the contract here.|Lütfen sözleşmeyi burada imzalayın.|is
+pay|A1|verb|Ödemek|ödemek|/peɪ/|/peɪ/|Can I pay by card?|Kartla ödeyebilir miyim?|is
+busy|A1|adj|Meşgul|meşgul, yoğun|/ˈbɪzi/|/ˈbɪzi/|I'm very busy at work this week.|Bu hafta işte çok yoğunum.|is
+clerk|B1|noun|Kâtip|kâtip, memur|/klɝːk/|/klɑːk/|The clerk checked my documents.|Memur belgelerimi kontrol etti.|is
+fire|B1|verb|İşten kovmak|işten çıkarmak, kovmak|/faɪɚ/|/faɪə/|He was fired for being late every day.|Her gün geç kaldığı için işten kovuldu.|is
+raise|B2|noun|Maaş zammı|zam, maaş artışı|/reɪz/|/reɪz/|She asked her boss for a raise.|Patronundan zam istedi.|is
+stamp|A2|noun|Mühür|mühür, kaşe, pul|/stæmp/|/stæmp/|The office put a stamp on the document.|Ofis belgeye mühür bastı.|is
+ball|A1|noun|Top|top|/bɑːl/|/bɔːl/|He kicked the ball into the net.|Topu ağlara gönderdi.|futbol
+kick|A2|verb|Tekmelemek|tekmelemek, vurmak|/kɪk/|/kɪk/|Kick the ball to your teammate.|Topu takım arkadaşına vur.|futbol
+pitch|B1|noun|Saha|futbol sahası, saha|/pɪtʃ/|/pɪtʃ/|The players walked onto the pitch.|Oyuncular sahaya çıktı.|futbol
+match|A1|noun|Maç|maç, eşleşme|/mætʃ/|/mætʃ/|The match starts at eight tonight.|Maç bu akşam sekizde başlıyor.|futbol
+score|A2|noun|Skor|skor, sayı|/skɔːr/|/skɔː/|What's the score now?|Skor şu an kaç?|futbol
+draw|B1|noun|Beraberlik|beraberlik|/drɑː/|/drɔː/|The match ended in a draw.|Maç beraberlikle bitti.|futbol
+foul|B2|noun|Faul|faul|/faʊl/|/faʊl/|The referee gave a foul against him.|Hakem onun aleyhine faul çaldı.|futbol
+card|A2|noun|Kart|kart|/kɑːrd/|/kɑːd/|He got a yellow card for the tackle.|O müdahale yüzünden sarı kart gördü.|futbol
+referee|B1|noun|Hakem|hakem|/ˌrefəˈriː/|/ˌrefəˈriː/|The referee blew his whistle.|Hakem düdüğünü çaldı.|futbol
+whistle|B1|noun|Düdük|düdük, ıslık|/ˈwɪsəl/|/ˈwɪsl/|The final whistle has gone.|Son düdük çaldı.|futbol
+coach|B1|noun|Antrenör|antrenör, çalıştırıcı|/koʊtʃ/|/kəʊtʃ/|The coach changed the team's tactics.|Antrenör takımın taktiğini değiştirdi.|futbol
+player|A1|noun|Oyuncu|oyuncu|/ˈpleɪɚ/|/ˈpleɪə/|He is the best player in the league.|O, ligin en iyi oyuncusu.|futbol
+keeper|B2|noun|Kaleci|kaleci|/ˈkiːpɚ/|/ˈkiːpə/|The keeper saved the penalty.|Kaleci penaltıyı kurtardı.|futbol
+striker|B2|noun|Golcü|golcü, forvet|/ˈstraɪkɚ/|/ˈstraɪkə/|Our striker scored twice.|Golcümüz iki gol attı.|futbol
+winger|B2|noun|Kanat oyuncusu|kanat oyuncusu|/ˈwɪŋɚ/|/ˈwɪŋə/|The winger ran down the left side.|Kanat oyuncusu sol taraftan koştu.|futbol
+captain|A2|noun|Kaptan|kaptan|/ˈkæptən/|/ˈkæptɪn/|The captain lifted the trophy.|Kaptan kupayı kaldırdı.|futbol
+squad|B2|noun|Kadro|kadro, ekip|/skwɑːd/|/skwɒd/|He was left out of the national squad.|Milli takım kadrosuna alınmadı.|futbol
+fan|A2|noun|Taraftar|taraftar, hayran, vantilatör|/fæn/|/fæn/|Thousands of fans sang in the stadium.|Binlerce taraftar stadyumda şarkı söyledi.|futbol
+stadium|A2|noun|Stadyum|stadyum|/ˈsteɪdiəm/|/ˈsteɪdiəm/|The stadium holds fifty thousand people.|Stadyum elli bin kişi alıyor.|futbol
+league|B1|noun|Lig|lig|/liːɡ/|/liːɡ/|They are top of the league.|Ligin zirvesindeler.|futbol
+trophy|B1|noun|Kupa|kupa, ödül|/ˈtroʊfi/|/ˈtrəʊfi/|The team won its first trophy in years.|Takım yıllar sonra ilk kupasını kazandı.|futbol
+title|B1|noun|Şampiyonluk|şampiyonluk, unvan, başlık|/ˈtaɪt̬əl/|/ˈtaɪtl/|They won the league title last season.|Geçen sezon lig şampiyonluğunu kazandılar.|futbol
+season|A2|noun|Sezon|sezon, mevsim|/ˈsiːzən/|/ˈsiːzn/|The new season starts in August.|Yeni sezon ağustosta başlıyor.|futbol
+half|A2|noun|Devre|devre, yarı|/hæf/|/hɑːf/|We scored early in the second half.|İkinci devrenin başında gol attık.|futbol
+penalty|B1|noun|Penaltı|penaltı, ceza|/ˈpenəlti/|/ˈpenəlti/|He missed the penalty in the last minute.|Son dakikada penaltıyı kaçırdı.|futbol
+corner|A2|noun|Korner|korner, köşe|/ˈkɔːrnɚ/|/ˈkɔːnə/|They scored from a corner.|Kornerden gol attılar.|futbol
+header|B2|noun|Kafa vuruşu|kafa vuruşu|/ˈhedɚ/|/ˈhedə/|He scored with a header.|Kafa vuruşuyla gol attı.|futbol
+pass|A2|noun|Pas|pas|/pæs/|/pɑːs/|What a great pass from midfield!|Orta sahadan ne harika bir pas!|futbol
+shot|B1|noun|Şut|şut, atış|/ʃɑːt/|/ʃɒt/|His shot hit the post.|Şutu direğe çarptı.|futbol
+save|B1|noun|Kurtarış|kurtarış|/seɪv/|/seɪv/|The keeper made an amazing save.|Kaleci inanılmaz bir kurtarış yaptı.|futbol
+tackle|B2|noun|Müdahale|müdahale, top kapma|/ˈtækəl/|/ˈtækl/|That was a hard but fair tackle.|Sert ama temiz bir müdahaleydi.|futbol
+dribble|B2|verb|Çalım atmak|çalım atmak, top sürmek|/ˈdrɪbəl/|/ˈdrɪbl/|He dribbled past three players.|Üç oyuncuya çalım attı.|futbol
+offside|B2|adj|Ofsayt|ofsayt|/ˌɔːfˈsaɪd/|/ˌɒfˈsaɪd/|The goal didn't count because he was offside.|Ofsayt olduğu için gol sayılmadı.|futbol
+boot|B1|noun|Krampon|krampon, bot|/buːt/|/buːt/|He cleaned his football boots after the match.|Maçtan sonra kramponlarını temizledi.|futbol
+jersey|B2|noun|Forma|forma|/ˈdʒɝːzi/|/ˈdʒɜːzi/|Fans were wearing the team's jersey.|Taraftarlar takımın formasını giyiyordu.|futbol
+bench|B1|noun|Yedek kulübesi|yedek kulübesi, bank|/bentʃ/|/bentʃ/|He started the game on the bench.|Maça yedek kulübesinde başladı.|futbol
+defend|B1|verb|Savunmak|savunmak|/dɪˈfend/|/dɪˈfend/|We need to defend better in the second half.|İkinci yarıda daha iyi savunma yapmalıyız.|futbol
+attack|B1|noun|Hücum|hücum, saldırı|/əˈtæk/|/əˈtæk/|Their attack was too fast for us.|Onların hücumu bizim için fazla hızlıydı.|futbol
+tactic|B2|noun|Taktik|taktik|/ˈtæktɪk/|/ˈtæktɪk/|The coach tried a new tactic.|Antrenör yeni bir taktik denedi.|futbol
+beat|A2|verb|Yenmek|yenmek, dövmek|/biːt/|/biːt/|We beat them three to one.|Onları üç bir yendik.|futbol
+defeat|B1|noun|Yenilgi|yenilgi, mağlubiyet|/dɪˈfiːt/|/dɪˈfiːt/|It was their first defeat this season.|Bu, onların bu sezonki ilk yenilgisiydi.|futbol
+final|A2|noun|Final|final|/ˈfaɪnəl/|/ˈfaɪnl/|Millions watched the cup final.|Milyonlar kupa finalini izledi.|futbol
+derby|B2|noun|Derbi|derbi|/ˈdɝːbi/|/ˈdɑːbi/|The Istanbul derby is always exciting.|İstanbul derbisi her zaman heyecanlıdır.|futbol
+volley|B2|noun|Vole|vole vuruşu|/ˈvɑːli/|/ˈvɒli/|He scored with a perfect volley.|Mükemmel bir vole vuruşuyla gol attı.|futbol
+cross|B1|noun|Orta (pas)|orta (futbol), çarpı|/krɑːs/|/krɒs/|His cross found the striker's head.|Ortası golcünün kafasını buldu.|futbol
+assist|B2|noun|Asist|asist, yardım|/əˈsɪst/|/əˈsɪst/|He had two goals and one assist.|İki gol ve bir asisti vardı.|futbol
+block|B1|verb|Bloke etmek|engellemek, bloke etmek|/blɑːk/|/blɒk/|The defender blocked the shot.|Defans oyuncusu şutu bloke etti.|futbol
+mark|B2|verb|Markaj yapmak|markaj yapmak, işaretlemek|/mɑːrk/|/mɑːk/|You must mark their number nine.|Onların dokuz numarasına markaj yapmalısın.|futbol
+wall|A1|noun|Baraj (futbol)|baraj (serbest vuruşta), duvar|/wɑːl/|/wɔːl/|The ball went over the wall and in.|Top barajın üstünden geçip ağlara gitti.|futbol
+chant|B2|noun|Tezahürat|tezahürat, slogan|/tʃænt/|/tʃɑːnt/|The fans' chants filled the stadium.|Taraftarların tezahüratları stadyumu doldurdu.|futbol
+flag|A2|noun|Bayrak|bayrak|/flæɡ/|/flæɡ/|The linesman raised his flag for offside.|Yan hakem ofsayt için bayrağını kaldırdı.|futbol
+stand|B1|noun|Tribün|tribün|/stænd/|/stænd/|Our seats are in the north stand.|Koltuklarımız kuzey tribününde.|futbol
+nil|B2|noun|Sıfır (skor)|sıfır (skorda)|/nɪl/|/nɪl/|We won the match two nil.|Maçı iki sıfır kazandık.|futbol
+lead|B1|verb|Önde olmak|önde olmak, yönetmek|/liːd/|/liːd/|We were leading at half time.|İlk yarıda öndeydik.|futbol
+sprint|B2|noun|Depar|depar, sürat koşusu|/sprɪnt/|/sprɪnt/|He won the ball after a long sprint.|Uzun bir depardan sonra topu kaptı.|futbol
+arena|B2|noun|Arena|arena|/əˈriːnə/|/əˈriːnə/|The new arena has a roof.|Yeni arenanın bir çatısı var.|futbol
+boo|B2|verb|Yuhalamak|yuhalamak|/buː/|/buː/|The fans booed the referee.|Taraftarlar hakemi yuhaladı.|futbol
+away|A2|adv|Deplasman|deplasmanda, uzakta|/əˈweɪ/|/əˈweɪ/|We play away next Sunday.|Önümüzdeki pazar deplasmanda oynuyoruz.|futbol
+glove|A2|noun|Eldiven|eldiven|/ɡlʌv/|/ɡlʌv/|The keeper wears special gloves.|Kaleci özel eldivenler giyer.|futbol
+sub|B2|noun|Yedek oyuncu|yedek oyuncu|/sʌb/|/sʌb/|The sub scored a minute after coming on.|Yedek oyuncu oyuna girdikten bir dakika sonra gol attı.|futbol
+rule|A2|noun|Kural|kural|/ruːl/|/ruːl/|The offside rule is hard to understand.|Ofsayt kuralını anlamak zor.|futbol
+shoot|B1|verb|Şut çekmek|şut çekmek, ateş etmek|/ʃuːt/|/ʃuːt/|He shot from outside the box.|Ceza sahası dışından şut çekti.|futbol
+trap|B2|verb|Topu durdurmak|topu kontrol etmek, tuzak|/træp/|/træp/|He trapped the ball with his chest.|Topu göğsüyle durdurdu.|futbol
+grass|A2|noun|Çim|çim, ot|/ɡræs/|/ɡrɑːs/|The players sat on the grass after the match.|Oyuncular maçtan sonra çimlere oturdu.|futbol,doga
+flower|A1|noun|Çiçek|çiçek|/ˈflaʊɚ/|/ˈflaʊə/|She picked a flower from the garden.|Bahçeden bir çiçek kopardı.|doga
+leaf|A2|noun|Yaprak|yaprak|/liːf/|/liːf/|A yellow leaf fell from the tree.|Ağaçtan sarı bir yaprak düştü.|doga
+rose|A2|noun|Gül|gül|/roʊz/|/rəʊz/|He gave her a red rose.|Ona kırmızı bir gül verdi.|doga
+bush|B1|noun|Çalı|çalı|/bʊʃ/|/bʊʃ/|A rabbit was hiding in the bush.|Çalının içinde bir tavşan saklanıyordu.|doga
+plant|A2|noun|Bitki|bitki|/plænt/|/plɑːnt/|Water the plants every morning.|Bitkileri her sabah sula.|doga
+wolf|A2|noun|Kurt|kurt|/wʊlf/|/wʊlf/|We heard a wolf in the night.|Gece bir kurt sesi duyduk.|doga
+bear|A2|noun|Ayı|ayı|/ber/|/beə/|A brown bear lives in these mountains.|Bu dağlarda bir boz ayı yaşıyor.|doga
+fox|A2|noun|Tilki|tilki|/fɑːks/|/fɒks/|The fox ran into the forest.|Tilki ormana koştu.|doga
+deer|A2|noun|Geyik|geyik|/dɪr/|/dɪə/|We saw a deer near the road.|Yolun yakınında bir geyik gördük.|doga
+lion|A1|noun|Aslan|aslan|/ˈlaɪən/|/ˈlaɪən/|The lion is called the king of animals.|Aslana hayvanlar kralı denir.|doga
+tiger|A1|noun|Kaplan|kaplan|/ˈtaɪɡɚ/|/ˈtaɪɡə/|A tiger has orange fur with black stripes.|Kaplanın siyah çizgili turuncu bir postu vardır.|doga
+eagle|B1|noun|Kartal|kartal|/ˈiːɡəl/|/ˈiːɡl/|An eagle flew over the mountain.|Dağın üzerinden bir kartal uçtu.|doga
+snake|A2|noun|Yılan|yılan|/sneɪk/|/sneɪk/|Be careful, there is a snake in the grass.|Dikkat et, çimlerde bir yılan var.|doga
+frog|A2|noun|Kurbağa|kurbağa|/frɑːɡ/|/frɒɡ/|A frog jumped into the pond.|Bir kurbağa gölete atladı.|doga
+duck|A1|noun|Ördek|ördek|/dʌk/|/dʌk/|The children fed the ducks in the park.|Çocuklar parktaki ördekleri besledi.|doga
+goat|A2|noun|Keçi|keçi|/ɡoʊt/|/ɡəʊt/|Goats can climb steep hills.|Keçiler dik tepelere tırmanabilir.|doga
+sheep|A1|noun|Koyun|koyun|/ʃiːp/|/ʃiːp/|The farmer has two hundred sheep.|Çiftçinin iki yüz koyunu var.|doga
+rabbit|A1|noun|Tavşan|tavşan|/ˈræbɪt/|/ˈræbɪt/|The rabbit ate all the carrots.|Tavşan bütün havuçları yedi.|doga
+shark|B1|noun|Köpekbalığı|köpekbalığı|/ʃɑːrk/|/ʃɑːk/|Sharks have very sharp teeth.|Köpekbalıklarının çok keskin dişleri vardır.|doga
+spring|A1|noun|İlkbahar|ilkbahar, bahar, kaynak|/sprɪŋ/|/sprɪŋ/|Trees turn green in spring.|Ağaçlar ilkbaharda yeşillenir.|doga
+frost|B2|noun|Kırağı|kırağı, don|/frɑːst/|/frɒst/|There was frost on the car this morning.|Bu sabah arabanın üstünde kırağı vardı.|doga
+thunder|B1|noun|Gök gürültüsü|gök gürültüsü|/ˈθʌndɚ/|/ˈθʌndə/|The dog is afraid of thunder.|Köpek gök gürültüsünden korkuyor.|doga
+sky|A1|noun|Gökyüzü|gökyüzü, gök|/skaɪ/|/skaɪ/|The sky is clear and blue today.|Bugün gökyüzü açık ve mavi.|doga
+rock|A2|noun|Kaya|kaya|/rɑːk/|/rɒk/|We sat on a big rock by the sea.|Deniz kenarında büyük bir kayaya oturduk.|doga
+stone|A2|noun|Taş|taş|/stoʊn/|/stəʊn/|The old wall is made of stone.|Eski duvar taştan yapılmış.|doga
+sand|A2|noun|Kum|kum|/sænd/|/sænd/|The children built a castle in the sand.|Çocuklar kumdan bir kale yaptı.|doga
+ocean|A2|noun|Okyanus|okyanus|/ˈoʊʃən/|/ˈəʊʃn/|The Pacific is the biggest ocean.|Pasifik en büyük okyanustur.|doga
+weather|A1|noun|Hava durumu|hava, hava durumu|/ˈweðɚ/|/ˈweðə/|The weather is lovely today.|Bugün hava çok güzel.|doga
+laptop|A2|noun|Dizüstü|dizüstü bilgisayar|/ˈlæptɑːp/|/ˈlæptɒp/|I take my laptop to work every day.|Her gün dizüstü bilgisayarımı işe götürürüm.|teknoloji
+phone|A1|noun|Telefon|telefon|/foʊn/|/fəʊn/|My phone is out of battery.|Telefonumun şarjı bitti.|teknoloji
+mouse|A2|noun|Fare|fare (bilgisayar), fare|/maʊs/|/maʊs/|Click the left button of the mouse.|Farenin sol tuşuna tıkla.|teknoloji
+code|B1|noun|Kod|kod, şifre|/koʊd/|/kəʊd/|She writes code for a game company.|Bir oyun şirketi için kod yazıyor.|teknoloji
+chip|B2|noun|Çip|çip, mikroçip|/tʃɪp/|/tʃɪp/|Every phone has a tiny chip inside.|Her telefonun içinde küçük bir çip vardır.|teknoloji
+plug|B1|noun|Fiş|fiş|/plʌɡ/|/plʌɡ/|Pull out the plug before you clean it.|Temizlemeden önce fişi çek.|teknoloji
+battery|A2|noun|Pil|pil, batarya|/ˈbæt̬əri/|/ˈbætri/|The battery lasts all day.|Pil bütün gün dayanıyor.|teknoloji
+robot|A2|noun|Robot|robot|/ˈroʊbɑːt/|/ˈrəʊbɒt/|A robot cleans our floor every day.|Yerimizi her gün bir robot temizliyor.|teknoloji
+email|A2|noun|E-posta|e-posta|/ˈiːmeɪl/|/ˈiːmeɪl/|I'll send you an email tonight.|Bu akşam sana bir e-posta göndereceğim.|teknoloji
+web|B1|noun|Web|web, ağ|/web/|/web/|You can find the answer on the web.|Cevabı web'de bulabilirsin.|teknoloji
+print|A2|verb|Yazdırmak|yazdırmak, basmak|/prɪnt/|/prɪnt/|Can you print this page for me?|Bu sayfayı benim için yazdırabilir misin?|teknoloji
+byte|B2|noun|Bayt|bayt|/baɪt/|/baɪt/|A byte is made of eight bits.|Bir bayt sekiz bitten oluşur.|teknoloji
+pixel|B2|noun|Piksel|piksel|/ˈpɪksəl/|/ˈpɪksl/|This camera takes photos with millions of pixels.|Bu kamera milyonlarca pikselli fotoğraflar çeker.|teknoloji
+video|A1|noun|Video|video|/ˈvɪdioʊ/|/ˈvɪdiəʊ/|He watched a funny video online.|İnternette komik bir video izledi.|teknoloji
+camera|A1|noun|Kamera|kamera, fotoğraf makinesi|/ˈkæmərə/|/ˈkæmərə/|My new phone has a great camera.|Yeni telefonumun harika bir kamerası var.|teknoloji
+tablet|A2|noun|Tablet|tablet|/ˈtæblət/|/ˈtæblət/|My son reads books on his tablet.|Oğlum tabletinde kitap okuyor.|teknoloji
+gadget|B2|noun|Pratik alet|pratik alet, aygıt|/ˈɡædʒɪt/|/ˈɡædʒɪt/|He loves new electronic gadgets.|Yeni elektronik aletlere bayılır.|teknoloji
+router|B2|noun|Yönlendirici|yönlendirici, modem|/ˈraʊt̬ɚ/|/ˈruːtə/|Restart the router if the internet is slow.|İnternet yavaşsa yönlendiriciyi yeniden başlat.|teknoloji
+server|B2|noun|Sunucu|sunucu|/ˈsɝːvɚ/|/ˈsɜːvə/|The website is down because the server crashed.|Sunucu çöktüğü için web sitesi kapalı.|teknoloji
+backup|B2|noun|Yedekleme|yedek, yedekleme|/ˈbækʌp/|/ˈbækʌp/|Always keep a backup of your files.|Dosyalarının her zaman bir yedeğini tut.|teknoloji
+login|B2|noun|Oturum açma|giriş, oturum açma|/ˈlɑːɡɪn/|/ˈlɒɡɪn/|Enter your login details to continue.|Devam etmek için giriş bilgilerini gir.|teknoloji
+bug|B2|noun|Yazılım hatası|yazılım hatası, böcek|/bʌɡ/|/bʌɡ/|The new update fixed a serious bug.|Yeni güncelleme ciddi bir hatayı düzeltti.|teknoloji
+search|A2|verb|Arama yapmak|aramak, arama yapmak|/sɝːtʃ/|/sɜːtʃ/|I searched the internet for a cheap hotel.|İnternette ucuz bir otel aradım.|teknoloji
+memory|B1|noun|Bellek|bellek, hafıza|/ˈmeməri/|/ˈmeməri/|My phone has no memory left.|Telefonumda hiç bellek kalmadı.|teknoloji
+disk|B2|noun|Disk|disk|/dɪsk/|/dɪsk/|The hard disk is almost full.|Sabit disk neredeyse dolu.|teknoloji
+monitor|B1|noun|Monitör|monitör, ekran|/ˈmɑːnət̬ɚ/|/ˈmɒnɪtə/|I use two monitors at work.|İşte iki monitör kullanıyorum.|teknoloji
+smart|A2|adj|Akıllı|akıllı, zeki|/smɑːrt/|/smɑːt/|We have a smart TV in the living room.|Oturma odasında akıllı bir televizyonumuz var.|teknoloji
+modem|B2|noun|Modem|modem|/ˈmoʊdəm/|/ˈməʊdem/|The modem lights are flashing.|Modemin ışıkları yanıp sönüyor.|teknoloji
+sensor|B2|noun|Sensör|sensör, algılayıcı|/ˈsensɚ/|/ˈsensə/|The light turns on with a motion sensor.|Işık bir hareket sensörüyle yanıyor.|teknoloji
+laser|B2|noun|Lazer|lazer|/ˈleɪzɚ/|/ˈleɪzə/|He used a laser to point at the screen.|Ekranı göstermek için bir lazer kullandı.|teknoloji
+program|A2|noun|Program|program, yazılım|/ˈproʊɡræm/|/ˈprəʊɡræm/|This program helps you edit photos.|Bu program fotoğraf düzenlemene yardım eder.|teknoloji
+blog|B1|noun|Blog|blog|/blɑːɡ/|/blɒɡ/|She writes a travel blog.|Bir seyahat blogu yazıyor.|teknoloji
+mobile|A2|noun|Cep telefonu|cep telefonu, mobil|/ˈmoʊbəl/|/ˈməʊbaɪl/|Please turn off your mobile in class.|Lütfen derste cep telefonunu kapat.|teknoloji
+icon|B2|noun|Simge|simge, ikon|/ˈaɪkɑːn/|/ˈaɪkɒn/|Tap the icon to open the app.|Uygulamayı açmak için simgeye dokun.|teknoloji
+cursor|B2|noun|İmleç|imleç|/ˈkɝːsɚ/|/ˈkɜːsə/|Move the cursor to the top of the page.|İmleci sayfanın en üstüne götür.|teknoloji
+tab|B2|noun|Sekme|sekme|/tæb/|/tæb/|I have twenty tabs open in my browser.|Tarayıcımda yirmi sekme açık.|teknoloji
+inbox|B1|noun|Gelen kutusu|gelen kutusu|/ˈɪnbɑːks/|/ˈɪnbɒks/|My inbox is full of emails.|Gelen kutum e-postalarla dolu.|teknoloji
+spam|B2|noun|Spam|istenmeyen e-posta|/spæm/|/spæm/|Most of these emails are spam.|Bu e-postaların çoğu spam.|teknoloji
+socket|B2|noun|Priz|priz, soket|/ˈsɑːkɪt/|/ˈsɒkɪt/|Is there a socket near the bed?|Yatağın yakınında priz var mı?|teknoloji
+charge|B1|verb|Şarj etmek|şarj etmek, ücret almak|/tʃɑːrdʒ/|/tʃɑːdʒ/|I need to charge my phone.|Telefonumu şarj etmem gerek.|teknoloji
+radio|A1|noun|Radyo|radyo|/ˈreɪdioʊ/|/ˈreɪdiəʊ/|I listen to the radio in the car.|Arabada radyo dinlerim.|teknoloji
+remote|B1|noun|Kumanda|uzaktan kumanda, uzak|/rɪˈmoʊt/|/rɪˈməʊt/|Where is the TV remote?|Televizyon kumandası nerede?|teknoloji
+avatar|B2|noun|Avatar|avatar, profil resmi|/ˈævətɑːr/|/ˈævətɑː/|Choose an avatar for your profile.|Profilin için bir avatar seç.|teknoloji
+crash|B1|verb|Çökmek|çökmek, kaza yapmak|/kræʃ/|/kræʃ/|My computer crashed and I lost my work.|Bilgisayarım çöktü ve çalışmamı kaybettim.|teknoloji
+error|B1|noun|Hata|hata|/ˈerɚ/|/ˈerə/|An error message appeared on the screen.|Ekranda bir hata mesajı çıktı.|teknoloji
+zoom|B2|verb|Yakınlaştırmak|yakınlaştırmak|/zuːm/|/zuːm/|Zoom in to see the map better.|Haritayı daha iyi görmek için yakınlaştır.|teknoloji
+scroll|B2|verb|Kaydırmak|kaydırmak (ekran)|/skroʊl/|/skrəʊl/|Scroll down to read the rest.|Gerisini okumak için aşağı kaydır.|teknoloji
+fax|B1|noun|Faks|faks|/fæks/|/fæks/|Few offices still use a fax.|Çok az ofis hâlâ faks kullanıyor.|teknoloji
+tech|B2|noun|Teknoloji|teknoloji|/tek/|/tek/|She works in tech in Silicon Valley.|Silikon Vadisi'nde teknoloji sektöründe çalışıyor.|teknoloji
+site|B1|noun|Web sitesi|site, web sitesi|/saɪt/|/saɪt/|This site has free English lessons.|Bu sitede ücretsiz İngilizce dersleri var.|teknoloji
+wire|B1|noun|Tel|tel, kablo|/waɪɚ/|/waɪə/|A loose wire caused the problem.|Gevşek bir tel soruna neden oldu.|teknoloji
+copy|A2|verb|Kopyalamak|kopyalamak|/ˈkɑːpi/|/ˈkɒpi/|Copy the text and send it to me.|Metni kopyala ve bana gönder.|teknoloji
+paste|B2|verb|Yapıştırmak|yapıştırmak|/peɪst/|/peɪst/|Paste the link into the message.|Bağlantıyı mesaja yapıştır.|teknoloji
+lens|B2|noun|Mercek|mercek, lens|/lenz/|/lenz/|Clean the camera lens with a soft cloth.|Kamera merceğini yumuşak bir bezle temizle.|teknoloji
+intern|B2|noun|Stajyer|stajyer|/ˈɪntɝːn/|/ˈɪntɜːn/|We have two new interns in the office this summer.|Bu yaz ofiste iki yeni stajyerimiz var.|is
+irk|C1|verb|Sinir etmek|sinirlendirmek, can sıkmak|/ɝːk/|/ɜːk/|His constant jokes began to irk her.|Sürekli şakaları onu sinir etmeye başladı.|c1
+woe|C1|noun|Dert|dert, keder|/woʊ/|/wəʊ/|He told me all about his money woes.|Bana bütün para dertlerini anlattı.|c1
+wit|C1|noun|Nükte|nükte, hazırcevaplık, zekâ|/wɪt/|/wɪt/|Her quick wit made everyone laugh.|Hazırcevaplığı herkesi güldürdü.|c1
+opt|C1|verb|Tercih etmek|tercih etmek, seçmek|/ɑːpt/|/ɒpt/|Many students opt to study online.|Birçok öğrenci çevrim içi okumayı tercih ediyor.|c1
+sly|C1|adj|Sinsi|sinsi, kurnaz|/slaɪ/|/slaɪ/|He gave me a sly smile.|Bana sinsice gülümsedi.|c1
+nag|C1|verb|Dır dır etmek|dır dır etmek, söylenip durmak|/næɡ/|/næɡ/|Stop nagging me about my room!|Odam hakkında dır dır etmeyi bırak!|c1
+coy|C1|adj|Nazlı|nazlı, ketum, çekingen|/kɔɪ/|/kɔɪ/|She was coy about her age.|Yaşını söylemekten kaçındı.|c1
+wry|C1|adj|Buruk|buruk, alaycı|/raɪ/|/raɪ/|He gave a wry smile at the bad news.|Kötü habere buruk bir gülümsemeyle karşılık verdi.|c1
+ebb|C1|verb|Dinmek|dinmek, azalmak, (deniz) çekilmek|/eb/|/eb/|Her anger slowly began to ebb.|Öfkesi yavaş yavaş dinmeye başladı.|c1
+arid|C1|adj|Kurak|kurak, çorak|/ˈærɪd/|/ˈærɪd/|Few plants grow in this arid land.|Bu kurak toprakta çok az bitki yetişir.|c1
+blur|C1|verb|Bulanıklaşmak|bulanıklaşmak, bulanıklaştırmak|/blɝː/|/blɜː/|Tears blurred her vision.|Gözyaşları görüşünü bulanıklaştırdı.|c1
+crux|C1|noun|Püf noktası|can alıcı nokta, püf noktası|/krʌks/|/krʌks/|This is the crux of the problem.|Sorunun püf noktası bu.|c1
+deft|C1|adj|Becerikli|becerikli, usta|/deft/|/deft/|With a few deft moves, he fixed the clock.|Birkaç becerikli hareketle saati tamir etti.|c1
+foil|C1|verb|Boşa çıkarmak|boşa çıkarmak, engel olmak|/fɔɪl/|/fɔɪl/|Police foiled the robbery.|Polis soygunu boşa çıkardı.|c1
+grim|C1|adj|Kasvetli|kasvetli, acı, ciddi|/ɡrɪm/|/ɡrɪm/|The news from the hospital was grim.|Hastaneden gelen haberler kasvetliydi.|c1
+hone|C1|verb|Bilemek|bilemek, geliştirmek|/hoʊn/|/həʊn/|She spent years honing her skills.|Becerilerini bilemek için yıllar harcadı.|c1
+jolt|C1|noun|Sarsıntı|sarsıntı, şok|/dʒoʊlt/|/dʒəʊlt/|The train stopped with a sudden jolt.|Tren ani bir sarsıntıyla durdu.|c1
+meek|C1|adj|Uysal|uysal, yumuşak başlı|/miːk/|/miːk/|He was a meek and gentle man.|Uysal ve nazik bir adamdı.|c1
+mock|C1|verb|Alay etmek|alay etmek, dalga geçmek|/mɑːk/|/mɒk/|They mocked his accent.|Aksanıyla alay ettiler.|c1
+ploy|C1|noun|Hile, oyun|hile, kurnazca plan|/plɔɪ/|/plɔɪ/|The offer was just a ploy to win votes.|Teklif sadece oy kazanmak için bir oyundu.|c1
+rash|C1|adj|Düşüncesiz|aceleci, düşüncesiz|/ræʃ/|/ræʃ/|Don't make any rash decisions.|Düşüncesizce karar verme.|c1
+shun|C1|verb|Uzak durmak|uzak durmak, dışlamak|/ʃʌn/|/ʃʌn/|After the scandal, his friends shunned him.|Skandaldan sonra arkadaşları ondan uzak durdu.|c1
+smug|C1|adj|Ukala|kendini beğenmiş, ukala|/smʌɡ/|/smʌɡ/|He had a smug look after winning.|Kazandıktan sonra yüzünde ukala bir ifade vardı.|c1
+snag|C1|noun|Pürüz|pürüz, beklenmedik sorun|/snæɡ/|/snæɡ/|There is one small snag in the plan.|Planda küçük bir pürüz var.|c1
+toil|C1|verb|Didinmek|didinmek, emek vermek|/tɔɪl/|/tɔɪl/|Farmers toiled in the fields all day.|Çiftçiler bütün gün tarlalarda didindi.|c1
+whim|C1|noun|Kapris|kapris, anlık heves|/wɪm/|/wɪm/|He bought the car on a whim.|Arabayı anlık bir hevesle aldı.|c1
+zest|C1|noun|Coşku|coşku, heves|/zest/|/zest/|He has a real zest for life.|Gerçek bir yaşam coşkusu var.|c1
+adept|C1|adj|Mahir|mahir, usta|/əˈdept/|/əˈdept/|She is adept at solving problems.|Sorun çözmede çok mahirdir.|c1
+aloof|C1|adj|Mesafeli|mesafeli, soğuk|/əˈluːf/|/əˈluːf/|He seemed aloof at the party.|Partide mesafeli görünüyordu.|c1
+bland|C1|adj|Tatsız|tatsız, yavan|/blænd/|/blænd/|The soup was a bit bland.|Çorba biraz tatsızdı.|c1
+bleak|C1|adj|Ümitsiz|ümitsiz, kasvetli|/bliːk/|/bliːk/|The future looks bleak for the factory.|Fabrikanın geleceği ümitsiz görünüyor.|c1
+brisk|C1|adj|Tempolu|tempolu, canlı, serin|/brɪsk/|/brɪsk/|We went for a brisk walk.|Tempolu bir yürüyüşe çıktık.|c1
+decry|C1|verb|Kınamak|kınamak, yermek|/dɪˈkraɪ/|/dɪˈkraɪ/|Critics decried the new law.|Eleştirmenler yeni yasayı kınadı.|c1
+eerie|C1|adj|Ürkütücü|ürkütücü, tekinsiz|/ˈɪri/|/ˈɪəri/|There was an eerie silence in the house.|Evde ürkütücü bir sessizlik vardı.|c1
+elude|C1|verb|Yakalanmamak|yakalanmamak, -den kurtulmak|/iˈluːd/|/iˈluːd/|The thief eluded the police for months.|Hırsız aylarca polise yakalanmadı.|c1
+enact|C1|verb|Yasalaştırmak|yasalaştırmak, canlandırmak|/ɪˈnækt/|/ɪˈnækt/|The new law was enacted last year.|Yeni kanun geçen yıl yasalaştı.|c1
+endow|C1|verb|Bağışlamak|bağışta bulunmak, donatmak|/ɪnˈdaʊ/|/ɪnˈdaʊ/|He endowed the school with a library.|Okula bir kütüphane bağışladı.|c1
+facet|C1|noun|Boyut, yön|yön, boyut, cephe|/ˈfæsɪt/|/ˈfæsɪt/|We looked at every facet of the problem.|Sorunun her yönünü inceledik.|c1
+feign|C1|verb|Numara yapmak|-mış gibi yapmak, numara yapmak|/feɪn/|/feɪn/|He feigned illness to stay at home.|Evde kalmak için hasta numarası yaptı.|c1
+glean|C1|verb|Derlemek|(bilgi) derlemek, toplamak|/ɡliːn/|/ɡliːn/|We gleaned some facts from the report.|Rapordan bazı bilgiler derledik.|c1
+gloom|C1|noun|Karamsarlık|kasvet, karamsarlık, karanlık|/ɡluːm/|/ɡluːm/|There was an air of gloom in the office.|Ofiste bir karamsarlık havası vardı.|c1
+hefty|C1|adj|Yüklü|yüklü, ağır, iri|/ˈhefti/|/ˈhefti/|He had to pay a hefty fine.|Yüklü bir para cezası ödemek zorunda kaldı.|c1
+knack|C1|noun|Hüner|hüner, yatkınlık|/næk/|/næk/|She has a knack for languages.|Dillere karşı bir yatkınlığı var.|c1
+lofty|C1|adj|Yüce|yüce, yüksek, kibirli|/ˈlɔːfti/|/ˈlɒfti/|She has lofty goals for her career.|Kariyeri için yüce hedefleri var.|c1
+murky|C1|adj|Bulanık|bulanık, karanlık, şaibeli|/ˈmɝːki/|/ˈmɜːki/|The water in the river was murky.|Nehrin suyu bulanıktı.|c1
+tacit|C1|adj|Örtük|örtük, zımni, sessiz|/ˈtæsɪt/|/ˈtæsɪt/|They gave their tacit approval.|Örtük bir onay verdiler.|c1
+apathy|C1|noun|Kayıtsızlık|kayıtsızlık, ilgisizlik|/ˈæpəθi/|/ˈæpəθi/|Voter apathy is a big problem.|Seçmen kayıtsızlığı büyük bir sorun.|c1
+baffle|C1|verb|Şaşırtmak|şaşırtmak, kafasını karıştırmak|/ˈbæfəl/|/ˈbæfl/|The question baffled even the teacher.|Soru öğretmeni bile şaşırttı.|c1
+debris|C1|noun|Enkaz|enkaz, moloz|/dəˈbriː/|/ˈdebriː/|Workers cleared the debris after the earthquake.|İşçiler depremden sonra enkazı temizledi.|c1
+deploy|C1|verb|Konuşlandırmak|konuşlandırmak, kullanmak|/dɪˈplɔɪ/|/dɪˈplɔɪ/|More troops were deployed to the border.|Sınıra daha fazla asker konuşlandırıldı.|c1
+devoid|C1|adj|Yoksun|yoksun, -sız|/dɪˈvɔɪd/|/dɪˈvɔɪd/|His voice was devoid of emotion.|Sesi duygudan yoksundu.|c1
+dismay|C1|noun|Büyük üzüntü|büyük üzüntü, endişe, dehşet|/dɪsˈmeɪ/|/dɪsˈmeɪ/|To our dismay, the shop was closed.|Büyük üzüntümüzle gördük ki dükkân kapalıydı.|c1
+embark|C1|verb|Girişmek|girişmek, başlamak, gemiye binmek|/ɪmˈbɑːrk/|/ɪmˈbɑːk/|She embarked on a new career.|Yeni bir kariyere girişti.|c1
+fickle|C1|adj|Dönek|dönek, kararsız|/ˈfɪkəl/|/ˈfɪkl/|Fans can be very fickle.|Taraftarlar çok dönek olabilir.|c1
+flimsy|C1|adj|Dayanıksız|dayanıksız, zayıf (bahane)|/ˈflɪmzi/|/ˈflɪmzi/|That is a flimsy excuse.|Bu çürük bir bahane.|c1
+frugal|C1|adj|Tutumlu|tutumlu, idareli|/ˈfruːɡəl/|/ˈfruːɡl/|They live a frugal life.|Tutumlu bir hayat sürüyorlar.|c1
+futile|C1|adj|Nafile|nafile, boşuna|/ˈfjuːt̬əl/|/ˈfjuːtaɪl/|All our efforts were futile.|Bütün çabalarımız nafileydi.|c1
+grudge|C1|noun|Kin|kin, garez|/ɡrʌdʒ/|/ɡrʌdʒ/|She still holds a grudge against him.|Ona karşı hâlâ kin besliyor.|c1
+ordeal|C1|noun|Çile|çile, zorlu deneyim|/ɔːrˈdiːl/|/ɔːˈdiːl/|The journey was a terrible ordeal.|Yolculuk korkunç bir çileydi.|c1
+hasten|C1|verb|Hızlandırmak|hızlandırmak, acele etmek|/ˈheɪsən/|/ˈheɪsn/|The storm hastened our departure.|Fırtına ayrılışımızı hızlandırdı.|c1
+jargon|C1|noun|Jargon|jargon, meslek dili|/ˈdʒɑːrɡən/|/ˈdʒɑːɡən/|The report was full of legal jargon.|Rapor hukuki jargonla doluydu.|c1
+lament|C1|verb|Yakınmak|yakınmak, ağıt yakmak|/ləˈment/|/ləˈment/|He lamented the loss of his old friends.|Eski dostlarını kaybettiği için yakındı.|c1
+latent|C1|adj|Gizil|gizil, gizli, potansiyel|/ˈleɪtənt/|/ˈleɪtnt/|She has a latent talent for music.|Gizli bir müzik yeteneği var.|c1
+lavish|C1|adj|Şatafatlı|şatafatlı, bol, cömert|/ˈlævɪʃ/|/ˈlævɪʃ/|They had a lavish wedding.|Şatafatlı bir düğün yaptılar.|c1
+lethal|C1|adj|Öldürücü|öldürücü, ölümcül|/ˈliːθəl/|/ˈliːθl/|The snake's bite can be lethal.|Yılanın ısırığı öldürücü olabilir.|c1
+loathe|C1|verb|Tiksinmek|nefret etmek, tiksinmek|/loʊð/|/ləʊð/|I loathe waking up early.|Erken kalkmaktan nefret ederim.|c1
+malice|C1|noun|Kötü niyet|kötü niyet, kin|/ˈmælɪs/|/ˈmælɪs/|He said it without any malice.|Bunu hiçbir kötü niyet olmadan söyledi.|c1
+mingle|C1|verb|Kaynaşmak|kaynaşmak, karışmak|/ˈmɪŋɡəl/|/ˈmɪŋɡl/|The host mingled with the guests.|Ev sahibi misafirlerle kaynaştı.|c1
+nuance|C1|noun|Nüans|nüans, ince fark|/ˈnuːɑːns/|/ˈnjuːɑːns/|Translators must notice every nuance.|Çevirmenler her nüansı fark etmeli.|c1
+oblige|C1|verb|Mecbur etmek|mecbur etmek, zorunlu kılmak|/əˈblaɪdʒ/|/əˈblaɪdʒ/|The law obliges employers to pay a fair wage.|Kanun işverenleri adil ücret ödemeye mecbur ediyor.|c1
+erratic|C1|adj|Tutarsız|tutarsız, düzensiz|/ɪˈræt̬ɪk/|/ɪˈrætɪk/|His behaviour has become erratic.|Davranışları tutarsız bir hal aldı.|c1
+mundane|C1|adj|Sıradan|sıradan, gündelik|/mʌnˈdeɪn/|/mʌnˈdeɪn/|I spend my days on mundane tasks.|Günlerimi sıradan işlerle geçiriyorum.|c1
+prudent|C1|adj|Tedbirli|tedbirli, sağduyulu|/ˈpruːdənt/|/ˈpruːdnt/|It would be prudent to save some money.|Biraz para biriktirmek tedbirli bir davranış olur.|c1
+rapport|C1|noun|Uyum, yakınlık|uyum, yakınlık, iyi ilişki|/ræˈpɔːr/|/ræˈpɔː/|She has a good rapport with her students.|Öğrencileriyle arası çok iyi.|c1
+remorse|C1|noun|Pişmanlık|pişmanlık, vicdan azabı|/rɪˈmɔːrs/|/rɪˈmɔːs/|He showed no remorse for his crime.|Suçu için hiç pişmanlık göstermedi.|c1
+torment|C1|noun|Eziyet|eziyet, ıstırap|/ˈtɔːrment/|/ˈtɔːment/|The long wait was a torment.|Uzun bekleyiş bir eziyetti.|c1

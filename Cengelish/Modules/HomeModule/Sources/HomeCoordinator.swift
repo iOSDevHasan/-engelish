@@ -15,6 +15,7 @@ public final class HomeCoordinator: HomeModuleInterface {
   @Inject private var nav: Routing
   @Inject private var content: any ContentProviding
   @Inject private var userData: any UserDataStoring
+  @Inject private var entitlements: any EntitlementProviding
   @Inject private var pronouncer: any Pronouncing
   @Inject private var puzzle: PuzzleModuleInterface
   @Inject private var explore: ExploreModuleInterface
@@ -23,7 +24,8 @@ public final class HomeCoordinator: HomeModuleInterface {
 
   public func createHomeView() -> AnyView {
     let viewModel = HomeViewModel(
-      coordinator: self, content: content, userData: userData, pronouncer: pronouncer)
+      coordinator: self, content: content, userData: userData, entitlements: entitlements,
+      pronouncer: pronouncer)
     return AnyView(HomeView(viewModel: viewModel))
   }
 
