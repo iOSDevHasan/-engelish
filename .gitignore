@@ -1,0 +1,13 @@
+.DS_Store
+xcuserdata/
+DerivedData/
+.build/
+.swiftpm/
+*.xcresult
+# Firebase client config (download from the Firebase console; keep out of the public repo)
+GoogleService-Info.plist
+# Never commit service-account keys
+*serviceAccount*.json
+*-firebase-adminsdk-*.json
+tools/content/out/
+__pycache__/

@@ -1,0 +1,6 @@
+#include "Base.xcconfig"
+
+// Host only, no scheme — read through HTTPKit's APIConfig.baseURL.
+BASE_URL = api.example.com
+ENABLE_NETWORK_LOGS = NO
+PREVENT_SCREENSHOT = NO

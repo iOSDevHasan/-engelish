@@ -1,0 +1,18 @@
+rules_version = '2';
+// İstemciler içerik koleksiyonlarını sadece okur. Yazma sadece yönetici betiğinden
+// (firebase-admin, kurallara tabi değildir). App Check zorunluluğu konsoldan açılır.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /packs/{packId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /dailies/{day} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
