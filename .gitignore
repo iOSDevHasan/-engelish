@@ -11,3 +11,4 @@ GoogleService-Info.plist
 *-firebase-adminsdk-*.json
 tools/content/out/
 __pycache__/
+-Xcc/
