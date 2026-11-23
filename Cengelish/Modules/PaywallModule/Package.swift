@@ -13,6 +13,9 @@ let package = Package(
     .package(path: "../../Core/InjectionKit"),
     .package(path: "../../AppCore/DesignKit"),
     .package(path: "../../AppCore/PurchaseKit"),
+    .package(path: "../../AppCore/ContentKit"),
+    .package(path: "../../AppCore/UserDataKit"),
+    .package(path: "../../Kits/PuzzleKit"),
     // jarvis:packages
   ],
   targets: [
@@ -28,6 +31,9 @@ let package = Package(
         .product(name: "InjectionKit", package: "InjectionKit"),
         .product(name: "DesignKit", package: "DesignKit"),
         .product(name: "PurchaseKit", package: "PurchaseKit"),
+        .product(name: "ContentKit", package: "ContentKit"),
+        .product(name: "UserDataKit", package: "UserDataKit"),
+        .product(name: "PuzzleKit", package: "PuzzleKit"),
         // jarvis:products
       ],
       path: "Sources",
@@ -44,6 +50,8 @@ let package = Package(
         .product(name: "RouterKitInterface", package: "RouterKit"),
         .product(name: "DesignKit", package: "DesignKit"),
         .product(name: "PurchaseKit", package: "PurchaseKit"),
+        .product(name: "ContentKit", package: "ContentKit"),
+        .product(name: "PuzzleKit", package: "PuzzleKit"),
       ],
       path: "Tests"
     ),

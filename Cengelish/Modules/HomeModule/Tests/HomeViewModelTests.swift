@@ -28,27 +28,81 @@ struct HomeViewModelTests {
     #expect(sut.goalText == "Bugün 3 bulmaca hedefin var")
   }
 
-  @Test("Premium kullanıcı dünü kaçırınca seri dondurmanın seriyi koruduğu söylenir")
+  @Test("Plus kullanıcı dünü kaçırınca seri dondurmanın seriyi koruduğu söylenir")
   func freezeProtectsStreak() async {
     let store = UserDataStore(inMemory: true)
     _ = store.finish(
       puzzleId: "p1", marks: ["e": true], wordIdsByEntry: [:], isPremium: true,
       now: .now.addingTimeInterval(-2 * 86_400))
-    let premium = makeSUT(store: store, premium: true)
-    await premium.load()
-    #expect(premium.freezeHint?.contains("seri dondurma serini koruyor") == true)
+    let plus = makeSUT(store: store, plus: true)
+    await plus.load()
+    #expect(plus.freezeHint?.contains("seri dondurma serini koruyor") == true)
+    #expect(!plus.showsFreezeTeaser)
 
-    let free = makeSUT(store: store, premium: false)
+    let free = makeSUT(store: store, plus: false)
     await free.load()
     #expect(free.streak == 0)
     #expect(free.freezeHint == nil)
   }
 
-  @Test("Premium kullanıcıya kalan dondurma hakkı gösterilir")
+  @Test("Plus kullanıcıya kalan dondurma hakkı gösterilir")
   func freezeAvailable() async {
-    let sut = makeSUT(store: UserDataStore(inMemory: true), premium: true)
+    let sut = makeSUT(store: UserDataStore(inMemory: true), plus: true)
     await sut.load()
     #expect(sut.freezeHint?.contains("2 hak") == true)
+  }
+
+  @Test("Plus olmayan kullanıcıya Plus kartı ve seri dondurma tanıtımı gösterilir, paywall açılır")
+  func plusPromo() async {
+    let router = RouterSpy()
+    let free = makeSUT(store: UserDataStore(inMemory: true), plus: false, router: router)
+    await free.load()
+    #expect(!free.isPlus)
+    #expect(free.showsPlusPromo)
+    #expect(free.showsFreezeTeaser)
+    free.openPaywall()
+    #expect(router.paywallCount == 1)
+
+    let plus = makeSUT(store: UserDataStore(inMemory: true), plus: true)
+    await plus.load()
+    #expect(plus.isPlus)
+    #expect(!plus.showsPlusPromo)
+    #expect(!plus.showsFreezeTeaser)
+  }
+
+  @Test("Plus butonu üyede de paywall'u açar (paywall üyelik durumunu gösterir)")
+  func plusButtonOpensPaywallForMember() async {
+    let router = RouterSpy()
+    let member = makeSUT(store: UserDataStore(inMemory: true), plus: true, router: router)
+    await member.load()
+    #expect(member.isPlus)
+    member.openPaywall()
+    #expect(router.paywallCount == 1)
+  }
+
+  @Test("Hatırlatıcı kısayolu durumu ve saati gösterir, paneli açar")
+  func reminderShortcut() async {
+    let store = UserDataStore(inMemory: true)
+    let actions = ReminderActions(
+      requestPermission: { true }, apply: { _, _ in }, refreshStreakWarning: { _, _ in })
+    let sut = makeSUT(store: store, reminders: actions)
+    await sut.load()
+    #expect(sut.reminderShortcut == "Günlük hatırlatıcı kur")
+    sut.openReminders()
+    #expect(sut.isReminderSheetOpen)
+    await sut.setReminder(true)
+    sut.setReminderTime(hour: 7, minute: 30)
+    await sut.load()
+    #expect(sut.reminderShortcut == "Hatırlatıcı her gün 07:30")
+  }
+
+  @Test("Bulmaca yokken Günün Bulmacası açılmaz")
+  func openDailyWithoutPuzzle() async {
+    let router = RouterSpy()
+    let sut = makeSUT(store: UserDataStore(inMemory: true), router: router)
+    await sut.load()
+    sut.openDaily()
+    #expect(router.opened.isEmpty)
   }
 
   @Test("Hatırlatıcı izin verilince açılır, saat değişince bildirim yeniden kurulur")
@@ -80,14 +134,14 @@ struct HomeViewModelTests {
   }
 
   private func makeSUT(
-    store: UserDataStore, premium: Bool = false,
+    store: UserDataStore, plus: Bool = false, router: RouterSpy = RouterSpy(),
     reminders: ReminderActions = ReminderActions(
       requestPermission: { false }, apply: { _, _ in }, refreshStreakWarning: { _, _ in })
   ) -> HomeViewModel {
     let entitlements = EntitlementStub()
-    entitlements.isPremium = premium
+    entitlements.isPremium = plus
     return HomeViewModel(
-      coordinator: HomeCoordinator(), content: EmptyContent(), userData: store,
+      router: router, content: EmptyContent(), userData: store,
       entitlements: entitlements, pronouncer: SilentPronouncer(), reminders: reminders)
   }
 }
@@ -166,7 +220,15 @@ private struct EmptyContent: ContentProviding {
   func puzzles(inPack packId: String) async -> [Puzzle] { [] }
   func words(ids: [String]) async -> [Word] { [] }
   func dailyPuzzle(for date: Date) async -> Puzzle? { nil }
-  func refreshFromRemote(entitledPackIds: Set<String>) async {}
+}
+
+/// Açılan ekranları kaydeder.
+@MainActor
+private final class RouterSpy: HomeRouting {
+  private(set) var opened: [String] = []
+  private(set) var paywallCount = 0
+  func showPuzzle(_ id: String) { opened.append(id) }
+  func showPaywall() { paywallCount += 1 }
 }
 
 @MainActor

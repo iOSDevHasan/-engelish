@@ -7,13 +7,13 @@ public enum Palette {
   // MARK: - Surfaces
 
   /// Ekran arka planı.
-  public static let background = dynamic(0xFFF8EE, 0x121027)
+  public static let background = dynamic(0xF3EEE4, 0x0C0A1C)
   /// Kart ve panel yüzeyi.
-  public static let surface = dynamic(0xFFFFFF, 0x1D1A38)
+  public static let surface = dynamic(0xFFFFFF, 0x24204A)
   /// İkincil yüzey (seçili satır, gri kutular).
-  public static let surface2 = dynamic(0xF1EEFF, 0x29254A)
+  public static let surface2 = dynamic(0xEFEBFF, 0x312C5E)
   /// İnce ayırıcı çizgi.
-  public static let line = dynamic(0xECE8FA, 0x2C2850)
+  public static let line = dynamic(0xE6E1F5, 0x38336A)
   /// Belirgin çizgi ve pasif kontrol rengi.
   public static let lineStrong = dynamic(0xD3CDF0, 0x433E72)
 
@@ -39,7 +39,9 @@ public enum Palette {
   /// Seçili seçeneğin alt gölgesi.
   public static let selectionShadow = dynamic(0xC9C0FA, 0x4B42A0)
   /// Kart gölgesi çizgisi.
-  public static let cardShadow = dynamic(0xECE7FB, 0x0E0C22)
+  public static let cardShadow = dynamic(0xE2DCF3, 0x05040F)
+  /// Kart kenar çizgisi (kartı zeminden ayırır).
+  public static let cardBorder = dynamic(0xE4DEF4, 0x3B3670)
 
   // MARK: - Status
 
@@ -55,10 +57,16 @@ public enum Palette {
   public static let gold = Color(hex: 0xFFC93C)
   /// Altın zemin üzerindeki yazı.
   public static let goldInk = Color(hex: 0x3B2A00)
+  /// Plus rozeti ve çağrıları için altın → turuncu geçiş renkleri.
+  public static let plusGradient: [Color] = [Color(hex: 0xFFD54F), Color(hex: 0xFF9F43)]
+  /// Plus tanıtım kartı için mor → pembe geçiş renkleri.
+  public static let plusPromoGradient: [Color] = [
+    Color(hex: 0x6C5CE7), Color(hex: 0xA55EEA), Color(hex: 0xFF6B9D),
+  ]
   /// Seri (alev) rengi.
   public static let streak = dynamic(0xFF8A3D, 0xFF9E5E)
   /// Seri kartı zemini.
-  public static let streakBackground = dynamic(0xFFF1E6, 0x2B2033)
+  public static let streakBackground = dynamic(0xFFEBDC, 0x33233A)
   /// Cevap anahtarı harf rengi.
   public static let keyInk = dynamic(0xFF6B2C, 0xFFB27A)
 
@@ -73,8 +81,8 @@ public enum Palette {
 
   /// Kart ve paket kapakları için pastel renkler.
   public static let pastels: [Color] = [
-    dynamic(0xFFE3D3, 0x3A2A2A), dynamic(0xD9F0FF, 0x1F3346), dynamic(0xE8E3FF, 0x2C2858),
-    dynamic(0xD6F5E6, 0x1C3B30), dynamic(0xEAF7D2, 0x2A3A20), dynamic(0xFFE0EC, 0x3D2335),
+    dynamic(0xFFDCC8, 0x4A2F2A), dynamic(0xD2ECFF, 0x1E3A55), dynamic(0xE3DDFF, 0x342F6B),
+    dynamic(0xCFF2E1, 0x1D4A3A), dynamic(0xE5F5C8, 0x33471F), dynamic(0xFFD9E8, 0x4A2440),
   ]
 
   // MARK: - Helpers

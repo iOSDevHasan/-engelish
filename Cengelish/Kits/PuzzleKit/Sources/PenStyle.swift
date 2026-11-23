@@ -58,14 +58,14 @@ public struct PenColorRow: View {
   }
 }
 
-/// Tema seçim kartı: mini ızgara, ad, kilit ve seçim işareti.
+/// Tema seçim kartı: mini ızgara, ad, Plus rozeti (sağ üst) ve seçim işareti (sol üst).
 public struct ThemeOptionCard: View {
   private let theme: PuzzleTheme
   private let isSelected: Bool
   private let isLocked: Bool
   private let cellSize: CGFloat
 
-  /// Tema, seçim, kilit ve kutu boyuyla oluşturur.
+  /// Tema, seçim, kilit (Çengelish Plus gerekiyor mu) ve kutu boyuyla oluşturur.
   public init(theme: PuzzleTheme, isSelected: Bool, isLocked: Bool, cellSize: CGFloat = 12) {
     self.theme = theme
     self.isSelected = isSelected
@@ -76,6 +76,7 @@ public struct ThemeOptionCard: View {
   public var body: some View {
     VStack(spacing: 6) {
       MiniGridView(puzzle: SamplePuzzles.demo, theme: theme, cellSize: cellSize)
+        .themePreviewBackdrop()
       Text(theme.name).font(AppFont.tiny.weight(.black)).foregroundStyle(Palette.ink)
         .lineLimit(1).minimumScaleFactor(0.8)
     }
@@ -90,22 +91,30 @@ public struct ThemeOptionCard: View {
             .strokeBorder(isSelected ? Palette.accent : Palette.line, lineWidth: isSelected ? 3 : 2)
         )
     )
+    .plusCorner(isLocked, compact: true, inset: 5)
     .overlay(alignment: .topLeading) {
-      if isLocked {
-        Pill("", systemImage: "crown.fill", tone: .gold).padding(5)
-      }
-    }
-    .overlay(alignment: .topTrailing) {
       if isSelected {
         Image(systemName: "checkmark").font(.system(size: 11, weight: .black))
           .foregroundStyle(.white)
           .frame(width: 22, height: 22)
           .background(Circle().fill(Palette.accent))
-          .offset(x: 7, y: -7)
+          .offset(x: -7, y: -7)
+          .transition(.scale.combined(with: .opacity))
       }
     }
+    .animation(Motion.snappy, value: isSelected)
     .accessibilityElement(children: .combine)
-    .accessibilityLabel("\(theme.name)\(isLocked ? ", Çengelish+" : "")")
+    .accessibilityLabel("\(theme.name)\(isLocked ? ", \(PlusBrand.name)" : "")")
     .accessibilityAddTraits(isSelected ? .isSelected : [])
+  }
+}
+
+extension View {
+  /// Tema önizlemesini ekran zemini renginde bir altlığa koyar; beyaz kutulu temalar (Canlı)
+  /// beyaz kart üzerinde kaybolmaz.
+  public func themePreviewBackdrop() -> some View {
+    padding(4)
+      .background(
+        RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Palette.background))
   }
 }

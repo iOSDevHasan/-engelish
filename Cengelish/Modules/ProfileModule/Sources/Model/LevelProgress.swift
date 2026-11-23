@@ -46,6 +46,9 @@ struct LevelProgress: Equatable {
   /// Çubuk doluluğu (0...1).
   var fraction: Double { min(1, Double(practiced) / Double(max(target, 1))) }
 
+  /// Seviye kodu ("B1").
+  var code: String { level.rawValue }
+
   /// "B1 · Orta".
   var headline: String { "\(level.rawValue) · \(level.title)" }
 

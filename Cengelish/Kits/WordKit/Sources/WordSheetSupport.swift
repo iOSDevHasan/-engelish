@@ -63,10 +63,14 @@ public struct WordNotebookStatus {
 // MARK: - Segment bar
 
 /// Tasarımdaki yuvarlak köşeli bölmeli seçici ("Tümü / Tekrar / Öğrendim").
+///
+/// Seçili bölmenin beyaz zemini seçim değişince yaylanarak kayar ve hafif dokunsal geri bildirim
+/// verilir.
 public struct SegmentBar<Value: Hashable>: View {
   private let options: [(value: Value, title: String)]
   @Binding private var selection: Value
   private let compact: Bool
+  @Namespace private var namespace
 
   /// Seçenekler, seçim ve boyutla seçici oluşturur.
   public init(
@@ -80,29 +84,7 @@ public struct SegmentBar<Value: Hashable>: View {
   public var body: some View {
     HStack(spacing: 0) {
       ForEach(options.indices, id: \.self) { index in
-        let option = options[index]
-        let isOn = option.value == selection
-        Button {
-          withAnimation(.snappy(duration: 0.2)) { selection = option.value }
-        } label: {
-          Text(option.title)
-            .font(compact ? AppFont.tiny.weight(.black) : AppFont.caption.weight(.black))
-            .lineLimit(1)
-            .foregroundStyle(isOn ? Palette.ink : Palette.muted)
-            .padding(.horizontal, compact ? 10 : 6)
-            .padding(.vertical, compact ? 6 : 8)
-            .frame(maxWidth: compact ? nil : .infinity)
-            .background {
-              if isOn {
-                RoundedRectangle(cornerRadius: 11, style: .continuous)
-                  .fill(Palette.surface)
-                  .shadow(color: .black.opacity(0.14), radius: 1.5, y: 1)
-              }
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(isOn ? .isSelected : [])
+        segment(options[index])
       }
     }
     .padding(3)
@@ -110,6 +92,35 @@ public struct SegmentBar<Value: Hashable>: View {
       RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Palette.surface2)
     )
     .fixedSize(horizontal: compact, vertical: false)
+    .sensoryFeedback(.selection, trigger: selection)
+  }
+
+  /// Tek bir bölme butonu.
+  private func segment(_ option: (value: Value, title: String)) -> some View {
+    let isOn = option.value == selection
+    return Button {
+      withAnimation(Motion.snappy) { selection = option.value }
+    } label: {
+      Text(option.title)
+        .font(compact ? AppFont.tiny.weight(.black) : AppFont.caption.weight(.black))
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
+        .foregroundStyle(isOn ? Palette.ink : Palette.muted)
+        .padding(.horizontal, compact ? 10 : 6)
+        .padding(.vertical, compact ? 6 : 8)
+        .frame(maxWidth: compact ? nil : .infinity)
+        .background {
+          if isOn {
+            RoundedRectangle(cornerRadius: 11, style: .continuous)
+              .fill(Palette.surface)
+              .shadow(color: .black.opacity(0.14), radius: 1.5, y: 1)
+              .matchedGeometryEffect(id: "selection", in: namespace)
+          }
+        }
+        .contentShape(Rectangle())
+    }
+    .buttonStyle(.plain)
+    .accessibilityAddTraits(isOn ? .isSelected : [])
   }
 }
 
@@ -141,21 +152,56 @@ public struct BoxDots: View {
 
 // MARK: - Speaker button
 
-/// Köşeli telaffuz butonu (liste satırları için).
+/// Telaffuz butonu: köşeli (liste satırları) ya da yuvarlak (panel, kart) görünümde.
+///
+/// Dokununca simge zıplar, buton hafifçe küçülür ve hafif dokunsal geri bildirim verilir.
 public struct SpeakerButton: View {
   private let word: String
   private let size: CGFloat
+  private let isRound: Bool
+  private let accent: Bool
+  private let label: String?
   private let action: () -> Void
+  @State private var taps = 0
 
-  /// Kelime, boyut ve eylemle buton oluşturur.
-  public init(word: String, size: CGFloat = 34, action: @escaping () -> Void) {
+  /// Kelime, boyut, şekil ve eylemle buton oluşturur.
+  ///
+  /// - Parameters:
+  ///   - isRound: `true` ise `IconCircle` görünümünde yuvarlak buton.
+  ///   - accent: Yuvarlak butonda mor dolgu.
+  ///   - label: Erişilebilirlik etiketi; verilmezse "<kelime> telaffuzunu dinle".
+  public init(
+    word: String, size: CGFloat = 34, isRound: Bool = false, accent: Bool = false,
+    label: String? = nil, action: @escaping () -> Void
+  ) {
     self.word = word
     self.size = size
+    self.isRound = isRound
+    self.accent = accent
+    self.label = label
     self.action = action
   }
 
   public var body: some View {
-    Button(action: action) {
+    Button {
+      taps += 1
+      action()
+    } label: {
+      icon
+        .symbolEffect(.bounce, value: taps)
+        .contentShape(Rectangle())
+    }
+    .buttonStyle(PressScaleButtonStyle())
+    .sensoryFeedback(.impact(flexibility: .soft), trigger: taps)
+    .accessibilityLabel(label ?? "\(word) telaffuzunu dinle")
+  }
+
+  /// Butonun şekline göre simge.
+  @ViewBuilder
+  private var icon: some View {
+    if isRound {
+      IconCircle("speaker.wave.2.fill", size: size, accent: accent)
+    } else {
       Image(systemName: "speaker.wave.2.fill")
         .font(.system(size: size * 0.44, weight: .bold))
         .foregroundStyle(Palette.ink)
@@ -163,7 +209,5 @@ public struct SpeakerButton: View {
         .background(
           RoundedRectangle(cornerRadius: size * 0.35, style: .continuous).fill(Palette.surface2))
     }
-    .buttonStyle(.plain)
-    .accessibilityLabel("\(word) telaffuzunu dinle")
   }
 }

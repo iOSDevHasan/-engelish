@@ -60,7 +60,7 @@ struct UserDataKitTests {
     #expect(result.addedToNotebook.isEmpty)
   }
 
-  @Test("Seri dondurma: Çengelish+ ile bir günlük boşluk ayda iki kez affedilir")
+  @Test("Seri dondurma: Çengelish Plus ile bir günlük boşluk ayda iki kez affedilir")
   func streakFreezeLimit() {
     let store = UserDataStore(inMemory: true)
     store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
@@ -88,17 +88,19 @@ struct UserDataKitTests {
     #expect(store.hintsLeft(isPremium: true) == nil)
   }
 
-  @Test("Dışa aktarılan veri geri yüklenince profil ve defter aynı kalır")
-  func backupRoundTrip() throws {
+  @Test("Klavyeyle yazılan harfler kaydedilir, ilerlemeyi başlatır ve boş sözlükle silinir")
+  func typedLetters() {
     let store = UserDataStore(inMemory: true)
-    store.createProfile(UserProfile(nickname: "Ece", avatar: AvatarConfig(body: .pink)))
-    store.addToNotebook(wordId: "w_heron", source: "manual")
-    let data = try store.exportData()
-    store.deleteAll()
-    #expect(store.profile == nil)
-    try store.importData(data)
-    #expect(store.profile?.nickname == "Ece")
-    #expect(store.profile?.avatar.body == .pink)
-    #expect(store.notebook.map(\.wordId) == ["w_heron"])
+    store.saveRevealed(puzzleId: "a1_02", cells: ["1,1"], hintsUsed: 1)
+    store.saveTyped(puzzleId: "a1_01", letters: ["1,2": "O", "1,3": "U"])
+    store.saveTyped(puzzleId: "a1_02", letters: ["2,2": "E"])
+    #expect(store.progress(for: "a1_01").typedLetters == ["1,2": "O", "1,3": "U"])
+    #expect(store.progress(for: "a1_01").status == .inProgress)
+    #expect(store.allProgress()["a1_01"]?.typedLetters.count == 2)
+    let second = store.progress(for: "a1_02")
+    #expect(second.revealedCells == ["1,1"])
+    #expect(second.typedLetters == ["2,2": "E"])
+    store.saveTyped(puzzleId: "a1_01", letters: [:])
+    #expect(store.progress(for: "a1_01").typedLetters.isEmpty)
   }
 }

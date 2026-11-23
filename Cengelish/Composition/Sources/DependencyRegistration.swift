@@ -40,8 +40,7 @@ public enum DependencyRegistration {
 
   private static func registerKits() {
     Injector.register(
-      value: ContentStore(remote: RemoteContentFactory.make()), for: (any ContentProviding).self,
-      scope: .singleton())
+      value: ContentStore(), for: (any ContentProviding).self, scope: .singleton())
     Injector.register(
       value: UserDataStore(), for: (any UserDataStoring).self, scope: .singleton(eager: true))
     Injector.register(
@@ -51,15 +50,25 @@ public enum DependencyRegistration {
     // jarvis:register-kits
   }
 
+  /// Modül koordinatörleri tekil tutulur: kabuk yeniden çizildiğinde yeni koordinatör kurulmaz,
+  /// görünüm modellerinin tuttuğu yönlendiriciler hep aynı nesneye işaret eder.
   private static func registerModules() {
-    Injector.register(value: HomeCoordinator(), for: HomeModuleInterface.self)
-    Injector.register(value: OnboardingCoordinator(), for: OnboardingModuleInterface.self)
-    Injector.register(value: ExploreCoordinator(), for: ExploreModuleInterface.self)
-    Injector.register(value: PuzzleCoordinator(), for: PuzzleModuleInterface.self)
-    Injector.register(value: NotebookCoordinator(), for: NotebookModuleInterface.self)
-    Injector.register(value: ProfileCoordinator(), for: ProfileModuleInterface.self)
-    Injector.register(value: SettingsCoordinator(), for: SettingsModuleInterface.self)
-    Injector.register(value: PaywallCoordinator(), for: PaywallModuleInterface.self)
+    Injector.register(
+      value: HomeCoordinator(), for: HomeModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: OnboardingCoordinator(), for: OnboardingModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: ExploreCoordinator(), for: ExploreModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: PuzzleCoordinator(), for: PuzzleModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: NotebookCoordinator(), for: NotebookModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: ProfileCoordinator(), for: ProfileModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: SettingsCoordinator(), for: SettingsModuleInterface.self, scope: .singleton())
+    Injector.register(
+      value: PaywallCoordinator(), for: PaywallModuleInterface.self, scope: .singleton())
     // jarvis:register-modules
   }
 }

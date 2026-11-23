@@ -31,4 +31,10 @@ struct WordKitTests {
     #expect(bold.count == 1)
     #expect(String(text.characters).hasPrefix("“"))
   }
+
+  @Test("Aksan başlıkları Türkçedir")
+  func accentTitles() {
+    #expect(WordAccent.allCases.map(\.title) == ["Amerikan", "İngiliz"])
+    #expect(WordAccent(languageCode: "en-US") == .american)
+  }
 }

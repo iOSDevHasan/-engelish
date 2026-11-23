@@ -15,6 +15,14 @@ enum KeyMode: String, CaseIterable, Identifiable {
   var id: String { rawValue }
 }
 
+/// Cevap anahtarının neden açıldığı.
+enum AnswerKeyPurpose {
+  /// Çözerken göz atma: işaretleme ve bitirme yok, bulmacaya geri dönülür.
+  case peek
+  /// "Bitirdim" sonrası: her kelime ✓ ya da ✗ işaretlenmeden sonuçlara geçilmez.
+  case finish
+}
+
 /// Cevap anahtarı: kullanıcı kendi yazdığını anahtarla karşılaştırıp her kelimeyi işaretler.
 @MainActor
 final class AnswerKeyViewModel: ObservableObject {
@@ -23,8 +31,12 @@ final class AnswerKeyViewModel: ObservableObject {
 
   @Published var mode: KeyMode = .compare
   @Published private(set) var marks: [String: Bool]
+  /// İşaretlenmemiş kelime varken "Sonuçları gör"e basılınca artar (uyarı ve kaydırma için).
+  @Published private(set) var incompleteAttempt = 0
   /// Bulmaca durumu.
   let session: PuzzleSession
+  /// Ekranın açılış amacı.
+  let purpose: AnswerKeyPurpose
   /// Kullanıcının çizimi (ölçek 1).
   let drawing: PKDrawing
   private let coordinator: PuzzleCoordinator
@@ -34,10 +46,11 @@ final class AnswerKeyViewModel: ObservableObject {
   // MARK: - Init
 
   init(
-    session: PuzzleSession, coordinator: PuzzleCoordinator, userData: any UserDataStoring,
-    entitlements: any EntitlementProviding
+    session: PuzzleSession, purpose: AnswerKeyPurpose = .finish, coordinator: PuzzleCoordinator,
+    userData: any UserDataStoring, entitlements: any EntitlementProviding
   ) {
     self.session = session
+    self.purpose = purpose
     self.coordinator = coordinator
     self.userData = userData
     self.entitlements = entitlements
@@ -52,16 +65,13 @@ final class AnswerKeyViewModel: ObservableObject {
     marks[entry.id] = marks[entry.id] == correct ? nil : correct
   }
 
-  /// İşaretlenmemiş kelimeleri doğru sayar.
-  func markRestCorrect() {
-    for entry in session.puzzle.entries where marks[entry.id] == nil {
-      marks[entry.id] = true
-    }
-  }
-
-  /// Sonuçları kaydedip bitiş ekranına geçer.
+  /// Sonuçları kaydedip bitiş ekranına geçer; işaretlenmemiş kelime varsa geçmez, uyarır.
   func finish() {
-    markRestCorrect()
+    guard purpose == .finish else { return back() }
+    guard canFinish else {
+      incompleteAttempt += 1
+      return
+    }
     let wordIds = Dictionary(
       uniqueKeysWithValues: session.puzzle.entries.map { ($0.id, $0.wordId) })
     let result = userData.finish(
@@ -78,7 +88,18 @@ final class AnswerKeyViewModel: ObservableObject {
   // MARK: - Derived
 
   /// İşaretlenen kelime sayısı.
-  var markedCount: Int { marks.count }
+  var markedCount: Int { session.puzzle.entries.filter { marks[$0.id] != nil }.count }
+
+  /// Henüz ✓ ya da ✗ verilmemiş kelime sayısı.
+  var unmarkedCount: Int { session.puzzle.entries.count - markedCount }
+
+  /// Her kelime işaretlendi mi (sonuçlara geçilebilir mi).
+  var canFinish: Bool { purpose == .finish && unmarkedCount == 0 }
+
+  /// İlk işaretlenmemiş kelimenin kimliği (uyarıda oraya kaydırılır).
+  var firstUnmarkedId: String? {
+    session.puzzle.entries.first { marks[$0.id] == nil }?.id
+  }
 
   /// "{x} doğru · {y} yanlış" özeti.
   var summaryText: String { MarkSummary.text(marks) }
@@ -90,13 +111,20 @@ final class AnswerKeyViewModel: ObservableObject {
     var result: [GridPoint: (Character, GridLetterStyle)] = [:]
     for point in layout.letterCells {
       guard let char = layout.answer(at: point) else { continue }
-      result[point] = (char, mode == .key ? .revealed : .key)
+      // Karşılaştırmada ipucuyla açılan kutular büyük harfle (kullanıcının harfi gibi) görünür.
+      let isRevealed = session.revealed.contains(point)
+      result[point] = (char, mode == .key || isRevealed ? .revealed : .key)
     }
     return result
   }
 
   /// Kullanıcının çizimi gösterilsin mi.
   var showsDrawing: Bool { mode != .key }
+
+  /// Izgarada gösterilecek klavye harfleri ("Anahtar" görünümünde gizli).
+  var typedLetters: [GridPoint: Character] {
+    mode == .key ? [:] : session.typed.filter { !session.revealed.contains($0.key) }
+  }
 
   /// Çizimi verilen boyutta resme çevirir.
   func drawingImage(scale: CGFloat) -> UIImage {

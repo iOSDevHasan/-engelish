@@ -26,18 +26,62 @@ struct PuzzleView: View {
       .onChange(of: mode, initial: true) { _, newMode in
         viewModel.setInlineFocus(newMode == .fold)
       }
+      .background {
+        KeyboardInput(
+          isActive: viewModel.wantsKeyboard && !viewModel.isFocusPresented,
+          request: viewModel.keyboardRequest, onInsert: viewModel.typeText,
+          onDelete: viewModel.deleteBackward, onReturn: viewModel.keyboardReturn,
+          onFocusChange: viewModel.keyboardFocusChanged
+        )
+        .frame(width: 1, height: 1)
+        .opacity(0)
+        .accessibilityHidden(true)
+      }
       .screenBackground()
       .task { await viewModel.load() }
       .onDisappear(perform: viewModel.pause)
-      .sheet(isPresented: hintBinding) {
+      .appBottomSheet(isPresented: hintBinding) {
         HintSheet(viewModel: viewModel)
       }
-      .sheet(isPresented: $viewModel.isThemeSheetPresented) {
+      .appBottomSheet(isPresented: $viewModel.isThemeSheetPresented) {
         ThemeSheet(viewModel: viewModel, theme: theme)
       }
       .fullScreenCover(isPresented: $viewModel.isFocusPresented) {
         FocusView(viewModel: viewModel, theme: theme, penColor: penColor)
       }
+      .overlay(alignment: .bottom) { finishNudge }
+      .animation(Motion.snappy, value: viewModel.finishNudge)
+      .sensoryFeedback(.warning, trigger: viewModel.finishNudge?.serial) { _, new in new != nil }
+      .task(id: viewModel.finishNudge?.serial) {
+        guard let serial = viewModel.finishNudge?.serial else { return }
+        try? await Task.sleep(for: .seconds(2.6))
+        viewModel.dismissFinishNudge(serial: serial)
+      }
+  }
+
+  /// Boş kutu varken "Bitirdim"e basılınca alttan çıkan uyarı balonu.
+  @ViewBuilder private var finishNudge: some View {
+    if let nudge = viewModel.finishNudge {
+      Label(nudge.message, systemImage: "square.dashed")
+        .font(AppFont.caption.weight(.heavy))
+        .foregroundStyle(Palette.ink)
+        .lineLimit(2)
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(
+          Capsule().fill(Palette.surface)
+            .overlay(Capsule().strokeBorder(Palette.cardBorder, lineWidth: 1))
+            .shadow(color: .black.opacity(0.14), radius: 12, y: 6)
+        )
+        .padding(.horizontal, Metrics.gutter)
+        // Araç çubuğu ve alt butonların üstünde durur; hiçbirini örtmez.
+        .padding(.bottom, 168)
+        .transition(.move(edge: .bottom).combined(with: .opacity))
+        .id(nudge.serial)
+        .accessibilityAddTraits(.isStaticText)
+        .allowsHitTesting(false)
+    }
   }
 
   // MARK: - Layouts
@@ -66,17 +110,28 @@ struct PuzzleView: View {
   }
 
   /// Telefon: üst bar, ipucu çubuğu, ızgara, araç çubuğu ve alt butonlar.
+  ///
+  /// Klavye açıkken açıklama ve alt butonlar gizlenir; ızgara kalan alana sığdırılır.
   private func phone(_ layout: CrosswordLayout) -> some View {
-    VStack(spacing: 10) {
+    let keyboardUp = viewModel.isKeyboardShown
+    return VStack(spacing: 10) {
       header
       VStack(spacing: 10) {
         ClueBar(entry: viewModel.selected, onStep: viewModel.step)
         canvas(layout)
-        hint("Parmağınla veya Apple Pencil ile yaz · iki parmakla yakınlaştır")
-        toolbar(compact: false)
+        if viewModel.isCompleted {
+          CompletedNote(correct: viewModel.correctCount, total: layout.puzzle.entries.count)
+        } else {
+          if !keyboardUp {
+            hint(hintText)
+          }
+          toolbar(compact: false)
+        }
       }
       .padding(.horizontal, 12)
-      actions
+      if !keyboardUp, !viewModel.isCompleted {
+        actions
+      }
     }
   }
 
@@ -89,7 +144,15 @@ struct PuzzleView: View {
           ClueBar(entry: viewModel.selected, onStep: viewModel.step)
             .frame(maxWidth: 540)
           canvas(layout)
-          hint("Apple Pencil ile yaz · parmakla kaydır ve yakınlaştır")
+          if viewModel.isCompleted {
+            CompletedNote(correct: viewModel.correctCount, total: layout.puzzle.entries.count)
+              .frame(maxWidth: 540)
+          } else {
+            hint(
+              viewModel.tool == .keyboard
+                ? "Kutuya dokun ve klavyeyle yaz · tekrar dokununca yön değişir"
+                : "Apple Pencil ile yaz · parmakla kaydır ve yakınlaştır")
+          }
         }
         CluePanel(
           layout: layout, selected: viewModel.selected, revealed: viewModel.revealed,
@@ -116,13 +179,19 @@ struct PuzzleView: View {
         }
         ClueBar(entry: viewModel.selected, onStep: viewModel.step)
         canvas(layout)
-        toolbar(compact: true, showsFocus: false)
+        if viewModel.isCompleted {
+          CompletedNote(correct: viewModel.correctCount, total: layout.puzzle.entries.count)
+        } else {
+          toolbar(compact: true, showsFocus: false)
+        }
       }
       .padding(.horizontal, 18)
       .padding(.top, 4)
-      Rectangle().fill(Palette.line).frame(width: 1).padding(.vertical, 12)
-      FoldFocusPanel(viewModel: viewModel, theme: theme, penColor: penColor)
-        .padding(.horizontal, 18)
+      if !viewModel.isCompleted {
+        Rectangle().fill(Palette.line).frame(width: 1).padding(.vertical, 12)
+        FoldFocusPanel(viewModel: viewModel, theme: theme, penColor: penColor)
+          .padding(.horizontal, 18)
+      }
     }
   }
 
@@ -151,7 +220,9 @@ struct PuzzleView: View {
         backButton
         tabletTitle
         Spacer(minLength: 8)
-        toolbar(compact: true).fixedSize()
+        if !viewModel.isCompleted {
+          toolbar(compact: true).fixedSize()
+        }
         tabletActions
       }
       VStack(spacing: 10) {
@@ -161,7 +232,9 @@ struct PuzzleView: View {
           Spacer(minLength: 8)
           tabletActions
         }
-        toolbar(compact: true).fixedSize()
+        if !viewModel.isCompleted {
+          toolbar(compact: true).fixedSize()
+        }
       }
     }
   }
@@ -179,12 +252,16 @@ struct PuzzleView: View {
     HStack(spacing: 12) {
       TimerPill(text: viewModel.timerText)
       themeButton
-      Button(action: viewModel.openAnswerKey) {
-        Label("Anahtar", systemImage: "key.fill")
+      if !viewModel.isCompleted {
+        Button(action: viewModel.openAnswerKey) {
+          Label("Anahtar", systemImage: "key.fill")
+        }
+        .buttonStyle(ChunkyButtonStyle(.secondary, fullWidth: false, compact: true))
+        Button("Bitirdim", action: viewModel.finishTapped)
+          .buttonStyle(ChunkyButtonStyle(.primary, fullWidth: false, compact: true))
+          .opacity(viewModel.canFinish ? 1 : 0.5)
+          .accessibilityHint(viewModel.canFinish ? "" : "Önce tüm kutuları doldur")
       }
-      .buttonStyle(ChunkyButtonStyle(.secondary, fullWidth: false, compact: true))
-      Button("Bitirdim", action: viewModel.openAnswerKey)
-        .buttonStyle(ChunkyButtonStyle(.primary, fullWidth: false, compact: true))
     }
     .fixedSize()
   }
@@ -206,8 +283,16 @@ struct PuzzleView: View {
   }
 
   private func hint(_ text: String) -> some View {
-    Label(text, systemImage: "pencil")
+    Label(text, systemImage: viewModel.tool == .keyboard ? "keyboard" : "pencil")
       .font(AppFont.tiny).foregroundStyle(Palette.muted)
+      .contentTransition(.opacity)
+  }
+
+  /// Telefondaki açıklama metni (araca göre).
+  private var hintText: String {
+    viewModel.tool == .keyboard
+      ? "Kutuya dokun ve klavyeyle yaz · tekrar dokununca yön değişir"
+      : "Parmağınla veya Apple Pencil ile yaz · iki parmakla yakınlaştır"
   }
 
   private func canvas(_ layout: CrosswordLayout) -> some View {
@@ -215,15 +300,18 @@ struct PuzzleView: View {
       drawing: viewModel.drawing,
       drawingRevision: viewModel.drawingRevision,
       contentSize: CanvasMetrics.grid.size(rows: layout.rows, columns: layout.columns),
+      inkRects: viewModel.inkRects,
       underlay: { scale in
         AnyView(
           PuzzleGridView(
             layout: layout, theme: theme, cellSize: CanvasMetrics.gridCell * scale,
             highlighted: viewModel.highlighted, active: viewModel.activeCell,
             activeClue: viewModel.activeClue, letters: viewModel.revealedLetters,
+            typed: viewModel.typed, typedInk: penColor,
             geometry: CanvasMetrics.grid.scaled(by: scale)))
       },
-      tool: viewModel.tool,
+      // Bitmiş bulmacada çizim kapalıdır; dokunuş yalnızca kelime seçer.
+      tool: viewModel.isCompleted ? .keyboard : viewModel.tool,
       penColor: UIColor(penColor),
       pencilColor: UIColor(theme.pencil),
       widthScale: viewModel.settings.penWidth,
@@ -234,10 +322,11 @@ struct PuzzleView: View {
       onChange: viewModel.drawingChanged,
       onTap: viewModel.tap(at:),
       onStroke: viewModel.strokeEnded(at:),
-      onViewport: { [zoom = viewModel.zoom] in zoom.update($0) }
+      onViewport: { [zoom = viewModel.zoom] in zoom.update($0) },
+      onErase: viewModel.erase(at:)
     )
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .accessibilityLabel("Bulmaca ızgarası. Kutulara parmakla ya da kalemle yaz.")
+    .accessibilityLabel(canvasLabel)
     .overlay {
       ZoomOverlay(
         zoom: viewModel.zoom, puzzle: layout.puzzle, theme: theme,
@@ -250,7 +339,8 @@ struct PuzzleView: View {
     return PuzzleToolbar(
       tool: $viewModel.tool, hintsLeft: viewModel.hintsLeft,
       leftHanded: viewModel.settings.leftHanded,
-      onUndo: bridge.undo, onRedo: bridge.redo,
+      canUndo: viewModel.canUndo, canRedo: viewModel.canRedo,
+      onUndo: viewModel.undo, onRedo: viewModel.redo,
       onFocus: onFocus,
       onHint: { viewModel.isHintSheetPresented = true }, onClear: viewModel.clearSelectedWord,
       compact: compact)
@@ -262,13 +352,24 @@ struct PuzzleView: View {
         Label("Cevap anahtarı", systemImage: "key.fill")
       }
       .buttonStyle(.chunkySecondary)
-      Button("Bitirdim", action: viewModel.openAnswerKey).buttonStyle(.chunky)
+      Button("Bitirdim", action: viewModel.finishTapped)
+        .buttonStyle(.chunky)
+        .opacity(viewModel.canFinish ? 1 : 0.5)
+        .accessibilityHint(viewModel.canFinish ? "" : "Önce tüm kutuları doldur")
     }
     .padding(.horizontal, Metrics.gutter)
     .frame(maxWidth: 640)
   }
 
   // MARK: - State
+
+  /// Izgaranın erişilebilirlik etiketi.
+  private var canvasLabel: String {
+    if viewModel.isCompleted { return "Bulmaca ızgarası. Doğru cevaplar gösteriliyor." }
+    return viewModel.tool == .keyboard
+      ? "Bulmaca ızgarası. Kutuya dokun ve klavyeyle yaz."
+      : "Bulmaca ızgarası. Kutulara parmakla ya da kalemle yaz."
+  }
 
   private var mode: PuzzleLayoutMode {
     PuzzleLayoutMode.resolve(size: containerSize, isRegularWidth: sizeClass == .regular)
@@ -294,6 +395,37 @@ struct PuzzleView: View {
   }
 }
 
+/// Bitmiş bulmacada araç çubuğunun yerinde duran bilgi kartı.
+struct CompletedNote: View {
+  /// Doğru işaretlenen kelime sayısı.
+  let correct: Int
+  /// Toplam kelime sayısı.
+  let total: Int
+
+  var body: some View {
+    HStack(spacing: 12) {
+      Image(systemName: "checkmark.seal.fill")
+        .font(.system(size: 26, weight: .semibold))
+        .foregroundStyle(Palette.good)
+      VStack(alignment: .leading, spacing: 2) {
+        Text("Bu bulmacayı bitirdin")
+          .font(AppFont.headline).foregroundStyle(Palette.ink)
+        Text("Doğru cevaplar gösteriliyor · \(correct)/\(total) kelime doğru")
+          .font(AppFont.caption).foregroundStyle(Palette.muted)
+      }
+      Spacer(minLength: 0)
+    }
+    .padding(14)
+    .frame(maxWidth: 640)
+    .background(
+      RoundedRectangle(cornerRadius: 22, style: .continuous)
+        .fill(Palette.surface)
+        .shadow(color: Palette.cardShadow, radius: 0, y: 2)
+    )
+    .accessibilityElement(children: .combine)
+  }
+}
+
 /// Sayaç kapsülü.
 struct TimerPill: View {
   let text: String
@@ -310,9 +442,12 @@ struct TimerPill: View {
 }
 
 /// Seçili kelimenin ipucu, yönü ve önceki / sonraki okları.
+///
+/// Kelime değişince ipucu yumuşakça yer değiştirir (Hareketi Azalt'ta sadece saydamlık).
 struct ClueBar: View {
   let entry: PuzzleEntry?
   let onStep: (Int) -> Void
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     HStack(spacing: 8) {
@@ -322,17 +457,26 @@ struct ClueBar: View {
         arrow("chevron.left")
       }
       .accessibilityLabel("Önceki kelime")
-      VStack(spacing: 2) {
-        HStack(spacing: 6) {
-          Text(entry?.dir == .down ? "↓" : "→").foregroundStyle(Palette.clueBarArrow)
-          Text(entry?.clue ?? "").lineLimit(1).minimumScaleFactor(0.7)
+      ZStack {
+        VStack(spacing: 2) {
+          HStack(spacing: 6) {
+            Text(entry?.dir == .down ? "↓" : "→").foregroundStyle(Palette.clueBarArrow)
+            Text(entry?.clue ?? "").lineLimit(1).minimumScaleFactor(0.7)
+          }
+          .font(AppFont.headline)
+          Text("\(entry?.answer.count ?? 0) harf · \(entry?.dir.title ?? "")")
+            .font(AppFont.tiny)
+            .opacity(0.8)
         }
-        .font(AppFont.headline)
-        Text("\(entry?.answer.count ?? 0) harf · \(entry?.dir.title ?? "")")
-          .font(AppFont.tiny)
-          .opacity(0.8)
+        .id(entry?.id)
+        .transition(
+          reduceMotion
+            ? AnyTransition.opacity
+            : AnyTransition(.blurReplace).combined(with: .scale(scale: 0.92)))
       }
       .frame(maxWidth: .infinity)
+      .clipped()
+      .animation(reduceMotion ? .easeOut(duration: 0.15) : Motion.snappy, value: entry?.id)
       Button {
         onStep(1)
       } label: {
@@ -358,6 +502,9 @@ struct PuzzleToolbar: View {
   @Binding var tool: DrawingTool
   let hintsLeft: Int?
   let leftHanded: Bool
+  /// Geri al / yinele butonları etkin mi.
+  var canUndo = true
+  var canRedo = true
   let onUndo: () -> Void
   let onRedo: () -> Void
   /// Odak modu eylemi; `nil` ise buton gösterilmez.
@@ -373,9 +520,10 @@ struct PuzzleToolbar: View {
         toolButton(.pen, "pencil.tip", "Kalem")
         toolButton(.pencil, "pencil", "Kurşun")
         toolButton(.eraser, "eraser", "Silgi")
+        toolButton(.keyboard, "keyboard", "Klavye")
         divider
-        action("arrow.uturn.backward", "Geri", onUndo)
-        action("arrow.uturn.forward", "İleri", onRedo)
+        action("arrow.uturn.backward", "Geri", onUndo).disabled(!canUndo)
+        action("arrow.uturn.forward", "İleri", onRedo).disabled(!canRedo)
         divider
         if let onFocus {
           action("viewfinder", "Odak", onFocus)
@@ -390,8 +538,13 @@ struct PuzzleToolbar: View {
     }
     .padding(compact ? 5 : 6)
     .frame(maxWidth: compact ? nil : 640)
-    .background(RoundedRectangle(cornerRadius: 22, style: .continuous).fill(Palette.surface))
-    .shadow(color: Palette.cardShadow, radius: 0, y: 2)
+    // Gölge yalnızca zemine: içerikteki ikon ve yazılar çift görünmesin.
+    .background(
+      RoundedRectangle(cornerRadius: 22, style: .continuous)
+        .fill(Palette.surface)
+        .shadow(color: Palette.cardShadow, radius: 0, y: 2)
+    )
+    .sensoryFeedback(.selection, trigger: tool)
     .contextMenu {
       Button("Seçili kelimeyi temizle", systemImage: "trash", role: .destructive, action: onClear)
     }
@@ -403,11 +556,11 @@ struct PuzzleToolbar: View {
 
   private func toolButton(_ value: DrawingTool, _ icon: String, _ title: String) -> some View {
     Button {
-      tool = value
+      withAnimation(Motion.snappy) { tool = value }
     } label: {
       item(icon, title, isOn: tool == value)
     }
-    .buttonStyle(.plain)
+    .buttonStyle(PressScaleButtonStyle())
     .accessibilityLabel(title)
     .accessibilityAddTraits(tool == value ? .isSelected : [])
   }
@@ -427,7 +580,7 @@ struct PuzzleToolbar: View {
           }
         }
     }
-    .buttonStyle(.plain)
+    .buttonStyle(ToolbarActionStyle())
     .accessibilityLabel(title)
   }
 
@@ -450,5 +603,17 @@ struct PuzzleToolbar: View {
       .background(shape.fill(isOn ? Palette.buttonFill : .clear))
       .contentShape(shape)
     }
+  }
+}
+
+/// Araç çubuğu eylem butonu: basınca hafif küçülür, kullanılamazken soluk görünür.
+private struct ToolbarActionStyle: ButtonStyle {
+  @Environment(\.isEnabled) private var isEnabled
+
+  func makeBody(configuration: Configuration) -> some View {
+    configuration.label
+      .opacity(isEnabled ? 1 : 0.35)
+      .scaleEffect(configuration.isPressed ? 0.92 : 1)
+      .animation(Motion.snappy, value: configuration.isPressed)
   }
 }

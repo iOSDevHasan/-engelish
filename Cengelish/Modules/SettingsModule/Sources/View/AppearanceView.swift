@@ -17,11 +17,11 @@ struct AppearanceView: View {
           HStack(spacing: 10) {
             ForEach(Appearance.allCases, id: \.self) { option in
               Button {
-                viewModel.update { $0.appearance = option }
+                withAnimation(Motion.snappy) { viewModel.update { $0.appearance = option } }
               } label: {
                 AppearanceTile(option: option, isOn: viewModel.settings.appearance == option)
               }
-              .buttonStyle(.plain)
+              .buttonStyle(PressScaleButtonStyle())
             }
           }
           Text(
@@ -37,8 +37,10 @@ struct AppearanceView: View {
               VStack(alignment: .leading, spacing: 3) {
                 Eyebrow("Bulmaca teması")
                 Text(currentTheme.name).font(AppFont.headline).foregroundStyle(Palette.ink)
-                Text("6 tema · kalem rengi ve kalınlığı").font(AppFont.caption)
-                  .foregroundStyle(Palette.muted)
+                Text("\(PuzzleTheme.all.count) tema · kalem rengi ve kalınlığı").font(
+                  AppFont.caption
+                )
+                .foregroundStyle(Palette.muted)
               }
               Spacer()
               Image(systemName: "chevron.right").foregroundStyle(Palette.lineStrong)
@@ -47,18 +49,18 @@ struct AppearanceView: View {
           }
           .buttonStyle(.plain)
           SettingsGroup {
-            SettingsRow("moon", "Koyu modda Gece teması") {
+            SettingInfoRow("moon", "Koyu modda Gece teması", info: SettingInfo.autoNight) {
               Toggle(
-                "",
+                "Koyu modda Gece teması",
                 isOn: Binding(
                   get: { viewModel.settings.autoNightTheme },
                   set: { on in viewModel.update { $0.autoNightTheme = on } })
               )
               .labelsHidden().tint(Palette.good)
             }
-            SettingsRow("eye", "Yüksek kontrast ızgara") {
+            SettingInfoRow("eye", "Yüksek kontrast ızgara", info: SettingInfo.highContrast) {
               Toggle(
-                "",
+                "Yüksek kontrast ızgara",
                 isOn: Binding(
                   get: { viewModel.settings.highContrast },
                   set: { on in viewModel.update { $0.highContrast = on } })
@@ -68,9 +70,11 @@ struct AppearanceView: View {
           }
         }
         .padding(.horizontal, Metrics.gutter)
+        .padding(.bottom, 30)
         .frame(maxWidth: 640)
         .frame(maxWidth: .infinity)
       }
+      .scrollIndicators(.hidden)
     }
     .screenBackground()
   }

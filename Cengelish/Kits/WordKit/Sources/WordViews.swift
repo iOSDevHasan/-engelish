@@ -17,9 +17,7 @@ public struct WordRow<Trailing: View>: View {
 
   public var body: some View {
     HStack(alignment: .top, spacing: 12) {
-      Button(action: onSpeak) { IconCircle("speaker.wave.2.fill", size: 36) }
-        .buttonStyle(.plain)
-        .accessibilityLabel("\(word.en) telaffuzunu dinle")
+      SpeakerButton(word: word.en, size: 36, isRound: true, action: onSpeak)
       VStack(alignment: .leading, spacing: 3) {
         HStack(spacing: 6) {
           Text(word.en).font(AppFont.bodyBold).foregroundStyle(Palette.ink)
@@ -31,7 +29,8 @@ public struct WordRow<Trailing: View>: View {
           .foregroundStyle(Palette.muted)
           .fixedSize(horizontal: false, vertical: true)
       }
-      Spacer(minLength: 4)
+      // Metin sütunu kalan genişliğin tamamını alır; örnek cümle gereksiz yere kırılmaz.
+      .frame(maxWidth: .infinity, alignment: .leading)
       trailing
     }
     .padding(.vertical, 10)
@@ -47,6 +46,10 @@ extension WordRow where Trailing == EmptyView {
 
 /// Alttan açılan kelime detay paneli: aksan seçimi, anlam, örnek cümle ve isteğe bağlı defter
 /// bölümü.
+///
+/// Düz panel içeriğidir: kendi `ScrollView`'unu ya da panel ayarını içermez. Sunan taraf
+/// DesignKit'in `.appBottomSheet(item:)` / `.appBottomSheet(isPresented:)` paneliyle açar; panel
+/// içeriğe göre boylanır ve gerekirse kendisi kaydırır.
 public struct WordDetailSheet: View {
 
   // MARK: - Properties
@@ -59,7 +62,6 @@ public struct WordDetailSheet: View {
   private let onSpeakAccent: ((WordAccent) -> Void)?
   private let notebook: WordNotebookStatus?
   @State private var accent: WordAccent
-  @State private var contentHeight: CGFloat = 460
 
   // MARK: - Init
 
@@ -90,58 +92,68 @@ public struct WordDetailSheet: View {
   // MARK: - Body
 
   public var body: some View {
-    VStack(alignment: .leading, spacing: 14) {
+    VStack(alignment: .leading, spacing: 16) {
       header
-      SegmentBar(
-        WordAccent.allCases.map { ($0, $0.title) }, selection: $accent, compact: true)
-      if notebook == nil {
-        HStack(spacing: 6) {
-          Pill(word.level.rawValue, tone: .accent)
-          if let boxLabel { Pill(boxLabel) }
-        }
-      }
-      VStack(alignment: .leading, spacing: 4) {
-        Eyebrow("Anlamı")
-        Text(word.meaning).font(AppFont.bodyBold).foregroundStyle(Palette.ink)
-          .fixedSize(horizontal: false, vertical: true)
-      }
+      accentRow
+      meaningSection
       exampleCard
       if let notebook { notebookSection(notebook) }
       if let primaryTitle, let onPrimary {
         Button(primaryTitle, action: onPrimary).buttonStyle(.chunky)
       }
     }
-    .padding(.horizontal, 20)
-    .padding(.top, 24)
+    .padding(.horizontal, Metrics.gutter)
+    .padding(.top, 20)
     .padding(.bottom, 16)
-    .onGeometryChange(for: CGFloat.self, of: \.size.height) { contentHeight = $0 }
-    .frame(maxHeight: .infinity, alignment: .top)
-    .presentationDetents([.height(contentHeight)])
-    .presentationDragIndicator(.visible)
-    .presentationBackground(Palette.surface)
+    .frame(maxWidth: 560)
+    .frame(maxWidth: .infinity)
   }
 
   // MARK: - Sections
 
   /// Kelime, IPA ve telaffuz butonu.
   private var header: some View {
-    HStack(alignment: .top) {
-      VStack(alignment: .leading, spacing: 6) {
-        Text(word.en).font(AppFont.rounded(36, weight: .black)).foregroundStyle(Palette.ink)
+    HStack(alignment: .center, spacing: 12) {
+      VStack(alignment: .leading, spacing: 4) {
+        Text(word.en).font(AppFont.rounded(34, weight: .black)).foregroundStyle(Palette.ink)
           .lineLimit(1).minimumScaleFactor(0.6)
         Text("\(word.ipa(british: accent.isBritish)) · \(word.posTitle)")
           .font(AppFont.caption).foregroundStyle(Palette.muted)
+          .fixedSize(horizontal: false, vertical: true)
+          .contentTransition(.opacity)
+          .animation(Motion.snappy, value: accent)
       }
-      Spacer()
-      Button(action: speak) { IconCircle("speaker.wave.2.fill", size: 44, accent: true) }
-        .buttonStyle(.plain)
-        .accessibilityLabel("Telaffuzu dinle (\(accent.title))")
+      Spacer(minLength: 8)
+      SpeakerButton(
+        word: word.en, size: 48, isRound: true, accent: true,
+        label: "Telaffuzu dinle (\(accent.title))", action: speak)
+    }
+  }
+
+  /// Aksan seçici ve seviye / kutu etiketleri aynı satırda.
+  private var accentRow: some View {
+    HStack(spacing: 8) {
+      SegmentBar(
+        WordAccent.allCases.map { ($0, $0.title) }, selection: $accent, compact: true)
+      Spacer(minLength: 4)
+      Pill(word.level.rawValue, tone: .accent)
+      if notebook == nil, let boxLabel { Pill(boxLabel) }
+    }
+  }
+
+  /// Türkçe anlam.
+  private var meaningSection: some View {
+    VStack(alignment: .leading, spacing: 4) {
+      Eyebrow("Anlamı")
+      Text(word.meaning).font(AppFont.headline).foregroundStyle(Palette.ink)
+        .fixedSize(horizontal: false, vertical: true)
     }
   }
 
   /// Vurgulu örnek cümle ve Türkçesi.
   private var exampleCard: some View {
-    VStack(alignment: .leading, spacing: 4) {
+    VStack(alignment: .leading, spacing: 6) {
+      Eyebrow("Örnek", color: Palette.muted)
       Text(Self.highlighted(word.example, word: word.en))
         .font(AppFont.body).foregroundStyle(Palette.ink)
         .fixedSize(horizontal: false, vertical: true)
@@ -151,31 +163,44 @@ public struct WordDetailSheet: View {
       }
     }
     .frame(maxWidth: .infinity, alignment: .leading)
-    .padding(.vertical, 12)
-    .padding(.horizontal, 14)
-    .background(
-      RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous).fill(Palette.surface2)
-    )
+    .padding(.vertical, 14)
+    .padding(.leading, 18)
+    .padding(.trailing, 14)
+    .background(Palette.surface)
     .overlay(alignment: .leading) { Rectangle().fill(Palette.accent).frame(width: 4) }
     .clipShape(RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
+        .strokeBorder(Palette.cardBorder, lineWidth: 1)
+    )
   }
 
   /// İlk görüldüğü yer, kutu ve defter eylemleri.
   private func notebookSection(_ notebook: WordNotebookStatus) -> some View {
     VStack(spacing: 12) {
-      HStack(alignment: .firstTextBaseline, spacing: 8) {
-        Text("İlk görüldüğü: \(notebook.firstSeen)").lineLimit(2)
+      HStack(alignment: .center, spacing: 10) {
+        VStack(alignment: .leading, spacing: 2) {
+          Text("İlk görüldüğü").font(AppFont.tiny).foregroundStyle(Palette.muted)
+          Text(notebook.firstSeen).font(AppFont.caption).foregroundStyle(Palette.ink)
+            .fixedSize(horizontal: false, vertical: true)
+        }
         Spacer(minLength: 4)
-        Text(notebook.learned ? "Öğrenildi" : "Kutu \(notebook.box)/\(notebook.maxBox)")
-          .fixedSize()
+        VStack(alignment: .trailing, spacing: 4) {
+          Text(notebook.learned ? "Öğrenildi" : "Kutu \(notebook.box)/\(notebook.maxBox)")
+            .font(AppFont.caption)
+            .foregroundStyle(notebook.learned ? Palette.good : Palette.muted)
+            .fixedSize()
+          BoxDots(box: notebook.learned ? notebook.maxBox : notebook.box, maxBox: notebook.maxBox)
+        }
       }
-      .font(AppFont.caption)
-      .foregroundStyle(Palette.muted)
+      .card(padding: 14)
       HStack(spacing: 10) {
-        Button("Tekrarda kalsın", action: notebook.onKeepReviewing)
-          .buttonStyle(.chunkySecondary)
+        Button(action: notebook.onKeepReviewing) {
+          Text("Tekrarda kalsın").lineLimit(1).minimumScaleFactor(0.8)
+        }
+        .buttonStyle(.chunkySecondary)
         Button(action: notebook.onLearned) {
-          Label("Öğrendim", systemImage: "checkmark")
+          Label("Öğrendim", systemImage: "checkmark").lineLimit(1).minimumScaleFactor(0.8)
         }
         .buttonStyle(.chunky)
       }
@@ -184,10 +209,10 @@ public struct WordDetailSheet: View {
           Label("Defterden çıkar", systemImage: "trash")
             .font(AppFont.caption)
             .foregroundStyle(Palette.bad)
+            .frame(maxWidth: .infinity, minHeight: 36)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .frame(maxWidth: .infinity)
-        .padding(.top, 2)
       }
     }
   }
@@ -206,7 +231,7 @@ public struct WordDetailSheet: View {
   // MARK: - Helpers
 
   /// Örnek cümleyi tırnak içine alır ve kelimeyi kalın yapar.
-  static func highlighted(_ sentence: String, word: String) -> AttributedString {
+  nonisolated static func highlighted(_ sentence: String, word: String) -> AttributedString {
     var text = AttributedString("“\(sentence)”")
     if let range = text.range(of: word, options: .caseInsensitive) {
       text[range].inlinePresentationIntent = .stronglyEmphasized

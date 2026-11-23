@@ -128,9 +128,14 @@ public struct NavHeader<Trailing: View>: View {
         .buttonStyle(.plain)
         .accessibilityLabel(leadingSymbol == "xmark" ? "Kapat" : "Geri")
       Spacer()
-      Text(title).font(AppFont.section).foregroundStyle(Palette.ink).lineLimit(1)
-      Spacer()
       trailing.frame(minWidth: 40, alignment: .trailing)
+    }
+    // Başlık iki yandaki butonlardan bağımsız olarak ekranın ortasında durur.
+    .overlay {
+      Text(title).font(AppFont.section).foregroundStyle(Palette.ink).lineLimit(1)
+        .minimumScaleFactor(0.85)
+        .padding(.horizontal, 60)
+        .accessibilityAddTraits(.isHeader)
     }
     .padding(.horizontal, Metrics.gutter)
     .padding(.top, 4)
@@ -172,6 +177,10 @@ public struct SettingsGroup<Content: View>: View {
         .background(
           RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
             .fill(Palette.surface)
+            .overlay(
+              RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
+                .strokeBorder(Palette.cardBorder, lineWidth: 1)
+            )
             .shadow(color: Palette.cardShadow, radius: 0, y: 2)
         )
     }

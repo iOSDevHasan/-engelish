@@ -2,9 +2,10 @@ import Combine
 import DesignKit
 import Foundation
 import PurchaseKit
+import UIKit
 import UserDataKit
 
-/// Profil ekranlarının ortak durumu.
+/// Profil ve rozet ekranlarının ortak durumu.
 @MainActor
 final class ProfileViewModel: ObservableObject {
 
@@ -12,45 +13,46 @@ final class ProfileViewModel: ObservableObject {
 
   /// Takma ad karakter sınırı.
   static let nicknameLimit = 16
-  /// Vitrindeki en fazla rozet.
-  static let showcaseLimit = 3
-  /// Çengelish+ ile ayda kullanılabilen seri dondurma hakkı.
-  static let monthlyFreezeAllowance = StreakRules.monthlyFreezes
 
   @Published private(set) var profile = UserProfile(nickname: "", avatar: AvatarConfig())
   @Published private(set) var stats = UserStats()
   @Published private(set) var badges: [BadgeKind: Date] = [:]
   @Published private(set) var snapshot = AchievementSnapshot(stats: UserStats())
   @Published private(set) var isPremium = false
-  @Published private(set) var iCloudOn = false
-  @Published private(set) var iCloudAvailable = false
-  @Published private(set) var lastBackupAt: Date?
-  /// Takvimde gösterilen ay (ayın herhangi bir günü).
-  @Published private(set) var displayedMonth: Date
-  @Published var draft = UserProfile(nickname: "", avatar: AvatarConfig())
+  /// Kayıtlı profil fotoğrafı; yoksa avatar maskottur.
+  @Published private(set) var photo: UIImage?
+  /// Düzenleme panelindeki takma ad taslağı.
+  @Published var draftNickname = ""
+  /// Düzenleme panelindeki fotoğraf taslağı (saklanmaya hazır JPEG).
+  @Published private(set) var draftPhotoData: Data?
+  /// Düzenleme panelindeki fotoğraf önizlemesi.
+  @Published private(set) var draftPhoto: UIImage?
+  /// Seçilen fotoğraf hazırlanıyor.
+  @Published private(set) var isPreparingPhoto = false
+  /// Panelde gösterilen kısa hata.
+  @Published var photoError: String?
+  /// Taslaktaki fotoğraf kayıtlı olandan farklı mı.
+  private var isPhotoChanged = false
+  /// `photo`'nun çözüldüğü veri (değişmediyse yeniden çözülmez).
+  private var photoData: Data?
   private let coordinator: ProfileCoordinator
   private let userData: any UserDataStoring
   private let entitlements: any EntitlementProviding
   private let calendar: Calendar
-  private let now: () -> Date
   private var cancellables: Set<AnyCancellable> = []
 
   // MARK: - Init
 
   init(
     coordinator: ProfileCoordinator, userData: any UserDataStoring,
-    entitlements: any EntitlementProviding, calendar: Calendar = .current,
-    now: @escaping () -> Date = { .now }
+    entitlements: any EntitlementProviding, calendar: Calendar = .current
   ) {
     self.coordinator = coordinator
     self.userData = userData
     self.entitlements = entitlements
     self.calendar = calendar
-    self.now = now
-    self.displayedMonth = now()
     reload()
-    draft = profile
-    draft.titleId = title.id
+    beginEditing()
     userData.changes.merge(with: entitlements.changes)
       .sink { [weak self] in self?.reload() }
       .store(in: &cancellables)
@@ -58,23 +60,27 @@ final class ProfileViewModel: ObservableObject {
 
   // MARK: - Navigation
 
-  func edit() { coordinator.showEdit() }
-  func openBadges() { coordinator.showBadges() }
+  /// Ayarları açar.
   func openSettings() { coordinator.showSettings() }
-  func openPaywall() { coordinator.showPaywall() }
+  /// Geri gider.
   func back() { coordinator.back() }
 
   // MARK: - Profile
 
-  /// Seçili unvan (eski kimlikler yenilerine eşlenir).
-  var title: UserTitle { UserTitle(storedId: profile.titleId) }
+  /// Gösterilen unvan: açılmış unvanların en yükseği (unvan seçimi yok).
+  var title: UserTitle {
+    UserTitle.allCases.last(where: isUnlocked) ?? .kalemci
+  }
 
-  /// Taslaktaki unvan.
-  var draftTitle: UserTitle { UserTitle(storedId: draft.titleId) }
+  /// Panelde önizlenen ad: taslak boşsa kayıtlı ad.
+  var draftDisplayName: String {
+    let trimmed = draftNickname.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? profile.displayName : trimmed
+  }
 
-  /// "Ekim 2026'dan beri · 7 rozet".
+  /// "Ekim 2026'dan beri".
   var memberSinceText: String {
-    "\(ProfileDateText.since(profile.createdAt, calendar: calendar)) · \(badges.count) rozet"
+    ProfileDateText.since(profile.createdAt, calendar: calendar)
   }
 
   /// Seviye kartı.
@@ -83,94 +89,13 @@ final class ProfileViewModel: ObservableObject {
       levelId: profile.level, wordsSeen: stats.wordsSeen, learnedWords: snapshot.learnedWords)
   }
 
-  /// Veri satırı metni.
-  var dataText: String {
-    switch (iCloudOn, iCloudAvailable) {
-    case (true, true): "Veriler bu cihazda · iCloud yedek açık"
-    case (true, false): "Veriler bu cihazda · iCloud'a giriş bekleniyor"
-    default: "Veriler sadece bu cihazda"
-    }
-  }
-
-  /// Veri satırının sağındaki zaman ("2 dk önce") ya da yedek durumu.
-  var dataTimestamp: String {
-    if let lastBackupAt { return ProfileDateText.relative(lastBackupAt, now: now()) }
-    return iCloudOn && iCloudAvailable ? "Otomatik" : "Yedek yok"
-  }
+  /// "5/16".
+  var nicknameCounter: String { "\(draftNickname.count)/\(Self.nicknameLimit)" }
 
   /// Takma adı sınıra göre kırpar.
   func limitNickname() {
-    if draft.nickname.count > Self.nicknameLimit {
-      draft.nickname = String(draft.nickname.prefix(Self.nicknameLimit))
-    }
-  }
-
-  /// "5/16".
-  var nicknameCounter: String { "\(draft.nickname.count)/\(Self.nicknameLimit)" }
-
-  // MARK: - Streak calendar
-
-  /// Takvimdeki ay.
-  var month: StreakMonth {
-    StreakMonth.make(
-      containing: displayedMonth, solvedDays: Set(stats.solvedDays), today: now(),
-      canFreeze: isPremium, calendar: calendar)
-  }
-
-  /// Sonraki aya geçilebilir mi (gelecek aylar gösterilmez).
-  var canShowNextMonth: Bool { monthStart(displayedMonth) < monthStart(now()) }
-
-  /// Önceki aya geçilebilir mi (profil oluşturulmadan ya da ilk çözümden öncesi gösterilmez).
-  var canShowPreviousMonth: Bool { monthStart(displayedMonth) > monthStart(earliestDay) }
-
-  /// Takvimi bir ay kaydırır.
-  func shiftMonth(by value: Int) {
-    guard value > 0 ? canShowNextMonth : canShowPreviousMonth,
-      let date = calendar.date(byAdding: .month, value: value, to: displayedMonth)
-    else { return }
-    displayedMonth = date
-  }
-
-  /// Bu ay kullanılan seri dondurma (Çengelish+).
-  var freezesUsedThisMonth: Int {
-    StreakMonth.make(
-      containing: now(), solvedDays: Set(stats.solvedDays), today: now(), canFreeze: true,
-      calendar: calendar
-    ).frozenCount
-  }
-
-  /// "Seri dondurma · bu ay 1/2 kullanıldı".
-  var freezeText: String {
-    let used = min(freezesUsedThisMonth, Self.monthlyFreezeAllowance)
-    return "Seri dondurma · bu ay \(used)/\(Self.monthlyFreezeAllowance) kullanıldı"
-  }
-
-  // MARK: - Badges
-
-  /// Vitrindeki rozetler (seçilmediyse kazanılan ilk üç).
-  var showcase: [BadgeKind] {
-    let chosen = profile.showcaseBadges.compactMap(BadgeKind.init(rawValue:)).filter {
-      badges[$0] != nil
-    }
-    if !chosen.isEmpty { return Array(chosen.prefix(Self.showcaseLimit)) }
-    return Array(earned.prefix(Self.showcaseLimit))
-  }
-
-  /// Kazanılan rozetler, kazanılma sırasıyla.
-  var earned: [BadgeKind] {
-    BadgeKind.allCases.filter { badges[$0] != nil }
-      .sorted { (badges[$0] ?? .now) < (badges[$1] ?? .now) }
-  }
-
-  /// Henüz kazanılmamış rozetler; hedefe en yakın olanlar önce.
-  var upcoming: [BadgeKind] {
-    let locked = BadgeKind.allCases.filter { badges[$0] == nil }
-    return locked.sorted { completion($0) > completion($1) }
-  }
-
-  /// Rozetin ilerlemesi.
-  func progress(_ badge: BadgeKind) -> (current: Int, target: Int)? {
-    badge.progress(snapshot)
+    guard draftNickname.count > Self.nicknameLimit else { return }
+    draftNickname = String(draftNickname.prefix(Self.nicknameLimit))
   }
 
   /// Unvanın açık olup olmadığı.
@@ -178,69 +103,101 @@ final class ProfileViewModel: ObservableObject {
     title.isUnlocked(badges: Set(badges.keys), snapshot: snapshot)
   }
 
-  /// Aksesuarın kilit nedeni (açıksa nil).
-  func lockReason(_ accessory: AvatarAccessory) -> String? {
-    UnlockRules.isUnlocked(accessory, stats: stats, isPremium: isPremium)
-      ? nil : UnlockRules.requirement(accessory)
-  }
-
-  /// Arka planın kilitli olup olmadığı.
-  func isLocked(_ background: AvatarBackground) -> Bool {
-    !UnlockRules.isUnlocked(background, isPremium: isPremium)
-  }
-
-  /// Rozetin tarih metni.
-  func dateText(_ badge: BadgeKind) -> String {
-    badges[badge].map(DateText.dayMonthShort) ?? ""
-  }
-
   // MARK: - Editing
 
-  /// Düzenlemeyi kaydeder ve geri döner.
-  func saveDraft() {
-    var updated = draft
-    updated.nickname = String(updated.nickname.prefix(Self.nicknameLimit))
-      .trimmingCharacters(in: .whitespaces)
-    if !isUnlocked(draftTitle) { updated.titleId = title.id }
-    userData.updateProfile(updated)
-    coordinator.back()
+  /// Taslağı kayıtlı profille başlatır (düzenleme paneli açılırken).
+  func beginEditing() {
+    draftNickname = profile.nickname
+    draftPhotoData = photoData
+    draftPhoto = photo
+    isPhotoChanged = false
+    isPreparingPhoto = false
+    photoError = nil
   }
 
-  /// Düzenlemeden vazgeçer.
-  func cancelDraft() {
-    draft = profile
-    coordinator.back()
-  }
-
-  /// Kapak / avatar arka planını hemen kaydeder.
-  func setBackground(_ background: AvatarBackground) {
-    guard !isLocked(background) else { return }
-    var updated = profile
-    updated.avatar.background = background
-    userData.updateProfile(updated)
-    draft.avatar.background = background
-  }
-
-  /// Rozeti vitrine ekler ya da çıkarır (en fazla 3; doluysa en eskisi çıkar).
-  func toggleShowcase(_ badge: BadgeKind) {
-    guard badges[badge] != nil else { return }
-    var current = showcase.map(\.rawValue)
-    if let index = current.firstIndex(of: badge.rawValue) {
-      current.remove(at: index)
-    } else if current.count < Self.showcaseLimit {
-      current.append(badge.rawValue)
-    } else {
-      current = Array(current.dropFirst()) + [badge.rawValue]
+  /// Seçilen ham fotoğrafı arka planda küçültüp taslağa koyar.
+  func pickPhoto(_ data: Data) async {
+    isPreparingPhoto = true
+    defer { isPreparingPhoto = false }
+    guard let prepared = await ProfilePhoto.normalized(data),
+      let image = UIImage(data: prepared)
+    else {
+      photoError = "Bu fotoğraf açılamadı. Başka bir fotoğraf seç."
+      return
     }
+    draftPhotoData = prepared
+    draftPhoto = image
+    isPhotoChanged = true
+    photoError = nil
+  }
+
+  /// Fotoğraf seçici veriyi okuyamadığında hatayı gösterir.
+  func photoLoadFailed() {
+    photoError = "Bu fotoğraf açılamadı. Başka bir fotoğraf seç."
+  }
+
+  /// Taslaktaki fotoğrafı kaldırır (avatar maskota döner).
+  func removeDraftPhoto() {
+    draftPhotoData = nil
+    draftPhoto = nil
+    isPhotoChanged = true
+  }
+
+  /// Taslaktaki takma adı ve fotoğrafı kaydeder.
+  ///
+  /// Boş takma ad kayıtlı adı korur; kayıtlı ad da boşsa "User" + 6 rakam verilir.
+  func saveDraft() {
     var updated = profile
-    updated.showcaseBadges = current
-    userData.updateProfile(updated)
+    updated.nickname = Self.resolveNickname(draftNickname, current: profile.nickname)
+    if updated != profile { userData.updateProfile(updated) }
+    if isPhotoChanged { userData.setProfilePhoto(draftPhotoData) }
+    isPhotoChanged = false
+  }
+
+  /// Taslak takma adı kırpar; boşsa kayıtlı adı, o da boşsa "User" + 6 rakamı döner.
+  static func resolveNickname(
+    _ draft: String, current: String, makeDefault: () -> String = makeDefaultNickname
+  ) -> String {
+    let trimmed = String(draft.prefix(nicknameLimit)).trimmingCharacters(
+      in: .whitespacesAndNewlines)
+    if !trimmed.isEmpty { return trimmed }
+    let saved = current.trimmingCharacters(in: .whitespacesAndNewlines)
+    return saved.isEmpty ? makeDefault() : saved
+  }
+
+  /// Rastgele varsayılan takma ad: "User" + 6 rakam (onboarding kuralı).
+  nonisolated static func makeDefaultNickname() -> String {
+    "User\(Int.random(in: 100_000...999_999))"
+  }
+
+  // MARK: - Badges
+
+  /// Tüm rozetler: kazanılanlar, ardından hedefe en yakın olanlar.
+  var badgeItems: [BadgeItem] { BadgeItem.all(badges: badges, snapshot: snapshot) }
+
+  /// "7/15".
+  var badgeCountText: String { "\(badges.count)/\(BadgeKind.allCases.count)" }
+
+  /// Kazanılan rozetlerin oranı (0...1).
+  var badgeProgress: Double {
+    Double(badges.count) / Double(max(BadgeKind.allCases.count, 1))
+  }
+
+  /// Rozetin tarih metni ("3 Kas").
+  func dateText(_ item: BadgeItem) -> String {
+    item.earnedAt.map(DateText.dayMonthShort) ?? ""
   }
 
   // MARK: - Private helpers
 
+  /// Kayıtlı veriyi yeniden okur.
   private func reload() {
     profile = userData.profile ?? profile
+    let storedPhoto = userData.profilePhoto
+    if storedPhoto != photoData {
+      photoData = storedPhoto
+      photo = storedPhoto.flatMap(UIImage.init(data:))
+    }
     stats = userData.stats
     badges = userData.badges
     let finished = userData.allProgress().values.filter { $0.status == .finished }.map(\.puzzleId)
@@ -248,31 +205,5 @@ final class ProfileViewModel: ObservableObject {
       stats: stats, finishedPuzzleIds: finished,
       learnedWords: userData.notebook.filter(\.learned).count)
     isPremium = entitlements.isPremium
-    iCloudOn = userData.isICloudBackupEnabled
-    iCloudAvailable = userData.isICloudAvailable
-    lastBackupAt = userData.settings.lastBackupAt
-  }
-
-  /// Rozetin tamamlanma oranı (sayaçsızlar en sona).
-  private func completion(_ badge: BadgeKind) -> Double {
-    guard let progress = badge.progress(snapshot) else { return -1 }
-    return Double(progress.current) / Double(max(progress.target, 1))
-  }
-
-  /// Takvimin gidebileceği en eski gün.
-  private var earliestDay: Date {
-    let first = stats.solvedDays.min().flatMap(date(fromKey:))
-    return min(profile.createdAt, first ?? profile.createdAt)
-  }
-
-  private func monthStart(_ date: Date) -> Date {
-    calendar.dateInterval(of: .month, for: date)?.start ?? date
-  }
-
-  /// `yyyy-MM-dd` anahtarını tarihe çevirir.
-  private func date(fromKey key: String) -> Date? {
-    let parts = key.split(separator: "-").compactMap { Int($0) }
-    guard parts.count == 3 else { return nil }
-    return calendar.date(from: DateComponents(year: parts[0], month: parts[1], day: parts[2]))
   }
 }

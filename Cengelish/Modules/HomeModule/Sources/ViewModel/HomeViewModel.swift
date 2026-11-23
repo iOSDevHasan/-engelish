@@ -3,6 +3,7 @@ import ContentKit
 import DesignKit
 import Foundation
 import PurchaseKit
+import UIKit
 import UserDataKit
 import WordKit
 
@@ -21,6 +22,15 @@ struct ContinueItem: Equatable {
   let progress: Double
 }
 
+/// Ana Sayfanın açtığı diğer ekranlar.
+@MainActor
+protocol HomeRouting: AnyObject {
+  /// Bulmacayı açar.
+  func showPuzzle(_ id: String)
+  /// Çengelish Plus paywall'unu açar.
+  func showPaywall()
+}
+
 /// Ana Sayfa durumu.
 @MainActor
 final class HomeViewModel: ObservableObject {
@@ -29,6 +39,10 @@ final class HomeViewModel: ObservableObject {
 
   @Published private(set) var name = "Kalemci"
   @Published private(set) var avatar = AvatarConfig()
+  /// Profil fotoğrafı; yoksa maskot gösterilir.
+  @Published private(set) var photo: UIImage?
+  /// Son çözülen fotoğraf verisi; aynıysa yeniden çözülmez.
+  private var photoData: Data?
   @Published private(set) var streak = 0
   @Published private(set) var longestStreak = 0
   @Published private(set) var week: [WeekDay] = []
@@ -38,8 +52,10 @@ final class HomeViewModel: ObservableObject {
   @Published private(set) var dailyDone = false
   @Published private(set) var continueItem: ContinueItem?
   @Published private(set) var wordOfDay: Word?
-  /// Seri kartındaki seri dondurma ipucu (premium ve hak varsa).
+  /// Seri kartındaki seri dondurma ipucu (Plus ve hak varsa).
   @Published private(set) var freezeHint: String?
+  /// Kullanıcının Çengelish Plus'ı var mı.
+  @Published private(set) var isPlus = false
   /// Günlük hatırlatıcı açık mı.
   @Published private(set) var reminderOn = false
   /// Hatırlatıcı saati (saat, dakika).
@@ -48,7 +64,7 @@ final class HomeViewModel: ObservableObject {
   @Published var isReminderSheetOpen = false
   /// Kısa bilgi mesajı.
   @Published var notice: String?
-  private let coordinator: HomeCoordinator
+  private let router: any HomeRouting
   private let content: any ContentProviding
   private let userData: any UserDataStoring
   private let entitlements: any EntitlementProviding
@@ -61,11 +77,11 @@ final class HomeViewModel: ObservableObject {
   // MARK: - Init
 
   init(
-    coordinator: HomeCoordinator, content: any ContentProviding, userData: any UserDataStoring,
+    router: any HomeRouting, content: any ContentProviding, userData: any UserDataStoring,
     entitlements: any EntitlementProviding, pronouncer: any Pronouncing,
     reminders: ReminderActions = .live, now: @escaping () -> Date = { .now }
   ) {
-    self.coordinator = coordinator
+    self.router = router
     self.content = content
     self.userData = userData
     self.entitlements = entitlements
@@ -86,6 +102,12 @@ final class HomeViewModel: ObservableObject {
       avatar = profile.avatar
       dailyGoal = profile.dailyGoal
     }
+    let newPhotoData = userData.profilePhoto
+    if newPhotoData != photoData {
+      photoData = newPhotoData
+      photo = newPhotoData.flatMap(UIImage.init(data:))
+    }
+    isPlus = entitlements.isPremium
     let stats = userData.stats
     let settings = userData.settings
     reminderOn = settings.reminderEnabled
@@ -112,14 +134,26 @@ final class HomeViewModel: ObservableObject {
   /// Günün Bulmacasını açar.
   func openDaily() {
     guard let daily else { return }
-    coordinator.showPuzzle(daily.id)
+    router.showPuzzle(daily.id)
   }
 
   /// Yarım kalan bulmacayı açar.
   func openContinue() {
     guard let continueItem else { return }
-    coordinator.showPuzzle(continueItem.puzzleId)
+    router.showPuzzle(continueItem.puzzleId)
   }
+
+  /// Çengelish Plus paywall'unu açar (sağ üstteki Plus butonu, Plus kartı, seri dondurma
+  /// tanıtımı). Plus üyesinde paywall üyelik durumunu gösterir.
+  func openPaywall() {
+    router.showPaywall()
+  }
+
+  /// Plus olmayan kullanıcıya seri kartında seri dondurma tanıtımı gösterilir mi.
+  var showsFreezeTeaser: Bool { !isPlus }
+
+  /// Plus olmayan kullanıcıya Günün Bulmacası'nın altında Plus kartı gösterilir mi.
+  var showsPlusPromo: Bool { !isPlus }
 
   /// Günün kelimesini okur.
   func speakWordOfDay() {
@@ -155,6 +189,13 @@ final class HomeViewModel: ObservableObject {
     }
   }
 
+  /// Seri kartındaki hatırlatıcı kısayolu ("Hatırlatıcı her gün 20:00" / "Günlük hatırlatıcı
+  /// kur").
+  var reminderShortcut: String {
+    guard reminderOn else { return "Günlük hatırlatıcı kur" }
+    return String(format: "Hatırlatıcı her gün %02d:%02d", reminderTime.hour, reminderTime.minute)
+  }
+
   /// Hatırlatıcı açıklaması ("Her gün 20:00 · Günün bulmacası hazır").
   var reminderDetail: String {
     String(
@@ -165,13 +206,13 @@ final class HomeViewModel: ObservableObject {
 
   /// Görünen seriyi ve seri dondurma ipucunu hesaplar.
   ///
-  /// `UserDataStoring.stats` seriyi dün oynanmadıysa 0 olarak verir; Çengelish+ dondurma hakkı
+  /// `UserDataStoring.stats` seriyi dün oynanmadıysa 0 olarak verir; Çengelish Plus dondurma hakkı
   /// dünkü boşluğu affettiği için bu durumda kullanıcıya serinin korunduğu söylenir.
   private func loadStreak(_ stats: UserStats) {
     streak = StreakRules.visibleStreak(
       stats.streak, lastDay: stats.lastPlayedDay, today: dayKey(offset: 0),
       yesterday: dayKey(offset: -1))
-    let canFreeze = entitlements.isPremium && stats.freezesUsed < StreakRules.monthlyFreezes
+    let canFreeze = isPlus && stats.freezesUsed < StreakRules.monthlyFreezes
     if canFreeze, stats.lastPlayedDay == dayKey(offset: -2) {
       freezeHint = "Dün kaçırdın ama seri dondurma serini koruyor · bugün çöz, seri devam etsin"
     } else if canFreeze {

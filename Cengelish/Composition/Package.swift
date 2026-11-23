@@ -26,7 +26,7 @@ let package = Package(
     .package(path: "../Modules/SettingsModule"),
     .package(path: "../Modules/PaywallModule"),
     .package(path: "../AppCore/ContentKit"),
-    .package(path: "../AppCore/FirebaseContentKit"),
+    .package(path: "../AppCore/CrashReportingKit"),
     .package(path: "../AppCore/WidgetBridgeKit"),
     // jarvis:packages
   ],
@@ -59,7 +59,7 @@ let package = Package(
         .product(name: "PaywallModule", package: "PaywallModule"),
         .product(name: "PaywallModuleInterface", package: "PaywallModule"),
         .product(name: "ContentKit", package: "ContentKit"),
-        .product(name: "FirebaseContentKit", package: "FirebaseContentKit"),
+        .product(name: "CrashReportingKit", package: "CrashReportingKit"),
         .product(name: "WidgetBridgeKit", package: "WidgetBridgeKit"),
         // jarvis:products
       ],

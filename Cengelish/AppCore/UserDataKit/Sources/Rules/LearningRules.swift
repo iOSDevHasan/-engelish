@@ -3,7 +3,7 @@ import Foundation
 /// Seri hesabı.
 public enum StreakRules {
 
-  /// Çengelish+ üyelerinin ayda kullanabildiği seri dondurma hakkı.
+  /// Çengelish Plus üyelerinin ayda kullanabildiği seri dondurma hakkı.
   public static let monthlyFreezes = 2
 
   /// Bugün bir bulmaca bitince yeni seriyi hesaplar.
@@ -13,7 +13,7 @@ public enum StreakRules {
   ///   - lastDay: Son oynanan gün (`yyyy-MM-dd`).
   ///   - today: Bugün (`yyyy-MM-dd`).
   ///   - yesterday: Dün (`yyyy-MM-dd`).
-  ///   - dayBefore: Önceki gün; Çengelish+ seri dondurma ile bir gün boşluk affedilir.
+  ///   - dayBefore: Önceki gün; Çengelish Plus seri dondurma ile bir gün boşluk affedilir.
   ///   - canFreeze: Seri dondurma kullanılabilir mi.
   /// - Returns: Yeni seri.
   public static func next(

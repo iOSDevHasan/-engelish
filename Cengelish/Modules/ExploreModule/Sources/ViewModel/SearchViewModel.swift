@@ -143,12 +143,6 @@ final class SearchViewModel: ObservableObject {
     pronouncer.speak(word.en, language: userData.settings.accent.languageCode)
   }
 
-  /// Kelimeyi deftere ekler ve paneli kapatır.
-  func addToNotebook(_ word: Word) {
-    userData.addToNotebook(wordId: word.id, source: "manual")
-    selectedWord = nil
-  }
-
   /// Geri gider.
   func back() {
     coordinator.back()

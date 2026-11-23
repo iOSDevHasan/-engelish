@@ -8,17 +8,20 @@ Izgara düzeni (çengel / İsveç tipi):
   - Tek satır × tek sütun kesişimleri iki kelimeye de aittir.
   - Bir satır/sütun çift konumda bölünebilir (araya ipucu kutusu) ya da kısaltılabilir (blok).
 
-Çıktılar:
-  - ../../Cengelish/AppCore/ContentKit/Sources/Resources/starter.json  (uygulamaya gömülü)
-  - out/firestore/*.json ve out/firestore/packContents/*.json.gz (Firebase'e yükleme için)
+Çıktı:
+  - ../../Cengelish/AppCore/ContentKit/Sources/Resources/starter.json  (uygulamaya gömülü; tüm
+    içerik buradadır, uygulama ağdan içerik indirmez)
 
-Kullanım: python3 generate.py [--seed 7] [--start 2026-11-09] [--days 30]
+Kullanım: python3 generate.py [--seed 7] [--start 2026-11-09] [--days 365]
+
+Günlük bulmacalar paketlerden sonra üretilir; gün sayısını artırmak paketleri ve ilk günleri
+değiştirmez (aynı tohumla). Takvimin bittiği günler için uygulama cihazda belirlenimci günlük
+bulmaca üretir (ContentKit `DailyPuzzleBuilder`).
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
-import gzip
 import json
 import random
 from dataclasses import dataclass, field
@@ -26,7 +29,6 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 APP_RESOURCES = HERE.parent.parent / "Cengelish/AppCore/ContentKit/Sources/Resources"
-OUT = HERE / "out"
 LEVELS = ["A1", "A2", "B1", "B2", "C1"]
 CONTENT_VERSION = 1
 
@@ -70,6 +72,8 @@ def load_words() -> list[Word]:
             raise SystemExit(f"Cevap sadece A-Z olmalı: {en}")
         if en.lower() in seen:
             raise SystemExit(f"Tekrar eden kelime: {en}")
+        if en.lower() in clue.lower():
+            raise SystemExit(f"İpucu cevabı ele veriyor: {en} ({clue})")
         seen.add(en.lower())
         words.append(
             Word(
@@ -176,12 +180,17 @@ class Filler:
         for w in pool:
             self.by_len.setdefault(len(w.answer), []).append(w)
         self.nodes = 0
+        self.used_clues: set[str] = set()
 
     def candidates(self, slot: Slot, grid: dict, used: set[str]) -> list[Word]:
         pattern = [grid.get(cell) for cell in slot.cells]
         out = []
         for w in self.by_len.get(len(slot.cells), []):
-            if w.answer in used:
+            # Aynı bulmacada aynı kelime ya da aynı ipucu (eş anlamlılar) iki kez olmaz.
+            if w.answer in used or w.clue.lower() in self.used_clues:
+                continue
+            # Biri diğerini içeren kelimeler (TOAST / TOASTER) aynı bulmacada birbirini ele verir.
+            if any(w.answer in u or u in w.answer for u in used):
                 continue
             if all(p is None or p == ch for p, ch in zip(pattern, w.answer)):
                 out.append(w)
@@ -194,6 +203,7 @@ class Filler:
         self.nodes = 0
         assignment: dict[int, Word] = {}
         grid: dict[tuple[int, int], str] = {}
+        self.used_clues: set[str] = set()
         return assignment if self._solve(t, assignment, grid, set()) else None
 
     def _solve(self, t: Template, assignment, grid, used) -> bool:
@@ -219,10 +229,12 @@ class Filler:
                     placed.append(cell)
             assignment[best] = w
             used.add(w.answer)
+            self.used_clues.add(w.clue.lower())
             if self._solve(t, assignment, grid, used):
                 return True
             del assignment[best]
             used.discard(w.answer)
+            self.used_clues.discard(w.clue.lower())
             for cell in placed:
                 del grid[cell]
         return False
@@ -285,28 +297,38 @@ def make_puzzle(pid, pack_id, level, kind, size, pool, usage, rng, prefer_long, 
 
 PACKS = [
     # id, başlık, alt başlık, tür, seviye, adet, ücretsiz adet, boyut, ürün kimliği, etiket
-    ("a1", "A1 · Başlangıç", "Renkler, sayılar, aile, ev", "level", "A1", 12, 8, (7, 7), None, None),
-    ("a2", "A2 · Temel", "Günlük hayat, seyahat, hava", "level", "A2", 12, 6, (7, 9), None, None),
-    ("b1", "B1 · Orta", "Duygular, iş, toplum", "level", "B1", 12, 0, (7, 9), None, None),
-    ("b2", "B2 · İleri-orta", "Soyut kavramlar, sınav kelimeleri", "level", "B2", 12, 0, (7, 9), None, None),
-    ("c1", "C1 · İleri", "Akademik ve nadir kelimeler", "level", "C1", 10, 0, (7, 9), None, None),
-    ("yds", "YDS Kelime Paketi", "YDS'de sık çıkan akademik kelimeler", "exam", "C1", 20, 0, (7, 9),
+    ("a1", "A1 · Başlangıç", "Renkler, sayılar, aile, ev", "level", "A1", 50, 50, (7, 7), None, None),
+    ("a2", "A2 · Temel", "Günlük hayat, seyahat, hava", "level", "A2", 50, 50, (7, 9), None, None),
+    ("b1", "B1 · Orta", "Duygular, iş, toplum", "level", "B1", 50, 50, (7, 9), None, None),
+    ("b2", "B2 · İleri-orta", "Soyut kavramlar, sınav kelimeleri", "level", "B2", 50, 50, (7, 9), None, None),
+    ("c1", "C1 · İleri", "Akademik ve nadir kelimeler", "level", "C1", 50, 50, (7, 9), None, None),
+    ("yds", "YDS Kelime Paketi", "YDS'de sık çıkan akademik kelimeler", "exam", "C1", 60, 0, (7, 9),
      "com.hasangurbuz.cengelish.pack.yds", "yds"),
-    ("yokdil", "YÖKDİL Kelime Paketi", "Fen, sağlık ve sosyal bilimler kelimeleri", "exam", "C1", 20,
+    ("yokdil", "YÖKDİL Kelime Paketi", "Fen, sağlık ve sosyal bilimler kelimeleri", "exam", "C1", 60,
      0, (7, 9), "com.hasangurbuz.cengelish.pack.yokdil", "yokdil"),
-    ("lgs", "LGS Kelime Paketi", "8. sınıf müfredatından kelimeler", "exam", "A2", 20, 0, (7, 9),
+    ("lgs", "LGS Kelime Paketi", "8. sınıf müfredatından kelimeler", "exam", "A2", 60, 0, (7, 9),
      "com.hasangurbuz.cengelish.pack.lgs", "lgs"),
-    ("ielts", "IELTS Kelime Paketi", "Akademik ve günlük konular", "exam", "B2", 20, 0, (7, 9),
+    ("ielts", "IELTS Kelime Paketi", "Akademik ve günlük konular", "exam", "B2", 60, 0, (7, 9),
      "com.hasangurbuz.cengelish.pack.ielts", "ielts"),
-    ("toefl", "TOEFL Kelime Paketi", "Akademik dersler ve kampüs hayatı", "exam", "B2", 20, 0, (7, 9),
+    ("toefl", "TOEFL Kelime Paketi", "Akademik dersler ve kampüs hayatı", "exam", "B2", 60, 0, (7, 9),
      "com.hasangurbuz.cengelish.pack.toefl", "toefl"),
-    ("mutfak", "Mutfak", "Yemek, malzemeler, tarifler", "theme", "A2", 20, 20, (7, 9), None, "mutfak"),
-    ("seyahat", "Seyahat", "Havalimanı, otel, gezi", "theme", "A2", 20, 20, (7, 9), None, "seyahat"),
-    ("is", "İş", "Ofis, toplantı, kariyer", "theme", "B1", 20, 0, (7, 9), None, "is"),
-    ("futbol", "Futbol", "Maç, gol, taktik", "theme", "A2", 20, 0, (7, 9), None, "futbol"),
-    ("doga", "Doğa", "Hayvanlar, bitkiler, hava", "theme", "A2", 20, 0, (7, 9), None, "doga"),
-    ("teknoloji", "Teknoloji", "Bilgisayar, internet, cihazlar", "theme", "B1", 20, 0, (7, 9), None,
+    ("mutfak", "Mutfak", "Yemek, malzemeler, tarifler", "theme", "A2", 50, 50, (7, 9), None, "mutfak"),
+    ("seyahat", "Seyahat", "Havalimanı, otel, gezi", "theme", "A2", 50, 50, (7, 9), None, "seyahat"),
+    ("is", "İş", "Ofis, toplantı, kariyer", "theme", "B1", 50, 0, (7, 9), None, "is"),
+    ("futbol", "Futbol", "Maç, gol, taktik", "theme", "A2", 50, 0, (7, 9), None, "futbol"),
+    ("doga", "Doğa", "Hayvanlar, bitkiler, hava", "theme", "A2", 50, 0, (7, 9), None, "doga"),
+    ("teknoloji", "Teknoloji", "Bilgisayar, internet, cihazlar", "theme", "B1", 50, 0, (7, 9), None,
      "teknoloji"),
+    ("saglik", "Sağlık", "Doktor, hastane, vücut", "theme", "A2", 50, 50, (7, 9), None, "saglik"),
+    ("alisveris", "Alışveriş", "Mağaza, para, kıyafet", "theme", "A2", 50, 50, (7, 9), None,
+     "alisveris"),
+    ("ev", "Ev ve Yaşam", "Odalar, eşyalar, ev işleri", "theme", "A2", 50, 50, (7, 9), None, "ev"),
+    ("okul", "Okul", "Dersler, sınıf, sınav", "theme", "A2", 50, 0, (7, 9), None, "okul"),
+    ("sanat", "Sanat ve Müzik", "Resim, müze, konser", "theme", "B1", 50, 0, (7, 9), None, "sanat"),
+    ("sinema", "Film ve Dizi", "Oyuncu, sahne, senaryo", "theme", "B1", 50, 0, (7, 9), None,
+     "sinema"),
+    ("bilim", "Bilim ve Uzay", "Deney, gezegen, yıldız", "theme", "B1", 50, 0, (7, 9), None, "bilim"),
+    ("spor", "Spor", "Koşu, yüzme, antrenman", "theme", "A2", 50, 0, (7, 9), None, "spor"),
 ]
 
 
@@ -333,7 +355,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--seed", type=int, default=7)
     ap.add_argument("--start", default="2026-11-09")
-    ap.add_argument("--days", type=int, default=30)
+    ap.add_argument("--days", type=int, default=365)
     args = ap.parse_args()
     rng = random.Random(args.seed)
     words = load_words()
@@ -413,30 +435,6 @@ def main() -> None:
     (APP_RESOURCES / "starter.json").write_text(
         json.dumps(bundle, ensure_ascii=False, separators=(",", ":")), encoding="utf-8"
     )
-
-    # Firebase çıktıları: Firestore manifest + Storage paket dosyaları.
-    fs = OUT / "firestore"
-    st = fs / "packContents"
-    fs.mkdir(parents=True, exist_ok=True)
-    st.mkdir(parents=True, exist_ok=True)
-    word_by_id = {w["id"]: w for w in word_json}
-    manifest = []
-    for p in packs:
-        pz = [x for x in puzzles if x["packId"] == p["id"]]
-        wids = {e["wordId"] for x in pz for e in x["entries"]}
-        payload = {"pack": p, "puzzles": pz, "words": [word_by_id[i] for i in sorted(wids)]}
-        path = f"packContents/{p['id']}_v{CONTENT_VERSION}"
-        (fs / f"{path}.json.gz").write_bytes(
-            gzip.compress(json.dumps(payload, ensure_ascii=False).encode("utf-8"))
-        )
-        manifest.append({**p, "contentPath": path, "contentVersion": CONTENT_VERSION})
-    (fs / "packs.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=1), encoding="utf-8")
-    daily_docs = []
-    for d in dailies:
-        pz = next(x for x in puzzles if x["id"] == d["puzzleId"])
-        wids = {e["wordId"] for e in pz["entries"]}
-        daily_docs.append({**d, "puzzle": pz, "words": [word_by_id[i] for i in sorted(wids)]})
-    (fs / "dailies.json").write_text(json.dumps(daily_docs, ensure_ascii=False, indent=1), encoding="utf-8")
 
     size_kb = (APP_RESOURCES / "starter.json").stat().st_size / 1024
     print(f"{len(puzzles)} bulmaca, {len(word_json)}/{len(words)} kelime kullanıldı, starter.json {size_kb:.0f} KB")

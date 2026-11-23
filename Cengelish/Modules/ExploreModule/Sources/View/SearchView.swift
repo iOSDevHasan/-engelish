@@ -23,8 +23,8 @@ struct SearchView: View {
               hint("Sonuç bulunamadı", detail: "Başka bir kelime ya da paket adı dene.")
             }
           } else {
-            packSection
-            wordSection
+            packSection.transition(.opacity)
+            wordSection.transition(.opacity)
           }
         }
         .padding(.horizontal, Metrics.gutter)
@@ -33,17 +33,19 @@ struct SearchView: View {
         .frame(maxWidth: 680)
         .frame(maxWidth: .infinity)
       }
+      .animation(Motion.snappy, value: viewModel.isQueryEmpty)
       .scrollDismissesKeyboard(.interactively)
+      .scrollIndicators(.hidden)
     }
     .screenBackground()
     .task { await viewModel.load() }
     .onAppear { isFieldFocused = true }
-    .sheet(item: $viewModel.selectedWord) { word in
-      let inNotebook = viewModel.isInNotebook(word)
+    .appBottomSheet(item: $viewModel.selectedWord) { word in
+      // Defter yalnızca bulmacalarda bilinemeyen kelimeleri tutar; aramadan elle eklenmez.
+      // Uygulama paneli içeriği kendisi kaydırır; WordDetailSheet kendi ScrollView'unu içermez.
       WordDetailSheet(
-        word: word, boxLabel: inNotebook ? "Defterde" : nil, onSpeak: { viewModel.speak(word) },
-        primaryTitle: inNotebook ? nil : "Deftere ekle",
-        onPrimary: inNotebook ? nil : { viewModel.addToNotebook(word) })
+        word: word, boxLabel: viewModel.isInNotebook(word) ? "Defterde" : nil,
+        onSpeak: { viewModel.speak(word) })
     }
   }
 
@@ -53,7 +55,7 @@ struct SearchView: View {
   private var searchBar: some View {
     HStack(spacing: 10) {
       Button(action: viewModel.back) { IconCircle("chevron.left") }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle())
         .accessibilityLabel("Geri")
       HStack(spacing: 8) {
         Image(systemName: "magnifyingglass").font(.system(size: 15, weight: .bold))
@@ -77,7 +79,10 @@ struct SearchView: View {
       }
       .padding(.horizontal, 14)
       .frame(height: 40)
-      .background(Capsule().fill(Palette.surface2))
+      .background(
+        Capsule().fill(Palette.surface)
+          .overlay(Capsule().strokeBorder(Palette.cardBorder, lineWidth: 1))
+      )
     }
     .padding(.horizontal, Metrics.gutter)
     .padding(.top, 4)
@@ -150,7 +155,7 @@ struct SearchView: View {
   }
 }
 
-/// Arama sonucundaki paket satırı.
+/// Arama sonucundaki paket satırı; Plus gerekiyorsa sağda Plus rozeti.
 private struct PackResultRow: View {
   let card: PackCard
 
@@ -159,18 +164,25 @@ private struct PackResultRow: View {
       VStack(alignment: .leading, spacing: 3) {
         Eyebrow(PackRules.eyebrow(for: card.pack.kind))
         Text(card.pack.title).font(AppFont.bodyBold).foregroundStyle(Palette.ink)
-        Text("\(card.puzzleCount) bulmaca · \(card.pack.subtitle)")
+          .lineLimit(2)
+        Text(detail)
           .font(AppFont.caption).foregroundStyle(Palette.muted).lineLimit(2)
       }
-      Spacer()
+      .frame(maxWidth: .infinity, alignment: .leading)
       if card.isLocked {
-        Image(systemName: "lock.fill").font(.system(size: 13, weight: .bold))
-          .foregroundStyle(Palette.muted)
+        PlusBadge(compact: true)
       }
       Image(systemName: "chevron.right").font(.system(size: 12, weight: .bold))
         .foregroundStyle(Palette.lineStrong)
     }
     .padding(12)
     .contentShape(Rectangle())
+    .accessibilityElement(children: .combine)
+  }
+
+  /// "20 bulmaca · açıklama".
+  private var detail: String {
+    let count = "\(card.puzzleCount) bulmaca"
+    return card.pack.subtitle.isEmpty ? count : "\(count) · \(card.pack.subtitle)"
   }
 }

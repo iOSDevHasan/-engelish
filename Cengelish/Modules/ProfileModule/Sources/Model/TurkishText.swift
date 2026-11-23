@@ -39,28 +39,11 @@ enum ProfileDateText {
     return "\(month) \(year)\(TurkishSuffix.ablative(year)) beri"
   }
 
-  /// "Kasım 2026".
-  static func monthYear(_ date: Date, calendar: Calendar) -> String {
-    "\(monthName(date, calendar: calendar)) \(calendar.component(.year, from: date))"
-  }
-
   /// Takvimin saat dilimine göre Türkçe ay adı ("Kasım").
   static func monthName(_ date: Date, calendar: Calendar) -> String {
     var style = Date.FormatStyle.dateTime.month(.wide).locale(DateText.locale)
     style.calendar = calendar
     style.timeZone = calendar.timeZone
     return date.formatted(style)
-  }
-
-  /// "az önce", "2 dk önce", "3 sa önce", "4 gün önce" ya da "9 Kasım".
-  static func relative(_ date: Date, now: Date) -> String {
-    let seconds = max(0, Int(now.timeIntervalSince(date)))
-    switch seconds {
-    case ..<60: return "az önce"
-    case ..<3_600: return "\(seconds / 60) dk önce"
-    case ..<86_400: return "\(seconds / 3_600) sa önce"
-    case ..<(86_400 * 30): return "\(seconds / 86_400) gün önce"
-    default: return DateText.dayMonth(date)
-    }
   }
 }

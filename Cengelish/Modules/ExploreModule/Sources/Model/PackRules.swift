@@ -7,7 +7,7 @@ enum PackRules {
 
   // MARK: - Access
 
-  /// Paketin tamamını açan ürün: sınavlarda paketin ürünü, seviye/temada yalnızca Çengelish+.
+  /// Paketin tamamını açan ürün: sınavlarda paketin ürünü, seviye/temada yalnızca Çengelish Plus.
   static func requiredProductId(for pack: Pack) -> String? {
     pack.kind == .exam ? pack.productId : nil
   }
@@ -18,20 +18,47 @@ enum PackRules {
     entitlements.canAccess(productId: requiredProductId(for: pack))
   }
 
-  /// Verilen sıradaki bulmaca kilitli mi (ücretsiz değil ve erişim yok).
+  /// Verilen sıradaki bulmaca Plus (ya da paket satın alma) istiyor mu: ücretsiz değil ve
+  /// erişim yok.
   @MainActor
-  static func isPuzzleLocked(
+  static func isPuzzlePlusLocked(
     _ pack: Pack, index: Int, entitlements: any EntitlementProviding
   ) -> Bool {
     !pack.isFree(index: index) && !canAccessAll(pack, entitlements: entitlements)
   }
 
-  /// Keşfet kartında kilit gösterilsin mi. Sınav kartı erişim yoksa hep kilitli görünür;
+  /// Keşfet kartında Plus rozeti gösterilsin mi. Sınav kartı erişim yoksa hep kilitli görünür;
   /// seviye ve tema kartı ise hiç ücretsiz bulmacası yoksa.
   @MainActor
   static func isCardLocked(_ pack: Pack, entitlements: any EntitlementProviding) -> Bool {
     let canAccess = canAccessAll(pack, entitlements: entitlements)
     return pack.kind == .exam ? !canAccess : pack.freeCount == 0 && !canAccess
+  }
+
+  // MARK: - Sequential play
+
+  /// Paketteki bulmacaların sıralı oynama + Plus kilidi durumları.
+  ///
+  /// Bitmiş bulmacalar her zaman tekrar oynanır. İlk bitmemiş bulmaca "sıradaki"dir (Plus
+  /// istiyorsa `.needsPlus`). Ondan sonraki bitmemiş bulmacalar, önce sıradakinin bitirilmesini
+  /// ister; sıradaki de Plus istiyorsa ilerlemenin tek yolu Plus olduğundan `.needsPlus` döner.
+  /// - Parameters:
+  ///   - stars: Her bulmaca için bittiyse yıldız sayısı, bitmediyse nil.
+  ///   - plusLocked: Her bulmaca için Plus (ya da paket satın alma) gerekip gerekmediği.
+  static func access(stars: [Int?], plusLocked: [Bool]) -> [PuzzleAccess] {
+    let next = stars.firstIndex { $0 == nil }
+    let needsPlus = { (index: Int) in plusLocked.indices.contains(index) && plusLocked[index] }
+    return stars.indices.map { index in
+      if let star = stars[index] { return .finished(stars: star) }
+      guard let next, index > next else { return needsPlus(index) ? .needsPlus : .next }
+      if needsPlus(index) && needsPlus(next) { return .needsPlus }
+      return .needsPrevious(blocker: next + 1, needsPlus: needsPlus(index))
+    }
+  }
+
+  /// Sıra kilitli bulmacaya dokununca gösterilen kısa mesaj ("Önce 3. bulmacayı bitir").
+  static func sequenceMessage(blocker: Int) -> String {
+    "Önce \(blocker). bulmacayı bitir"
   }
 
   // MARK: - Level range
@@ -63,6 +90,14 @@ enum PackRules {
     case "futbol": "soccerball"
     case "doga": "leaf.fill"
     case "teknoloji": "cpu"
+    case "saglik": "cross.case.fill"
+    case "alisveris": "bag.fill"
+    case "ev": "house.fill"
+    case "okul": "graduationcap.fill"
+    case "sanat": "paintpalette.fill"
+    case "sinema": "film.fill"
+    case "bilim": "atom"
+    case "spor": "figure.run"
     default: "square.grid.2x2.fill"
     }
   }
@@ -80,6 +115,41 @@ enum PackRules {
     case .level: "Seviye paketi"
     case .exam: "Sınav paketi"
     case .theme: "Tema paketi"
+    }
+  }
+}
+
+/// Paket detayındaki bir bulmacanın erişim durumu (sıralı oynama ve Plus kilidi).
+enum PuzzleAccess: Equatable {
+  /// Bitti; yıldızlarıyla gösterilir, tekrar oynanabilir.
+  case finished(stars: Int)
+  /// Sıradaki oynanabilir bulmaca.
+  case next
+  /// Önce `blocker` numaralı bulmaca bitirilmeli; `needsPlus` ise ayrıca Plus rozeti taşır.
+  case needsPrevious(blocker: Int, needsPlus: Bool)
+  /// Plus (ya da paket satın alma) gerekiyor; dokununca paywall açılır.
+  case needsPlus
+
+  /// Bulmaca şu an açılabilir mi (bitmiş ya da sıradaki).
+  var isPlayable: Bool {
+    switch self {
+    case .finished, .next: true
+    case .needsPrevious, .needsPlus: false
+    }
+  }
+
+  /// Bulmaca bitti mi.
+  var isFinished: Bool {
+    if case .finished = self { return true }
+    return false
+  }
+
+  /// Karede Plus rozeti gösterilsin mi.
+  var showsPlusBadge: Bool {
+    switch self {
+    case .needsPlus: true
+    case .needsPrevious(_, let needsPlus): needsPlus
+    case .finished, .next: false
     }
   }
 }

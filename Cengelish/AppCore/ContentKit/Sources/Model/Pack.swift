@@ -29,7 +29,7 @@ public struct Pack: Codable, Hashable, Identifiable, Sendable {
   public let puzzleIds: [String]
   /// Paketteki kelime sayısı.
   public let wordCount: Int
-  /// Firebase Storage'daki içerik dosyası.
+  /// Eski uzak içerik dosyasının yolu (artık kullanılmıyor; gömülü içerikte boş).
   public let contentPath: String?
   /// İçerik sürümü; değişince paket yeniden indirilir.
   public let contentVersion: Int?
@@ -83,7 +83,7 @@ public struct ContentBundle: Codable, Sendable {
   public let dailies: [DailyEntry]
 }
 
-/// Firebase Storage'dan inen tek paket dosyası.
+/// Tek paket dosyası (eski sürümlerin önbelleğinden okunur).
 public struct PackPayload: Codable, Sendable {
   /// Paket bilgisi.
   public let pack: Pack

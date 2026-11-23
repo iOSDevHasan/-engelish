@@ -34,6 +34,7 @@ struct CluePanel: View {
           section("Yukarıdan aşağı ↓", .down)
         }
       }
+      .scrollIndicators(.hidden)
       tipCard
     }
     .padding(18)

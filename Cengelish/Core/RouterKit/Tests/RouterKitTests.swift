@@ -333,6 +333,26 @@ struct RouterKitTests {
     // Then
     #expect(sut.navigationPath.count == 1)
   }
+
+  @Test("Present shows a modal without touching the stack; dismissModal clears it")
+  func present_showsModalOverStack() {
+    // Given
+    sut.push(Text("Screen"))
+
+    // When
+    sut.present(Text("Paywall"))
+
+    // Then
+    #expect(sut.modal != nil)
+    #expect(sut.navigationPath.count == 1)
+
+    // When
+    sut.dismissModal()
+
+    // Then
+    #expect(sut.modal == nil)
+    #expect(sut.navigationPath.count == 1)
+  }
 }
 
 private extension DeepLinkPath {

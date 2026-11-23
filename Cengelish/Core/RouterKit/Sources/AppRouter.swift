@@ -6,6 +6,8 @@ public final class AppRouter: ObservableObject, Routing {
   @Published public var navigationPath: [RouteView] = []
   @Published public var flowExitContext: (@MainActor () -> Void)?
   @Published public var isFlowExitDialogPresented: Bool = false
+  /// The view shown modally over the stack; `nil` when nothing is presented.
+  @Published public var modal: RouteView?
 
   private var deepLinkHandlers: [DeepLinkPath: () -> AnyView] = [:]
   private var deepLinkURLHandlers: [DeepLinkPath: @MainActor (URL) -> Void] = [:]
@@ -50,6 +52,14 @@ public extension AppRouter {
 
   func setRoot<V: View>(_ view: V) {
     navigationPath = [RouteView(AnyView(view))]
+  }
+
+  func present<V: View>(_ view: V) {
+    modal = RouteView(AnyView(view))
+  }
+
+  func dismissModal() {
+    modal = nil
   }
 }
 

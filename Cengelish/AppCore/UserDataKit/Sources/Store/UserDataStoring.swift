@@ -6,6 +6,9 @@ import Foundation
 public protocol UserDataStoring: AnyObject {
   /// Veri her değiştiğinde yayın yapar.
   var changes: AnyPublisher<Void, Never> { get }
+  /// `deleteAll()` tüm veriyi sildiğinde yayın yapar; aynı silmenin `changes` yayınından önce
+  /// gelir. Uygulama kabuğu bunu dinleyip açılış ekranına ve onboarding'e döner.
+  var dataErased: AnyPublisher<Void, Never> { get }
 
   // MARK: Profile
 
@@ -13,8 +16,16 @@ public protocol UserDataStoring: AnyObject {
   var profile: UserProfile? { get }
   /// Onboarding sonunda profili oluşturur.
   func createProfile(_ profile: UserProfile)
-  /// Profili günceller.
+  /// Profili günceller (fotoğrafa dokunmaz).
   func updateProfile(_ profile: UserProfile)
+  /// Profil fotoğrafı (JPEG, en uzun kenar `ProfilePhoto.maxPixelSize`); yoksa nil.
+  var profilePhoto: Data? { get }
+  /// Profil fotoğrafını kaydeder; nil fotoğrafı kaldırır.
+  ///
+  /// Veri `ProfilePhoto.normalized(_:)` ile hazırlanmış olmalıdır; değilse burada küçültülüp
+  /// JPEG'e çevrilir. Okunamayan veri kaydedilmez ve false döner.
+  @discardableResult
+  func setProfilePhoto(_ data: Data?) -> Bool
 
   // MARK: Settings
 
@@ -33,6 +44,8 @@ public protocol UserDataStoring: AnyObject {
   func saveDraft(puzzleId: String, drawing: Data?, durationSec: Int)
   /// İpucuyla açılan kutuları kaydeder.
   func saveRevealed(puzzleId: String, cells: Set<String>, hintsUsed: Int)
+  /// Klavyeyle yazılan harfleri (`satır,sütun` → harf) kaydeder; boş sözlük hepsini siler.
+  func saveTyped(puzzleId: String, letters: [String: String])
   /// Bulmacayı kendi kendine işaretlemeyle bitirir; seri, rozet ve defteri günceller.
   func finish(
     puzzleId: String, marks: [String: Bool], wordIdsByEntry: [String: String],
@@ -60,7 +73,7 @@ public protocol UserDataStoring: AnyObject {
   var stats: UserStats { get }
   /// Kazanılan rozetler (kimlik → tarih).
   var badges: [BadgeKind: Date] { get }
-  /// Bugün kalan ipucu hakkı (premium için nil = sınırsız).
+  /// Bugün kalan ipucu hakkı (Çengelish Plus için nil = sınırsız).
   func hintsLeft(isPremium: Bool) -> Int?
   /// İpucu hakkı harcar; yetmezse false döner.
   func consumeHints(_ count: Int, isPremium: Bool) -> Bool
@@ -75,13 +88,11 @@ public protocol UserDataStoring: AnyObject {
   func setICloudBackup(_ enabled: Bool)
   /// Verilerin cihazda kapladığı tahmini alan.
   func storageUsage() -> StorageUsage
-  /// Tüm veriyi dosyaya aktarılabilir JSON olarak döner.
-  func exportData() throws -> Data
-  /// Dışa aktarılmış dosyadan verileri geri yükler.
-  func importData(_ data: Data) throws
   /// Biten bulmacaların çizimlerini siler (son `keep` tanesi hariç).
   func clearOldDrawings(keep: Int) -> Int
-  /// Tüm kullanıcı verisini siler.
+  /// Tüm kullanıcı verisini siler: profil (fotoğraf dahil), ayarlar, ilerleme (çizimler ve yazılan
+  /// harfler dahil), defter, seri ve sayaçlar, rozetler. Ardından `dataErased` yayınlanır.
+  /// iCloud tercihi cihaza özeldir ve korunur.
   func deleteAll()
 }
 

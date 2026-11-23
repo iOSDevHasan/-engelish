@@ -1,11 +1,12 @@
 import Foundation
 
-/// App Store Connect'te tanımlanacak ürün kimlikleri.
+/// App Store Connect'te tanımlanacak ürün kimlikleri. Hepsi tek seferlik (non-consumable);
+/// uygulamada abonelik yoktur.
 public enum ProductID {
-  /// Çengelish+ aylık abonelik.
-  public static let plusMonthly = "com.hasangurbuz.cengelish.plus.monthly"
-  /// Çengelish+ yıllık abonelik (7 gün ücretsiz deneme).
-  public static let plusYearly = "com.hasangurbuz.cengelish.plus.yearly"
+  /// Plus'ın marka adı.
+  public static let plusName = "Çengelish Plus"
+  /// Çengelish Plus ömür boyu erişim (tek seferlik): tüm bulmacalar ve sınav paketleri.
+  public static let plusLifetime = "com.hasangurbuz.cengelish.plus.lifetime"
   /// YDS paketi (tek seferlik).
   public static let packYDS = "com.hasangurbuz.cengelish.pack.yds"
   /// YÖKDİL paketi (tek seferlik).
@@ -17,12 +18,10 @@ public enum ProductID {
   /// TOEFL paketi (tek seferlik).
   public static let packTOEFL = "com.hasangurbuz.cengelish.pack.toefl"
 
-  /// Abonelik ürünleri.
-  public static let subscriptions: [String] = [plusYearly, plusMonthly]
   /// Tek seferlik sınav paketleri.
   public static let examPacks: [String] = [packYDS, packYOKDIL, packLGS, packIELTS, packTOEFL]
-  /// Tüm ürünler.
-  public static let all: [String] = subscriptions + examPacks
+  /// Tüm ürünler (önce Plus, sonra sınav paketleri).
+  public static let all: [String] = [plusLifetime] + examPacks
 
   /// Sınav paketi ürününün ekranda görünen sınav adı (YDS, YÖKDİL...); sınav paketi değilse nil.
   public static func examTitle(for productId: String) -> String? {
@@ -35,26 +34,14 @@ public enum ProductID {
     default: nil
     }
   }
-}
 
-/// Aktif Çengelish+ aboneliğinin özeti.
-public struct ActiveSubscription: Equatable, Sendable {
-  /// Abonelik ürün kimliği (`ProductID.plusYearly` / `plusMonthly`).
-  public let productId: String
-  /// Sonraki yenilenme (ya da yenilenmeyecekse bitiş) tarihi.
-  public let renewalDate: Date?
-  /// Dönem sonunda otomatik yenilenecek mi.
-  public let willAutoRenew: Bool
-
-  /// Abonelik özetini oluşturur.
-  public init(productId: String, renewalDate: Date?, willAutoRenew: Bool = true) {
-    self.productId = productId
-    self.renewalDate = renewalDate
-    self.willAutoRenew = willAutoRenew
+  /// Ürünün ekranda görünen tam adı ("Çengelish Plus Ömür Boyu", "YDS Paketi"); bilinmiyorsa nil.
+  public static func displayTitle(for productId: String) -> String? {
+    switch productId {
+    case plusLifetime: "\(plusName) Ömür Boyu"
+    default: examTitle(for: productId).map { "\($0) Paketi" }
+    }
   }
-
-  /// Planın Türkçe adı ("Yıllık" / "Aylık").
-  public var planTitle: String { productId == ProductID.plusYearly ? "Yıllık" : "Aylık" }
 }
 
 /// Paywall'da gösterilen ürün bilgisi.
@@ -65,24 +52,21 @@ public struct StoreProduct: Identifiable, Equatable, Sendable {
   public let title: String
   /// Yerel para biriminde fiyat.
   public let displayPrice: String
-  /// Aylık karşılığı (yıllık plan için).
-  public let monthlyEquivalent: String?
-  /// Ücretsiz deneme açıklaması.
-  public let trialText: String?
-  /// Abonelik mi.
-  public let isSubscription: Bool
+  /// Sayısal fiyat (lansman fiyatı karşılaştırması için); bilinmiyorsa nil.
+  public let price: Decimal?
+  /// Fiyatın para birimi ("TRY"); bilinmiyorsa nil.
+  public let currencyCode: String?
 
   /// Ürün bilgisini oluşturur.
   public init(
-    id: String, title: String, displayPrice: String, monthlyEquivalent: String?,
-    trialText: String?, isSubscription: Bool
+    id: String, title: String, displayPrice: String, price: Decimal? = nil,
+    currencyCode: String? = nil
   ) {
     self.id = id
     self.title = title
     self.displayPrice = displayPrice
-    self.monthlyEquivalent = monthlyEquivalent
-    self.trialText = trialText
-    self.isSubscription = isSubscription
+    self.price = price
+    self.currencyCode = currencyCode
   }
 }
 

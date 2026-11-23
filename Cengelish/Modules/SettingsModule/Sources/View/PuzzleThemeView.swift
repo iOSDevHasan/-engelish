@@ -22,14 +22,19 @@ struct PuzzleThemeView: View {
             columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10
           ) {
             ForEach(PuzzleTheme.all) { theme in
+              let isLocked = theme.isPremium && !viewModel.isPremium
               Button {
-                viewModel.selectTheme(id: theme.id, isPremiumTheme: theme.isPremium)
+                withAnimation(Motion.snappy) {
+                  viewModel.selectTheme(
+                    id: theme.id, isPremiumTheme: theme.isPremium,
+                    keepsInDarkMode: theme.keepsInDarkMode)
+                }
               } label: {
-                ThemeOptionCard(
-                  theme: theme, isSelected: theme.id == selected.id,
-                  isLocked: theme.isPremium && !viewModel.isPremium)
+                ThemeOptionCard(theme: theme, isSelected: theme.id == selected.id, isLocked: false)
+                  .plusCorner(isLocked, inset: 5)
+                  .accessibilityValue(isLocked ? PlusBrand.name : "")
               }
-              .buttonStyle(.plain)
+              .buttonStyle(PressScaleButtonStyle())
             }
           }
           VStack(alignment: .leading, spacing: 12) {
@@ -58,20 +63,10 @@ struct PuzzleThemeView: View {
           .foregroundStyle(Palette.ink)
           .card(padding: 14)
           if !viewModel.isPremium {
-            Button(action: viewModel.openPaywall) {
-              OptionRow(isSelected: true) {
-                Image(systemName: "crown.fill").foregroundStyle(Palette.accent)
-                VStack(alignment: .leading, spacing: 2) {
-                  Text("Pastel ve Kareli Defter").font(AppFont.bodyBold).foregroundStyle(
-                    Palette.ink)
-                  Text("Çengelish+ ile tüm temalar açılır").font(AppFont.caption)
-                    .foregroundStyle(Palette.muted)
-                }
-                Spacer()
-                Image(systemName: "chevron.right").foregroundStyle(Palette.muted)
-              }
-            }
-            .buttonStyle(.plain)
+            PlusPromoCard(
+              title: "\(PuzzleTheme.all.filter(\.isPremium).count) Plus teması",
+              subtitle: "\(PlusBrand.name) ile tüm bulmaca temaları açılır",
+              action: viewModel.openPaywall)
           }
         }
         .padding(.horizontal, Metrics.gutter)
@@ -79,6 +74,7 @@ struct PuzzleThemeView: View {
         .frame(maxWidth: 640)
         .frame(maxWidth: .infinity)
       }
+      .scrollIndicators(.hidden)
     }
     .screenBackground()
   }
@@ -93,12 +89,15 @@ struct PuzzleThemeView: View {
       highContrast: viewModel.settings.highContrast)
   }
 
+  /// Seçili temanın canlı önizlemesi.
   private var preview: some View {
     HStack(spacing: 14) {
       PuzzleGridView(
         layout: CrosswordLayout(puzzle: SamplePuzzles.demo), theme: shown, cellSize: 25,
         highlighted: Set(SamplePuzzles.demo.entries[1].cells), active: .init(row: 3, col: 3),
-        activeClue: .init(row: 3, col: 0))
+        activeClue: .init(row: 3, col: 0)
+      )
+      .themePreviewBackdrop()
       VStack(alignment: .leading, spacing: 6) {
         Eyebrow("Seçili tema")
         Text(shown.name).font(AppFont.headline).foregroundStyle(Palette.ink)
@@ -107,7 +106,11 @@ struct PuzzleThemeView: View {
           Text("Koyu modda Gece teması gösteriliyor").font(AppFont.tiny)
             .foregroundStyle(Palette.muted)
         }
-        Pill(selected.isPremium ? "Çengelish+" : "Ücretsiz", systemImage: "checkmark", tone: .good)
+        if selected.isPremium {
+          PlusBadge(compact: true)
+        } else {
+          Pill("Ücretsiz", systemImage: "checkmark", tone: .good)
+        }
       }
       Spacer(minLength: 0)
     }

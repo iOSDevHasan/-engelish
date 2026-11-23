@@ -48,9 +48,9 @@ public struct CengelishTimelineProvider: TimelineProvider {
     CengelishEntry(date: .now, snapshot: .sample())
   }
 
-  /// Galeri ve geçiş için tek girdi; veri yoksa örnek gösterir.
+  /// Galeri için örnek, ana ekranda gerçek veri; veri yoksa boş durum (sahte veri değil).
   public func getSnapshot(in context: Context, completion: @escaping (CengelishEntry) -> Void) {
-    let snapshot = context.isPreview ? .sample() : (store.load() ?? .sample())
+    let snapshot = context.isPreview ? .sample() : (store.load() ?? .empty())
     completion(CengelishEntry(date: .now, snapshot: snapshot))
   }
 
@@ -58,7 +58,7 @@ public struct CengelishTimelineProvider: TimelineProvider {
   public func getTimeline(
     in context: Context, completion: @escaping (Timeline<CengelishEntry>) -> Void
   ) {
-    let snapshot = store.load() ?? .sample()
+    let snapshot = store.load() ?? .empty()
     let dates = Self.entryDates(from: .now, dayCount: max(1, snapshot.days.count))
     let entries = dates.map { CengelishEntry(date: $0, snapshot: snapshot) }
     let reload = Calendar.current.date(byAdding: .day, value: 1, to: dates.last ?? .now) ?? .now

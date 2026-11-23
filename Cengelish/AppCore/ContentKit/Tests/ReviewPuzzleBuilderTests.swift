@@ -63,7 +63,7 @@ struct ReviewPuzzleBuilderTests {
   func manySeeds() throws {
     let words = try pool()
     let clock = ContinuousClock()
-    var worst: Duration = .zero
+    var total: Duration = .zero
     var shuffler = SeededGenerator(seed: 2026)
     for seed in UInt64(1)...12 {
       let level = CEFRLevel.allCases[Int(seed) % 5]
@@ -73,13 +73,14 @@ struct ReviewPuzzleBuilderTests {
       let elapsed = clock.measure {
         puzzle = ReviewPuzzleBuilder(seed: seed).build(dueWords: due, pool: words)
       }
-      worst = max(worst, elapsed)
+      total += elapsed
       let built = try #require(puzzle)
       expectValid(built)
       #expect(!Set(due.map(\.id)).isDisjoint(with: Set(built.wordIds)))
     }
-    // Hata ayıklama derlemesinde de makul kalmalı.
-    #expect(worst < .seconds(2))
+    // Hata ayıklama derlemesinde de makul kalmalı. Ortalama ölçülür: paralel çalışan testler
+    // tek bir tohumu yavaşlatsa da sonuç kararlı kalır.
+    #expect(total / 12 < .milliseconds(1_500))
   }
 
   @Test("Kelime havuzu yetersizse nil döner")

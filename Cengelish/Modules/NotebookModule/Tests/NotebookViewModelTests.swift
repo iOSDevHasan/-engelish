@@ -12,31 +12,21 @@ import WordKit
 struct NotebookViewModelTests {
 
   /// Test için görünüm modeli ve bağımlılıkları.
+  ///
+  /// Yönlendirici gerçek uygulamadaki gibi yalnızca görünüm modeline verilir (koordinatör DI'da
+  /// `factory`; başka kimse tutmaz). Testler açılan ekranları `RouteLog` üzerinden okur.
   private func makeSUT(
-    premium: Bool = false
-  ) -> (NotebookViewModel, UserDataStore, ContentStub, RouterSpy) {
+    plus: Bool = false, pool: [Word] = poolWords
+  ) -> (NotebookViewModel, UserDataStore, ContentStub, RouteLog) {
     let store = UserDataStore(inMemory: true)
-    let content = ContentStub()
-    let router = RouterSpy()
+    let content = ContentStub(pool: pool)
+    let log = RouteLog()
     let entitlements = EntitlementStub()
-    entitlements.isPremium = premium
+    entitlements.isPremium = plus
     let sut = NotebookViewModel(
-      router: router, content: content, userData: store, pronouncer: SilentPronouncer(),
-      entitlements: entitlements, puzzleSeed: 11)
-    return (sut, store, content, router)
-  }
-
-  @Test("Tekrar oturumu bugünkü kelimelerle başlar ve cevaplandıkça biter")
-  func reviewFlow() async {
-    let (sut, store, _, _) = makeSUT()
-    store.addToNotebook(wordId: "w_house", source: "manual")
-    await sut.load()
-    #expect(sut.dueCount == 1)
-    sut.startReview()
-    #expect(sut.isReviewing)
-    sut.answer(knew: true)
-    #expect(!sut.isReviewing)
-    #expect(store.notebook.first?.box == 2)
+      router: RouterSpy(log: log), content: content, userData: store,
+      pronouncer: SilentPronouncer(), entitlements: entitlements, puzzleSeed: 11)
+    return (sut, store, content, log)
   }
 
   @Test("Özet sayıları ve bölmeler doğru hesaplanır")
@@ -102,43 +92,100 @@ struct NotebookViewModelTests {
     #expect(store.notebook.first?.learned == false)
   }
 
-  @Test("Elle ekleme havuzu arar ve kelimeyi manual kaynağıyla ekler")
-  func manualAdd() async throws {
+  @Test("Bulmacadan gelen ve eski elle eklenmiş kelimeler birlikte listelenir")
+  func puzzleAndLegacyManualWords() async {
     let (sut, store, _, _) = makeSUT()
-    await sut.startAdding()
-    #expect(sut.isAddingWord)
-    sut.query = "kedi"
-    let cat = try #require(sut.searchResults.first)
-    #expect(cat.id == "w_cat")
-    sut.add(cat)
-    #expect(store.notebook.first?.source == "manual")
+    store.addToNotebook(wordId: "w_cat", source: "a1_01")
+    store.addToNotebook(wordId: "w_house", source: "manual")
     await sut.load()
-    #expect(sut.isInNotebook(cat))
+    sut.filter = .all
+    #expect(Set(sut.visibleRows.map(\.word.id)) == ["w_cat", "w_house"])
+  }
+
+  @Test("Plus durumu yüklemede yetkiden okunur")
+  func plusState() async {
+    let (free, _, _, _) = makeSUT(plus: false)
+    await free.load()
+    #expect(!free.isPlus)
+    let (plus, _, _, _) = makeSUT(plus: true)
+    await plus.load()
+    #expect(plus.isPlus)
   }
 
   @Test("Ücretsiz kullanıcı bulmaca tekrarında paywall görür")
-  func puzzleReviewNeedsPremium() async {
-    let (sut, store, content, router) = makeSUT(premium: false)
+  func puzzleReviewNeedsPlus() async {
+    let (sut, store, content, log) = makeSUT(plus: false)
     store.addToNotebook(wordId: "w_cat", source: "manual")
     await sut.load()
     await sut.startPuzzleReview()
-    #expect(router.paywallCount == 1)
-    #expect(router.opened.isEmpty)
+    #expect(log.paywallCount == 1)
+    #expect(log.opened.isEmpty)
     #expect(await content.transient.isEmpty)
   }
 
-  @Test("Çengelish+ kullanıcısı için tekrar bulmacası kurulur, kaydedilir ve açılır")
+  @Test("Çengelish Plus kullanıcısı için tekrar bulmacası kurulur, kaydedilir ve açılır")
   func puzzleReviewOpensPuzzle() async throws {
-    let (sut, store, content, router) = makeSUT(premium: true)
+    let (sut, store, content, log) = makeSUT(plus: true)
     ["w_cat", "w_house", "w_sun"].forEach { store.addToNotebook(wordId: $0, source: "manual") }
     await sut.load()
     await sut.startPuzzleReview()
-    let id = try #require(router.opened.first)
+    let id = try #require(log.opened.first)
     #expect(id.hasPrefix(ReviewPuzzleBuilder.idPrefix))
     let puzzle = try #require(await content.puzzle(id: id))
     #expect(puzzle.isReview)
     #expect(!Set(puzzle.wordIds).isDisjoint(with: ["w_cat", "w_house", "w_sun"]))
     #expect(!sut.isBuildingPuzzle)
+    #expect(sut.notice == nil)
+  }
+
+  @Test("Görünüm modeli yönlendiriciyi canlı tutar (tekrar bulmacası düğmesi boşa düşmez)")
+  func keepsRouterAlive() async {
+    weak var weakRouter: RouterSpy?
+    let sut: NotebookViewModel
+    do {
+      let router = RouterSpy(log: RouteLog())
+      weakRouter = router
+      sut = NotebookViewModel(
+        router: router, content: ContentStub(), userData: UserDataStore(inMemory: true),
+        pronouncer: SilentPronouncer(), entitlements: EntitlementStub())
+    }
+    #expect(weakRouter != nil)
+    withExtendedLifetime(sut) {}
+  }
+
+  @Test("Tek bir tekrar kelimesi havuzla doldurularak bulmacaya girer")
+  func singleDueWordFillsFromPool() async throws {
+    let (sut, store, content, log) = makeSUT(plus: true)
+    store.addToNotebook(wordId: "w_house", source: "a1_01")
+    await sut.load()
+    await sut.startPuzzleReview()
+    let id = try #require(log.opened.first)
+    let puzzle = try #require(await content.puzzle(id: id))
+    #expect(puzzle.wordIds.contains("w_house"))
+    #expect(puzzle.entries.count >= 5)
+  }
+
+  @Test("Bulmaca kurulamazsa açık bir Türkçe açıklama gösterilir, ekran açılmaz")
+  func puzzleReviewNotBuilt() async {
+    let (sut, store, content, log) = makeSUT(plus: true, pool: [])
+    ["w_cat", "w_house"].forEach { store.addToNotebook(wordId: $0, source: "manual") }
+    await sut.load()
+    await sut.startPuzzleReview()
+    #expect(sut.notice == NotebookViewModel.Notice.notBuilt)
+    #expect(log.opened.isEmpty)
+    #expect(await content.transient.isEmpty)
+    #expect(!sut.isBuildingPuzzle)
+  }
+
+  @Test("Tekrar kelimelerinin hiçbiri sığmazsa ilgisiz bulmaca açılmaz")
+  func puzzleReviewNoFittingWord() async {
+    let (sut, store, content, log) = makeSUT(plus: true)
+    store.addToNotebook(wordId: "w_blackboard", source: "manual")
+    await sut.load()
+    await sut.startPuzzleReview()
+    #expect(sut.notice == NotebookViewModel.Notice.noFit)
+    #expect(log.opened.isEmpty)
+    #expect(await content.transient.isEmpty)
   }
 }
 
@@ -168,7 +215,7 @@ private let poolWords: [Word] = {
     ("letter", "mektup"), ("street", "sokak"), ("dinner", "akşam yemeği"), ("listen", "dinle"),
     ("animal", "hayvan"), ("island", "ada"), ("rabbit", "tavşan"), ("carrot", "havuç"),
     ("teacher", "öğretmen"), ("morning", "sabah"), ("kitchen", "mutfak"),
-    ("brother", "erkek kardeş"),
+    ("brother", "erkek kardeş"), ("blackboard", "kara tahta"),
     ("chicken", "tavuk"), ("station", "istasyon"), ("rainbow", "gökkuşağı"), ("student", "öğrenci"),
   ]
   return entries.map { en, tr in
@@ -181,9 +228,14 @@ private let poolWords: [Word] = {
 /// Bellekte içerik; geçici bulmacaları kaydeder.
 private actor ContentStub: ContentProviding {
   private(set) var transient: [String: Puzzle] = [:]
+  private let pool: [Word]
   private let pack = Pack(
     id: "a1", title: "A1 · Başlangıç", subtitle: "", kind: .level, level: .a1, order: 0,
     freeCount: 1, productId: nil, puzzleIds: ["a1_01"], wordCount: 0)
+
+  init(pool: [Word] = poolWords) {
+    self.pool = pool
+  }
 
   func packs() async -> [Pack] { [pack] }
   func pack(id: String) async -> Pack? { id == pack.id ? pack : nil }
@@ -205,18 +257,24 @@ private actor ContentStub: ContentProviding {
     ids.compactMap { id in poolWords.first { $0.id == id } }
   }
   func dailyPuzzle(for date: Date) async -> Puzzle? { nil }
-  func refreshFromRemote(entitledPackIds: Set<String>) async {}
-  func wordPool() async -> [Word] { poolWords }
+  func wordPool() async -> [Word] { pool }
   func registerTransient(_ puzzle: Puzzle, words: [Word]) async { transient[puzzle.id] = puzzle }
 }
 
-/// Açılan ekranları kaydeder.
+/// Açılan ekranların kaydı (yönlendiriciden ayrı; yönlendiriciyi test tutmaz).
+@MainActor
+private final class RouteLog {
+  var opened: [String] = []
+  var paywallCount = 0
+}
+
+/// Açılan ekranları `RouteLog`'a yazar.
 @MainActor
 private final class RouterSpy: NotebookRouting {
-  private(set) var opened: [String] = []
-  private(set) var paywallCount = 0
-  func showPuzzle(_ puzzleId: String) { opened.append(puzzleId) }
-  func showPaywall() { paywallCount += 1 }
+  private let log: RouteLog
+  init(log: RouteLog) { self.log = log }
+  func showPuzzle(_ puzzleId: String) { log.opened.append(puzzleId) }
+  func showPaywall() { log.paywallCount += 1 }
 }
 
 /// Ayarlanabilir yetki servisi.

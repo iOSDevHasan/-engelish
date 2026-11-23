@@ -151,7 +151,9 @@ public struct DailyPuzzleWidgetView: View {
       }
       .frame(maxWidth: .infinity, alignment: .leading)
       if let puzzle = entry.puzzle {
-        WidgetMiniGrid(rows: puzzle.grid, cell: 19)
+        // Izgara widget yüksekliğine sığar; satır sayısı ne olursa olsun yazılar kaymaz.
+        WidgetMiniGrid(rows: puzzle.grid)
+          .frame(maxWidth: 150, maxHeight: .infinity)
       }
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -193,26 +195,51 @@ struct WidgetProgressBar: View {
   }
 }
 
-/// Anlık görüntüdeki satırlardan çizilen küçük ızgara.
+/// Anlık görüntüdeki satırlardan çizilen küçük ızgara; verilen alana oranını koruyarak sığar.
 struct WidgetMiniGrid: View {
   /// Satırlar (`#` ipucu, `.` boş, `x` dolu, ` ` boşluk).
   let rows: [String]
-  /// Kutu boyu.
-  let cell: CGFloat
+
+  /// Kutu aralığının kutu boyuna oranı.
+  private static var gapRatio: CGFloat { 0.12 }
+
+  private var columnCount: Int { max(rows.map(\.count).max() ?? 1, 1) }
+  private var rowCount: Int { max(rows.count, 1) }
 
   var body: some View {
-    VStack(spacing: 2) {
-      ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-        HStack(spacing: 2) {
-          ForEach(Array(row.enumerated()), id: \.offset) { _, kind in
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-              .fill(color(for: kind))
-              .frame(width: cell, height: cell)
+    GeometryReader { proxy in
+      let cell = cellSize(in: proxy.size)
+      let gap = cell * Self.gapRatio
+      VStack(spacing: gap) {
+        ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+          HStack(spacing: gap) {
+            ForEach(Array(row.enumerated()), id: \.offset) { _, kind in
+              RoundedRectangle(cornerRadius: cell * 0.22, style: .continuous)
+                .fill(color(for: kind))
+                .frame(width: cell, height: cell)
+            }
           }
         }
       }
+      .frame(width: proxy.size.width, height: proxy.size.height)
     }
+    .aspectRatio(aspectRatio, contentMode: .fit)
     .widgetAccentable()
+  }
+
+  /// Genişlik / yükseklik oranı (aralıklar dahil).
+  private var aspectRatio: CGFloat {
+    span(columnCount) / span(rowCount)
+  }
+
+  /// `count` kutunun aralıklarla birlikte kutu boyu cinsinden uzunluğu.
+  private func span(_ count: Int) -> CGFloat {
+    CGFloat(count) + CGFloat(count - 1) * Self.gapRatio
+  }
+
+  /// Alana sığan en büyük kutu boyu.
+  private func cellSize(in size: CGSize) -> CGFloat {
+    max(min(size.width / span(columnCount), size.height / span(rowCount)), 0)
   }
 
   /// Kutu türünün rengi.

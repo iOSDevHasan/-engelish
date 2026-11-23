@@ -140,6 +140,15 @@ extension WidgetSnapshot {
     return WidgetDay.string(from: yesterday) == lastPlayedDay ? streak : 0
   }
 
+  /// Widget'ta görünen durum aynı mı: kimlik, seri, günlük sayaç, günlerin kelimesi ve
+  /// bulmacanın bitip bitmediği. Bulmacanın ilerleme yüzdesi ve küçük ızgarası sayılmaz.
+  public func hasSameStatus(as other: WidgetSnapshot) -> Bool {
+    nickname == other.nickname && avatar == other.avatar && streak == other.streak
+      && lastPlayedDay == other.lastPlayedDay && solvedDays == other.solvedDays
+      && dailyGoal == other.dailyGoal && solvedToday == other.solvedToday
+      && days.map(\.statusKey) == other.days.map(\.statusKey)
+  }
+
   /// Verilen günde bitirilen bulmaca sayısı.
   public func solvedCount(on day: String) -> Int {
     solvedToday.day == day ? solvedToday.count : 0
@@ -168,9 +177,25 @@ extension WidgetSnapshot {
   }
 }
 
+extension WidgetSnapshot.Day {
+  /// Gün, kelime, bulmaca ve bitip bitmediği.
+  fileprivate var statusKey: String {
+    [day, word?.en ?? "", puzzle?.id ?? "", puzzle?.isFinished == true ? "1" : "0"]
+      .joined(separator: "|")
+  }
+}
+
 // MARK: - Sample
 
 extension WidgetSnapshot {
+
+  /// Uygulama henüz veri yazmadıysa gösterilen boş görüntü (sahte veri gösterilmez).
+  public static func empty(now: Date = .now) -> WidgetSnapshot {
+    WidgetSnapshot(
+      generatedAt: now, nickname: "", avatar: .mascot, streak: 0, lastPlayedDay: nil,
+      solvedDays: [], dailyGoal: 1,
+      solvedToday: DayCount(day: WidgetDay.string(from: now), count: 0), days: [])
+  }
 
   /// Galeri ve önizleme için örnek veri.
   public static func sample(now: Date = .now) -> WidgetSnapshot {

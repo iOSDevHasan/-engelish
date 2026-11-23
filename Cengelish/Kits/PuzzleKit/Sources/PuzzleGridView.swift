@@ -26,12 +26,19 @@ public struct PuzzleGridView: View {
   private let active: GridPoint?
   private let activeClue: GridPoint?
   private let letters: [GridPoint: (Character, GridLetterStyle)]
+  private let typed: [GridPoint: Character]
+  private let typedInk: Color?
   private let showsClueText: Bool
   private let geometry: GridGeometry
 
   // MARK: - Init
 
   /// Izgarayı düzen, tema, kutu boyu ve vurgularla oluşturur.
+  ///
+  /// - Parameters:
+  ///   - letters: Kutuya basılı harfler (ipucu harfi, cevap anahtarı, paylaşım dolgusu).
+  ///   - typed: Klavyeyle yazılan harfler; el yazısı görünümlü yazı tipiyle çizilir.
+  ///   - typedInk: Klavye harflerinin rengi (verilmezse temanın kalem rengi).
   public init(
     layout: CrosswordLayout,
     theme: PuzzleTheme,
@@ -40,6 +47,8 @@ public struct PuzzleGridView: View {
     active: GridPoint? = nil,
     activeClue: GridPoint? = nil,
     letters: [GridPoint: (Character, GridLetterStyle)] = [:],
+    typed: [GridPoint: Character] = [:],
+    typedInk: Color? = nil,
     showsClueText: Bool = true,
     geometry: GridGeometry? = nil
   ) {
@@ -50,6 +59,8 @@ public struct PuzzleGridView: View {
     self.active = active
     self.activeClue = activeClue
     self.letters = letters
+    self.typed = typed
+    self.typedInk = typedInk
     self.showsClueText = showsClueText
     self.geometry = geometry ?? GridGeometry(cell: cellSize, gap: theme.gap, border: theme.border)
   }
@@ -86,16 +97,10 @@ public struct PuzzleGridView: View {
       )
       .clipShape(shape)
     case .letter:
-      ZStack {
-        shape.fill(fill(for: point))
-        if point == active, let ring = theme.activeRing {
-          shape.strokeBorder(ring, lineWidth: max(2, cellSize * 0.06))
-        }
-        if let (char, style) = letters[point] {
-          LetterMark(char: char, style: style, theme: theme, size: cellSize)
-        }
-      }
-      .frame(width: cellSize, height: cellSize)
+      LetterCell(
+        fill: fill(for: point), ring: point == active ? theme.activeRing : nil,
+        letter: letters[point], typed: typed[point], typedInk: typedInk ?? theme.pen,
+        theme: theme, size: cellSize, radius: radius)
     }
   }
 
@@ -196,6 +201,71 @@ private struct ArrowMark: View {
   }
 }
 
+/// Harf kutusu: zemin, etkin çerçeve, klavyeyle yazılan harf ve basılı harf.
+///
+/// Harfler belirirken küçükten büyüyerek gelir (ipucu harfi zıplayarak); Hareketi Azalt açıkken
+/// sadece yumuşakça belirir.
+private struct LetterCell: View {
+  let fill: Color
+  let ring: Color?
+  let letter: (Character, GridLetterStyle)?
+  let typed: Character?
+  let typedInk: Color
+  let theme: PuzzleTheme
+  let size: CGFloat
+  let radius: CGFloat
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+  var body: some View {
+    let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
+    ZStack {
+      shape.fill(fill)
+      if let ring {
+        shape.strokeBorder(ring, lineWidth: max(2, size * 0.06))
+      }
+      if let typed, letter?.1 != .revealed {
+        TypedMark(char: typed, ink: typedInk, size: size)
+          .id(typed)
+          .transition(appear(from: 0.55))
+      }
+      if let (char, style) = letter {
+        LetterMark(char: char, style: style, theme: theme, size: size)
+          .id(letterKey)
+          .transition(appear(from: 0.3))
+      }
+    }
+    .frame(width: size, height: size)
+    .animation(reduceMotion ? .easeOut(duration: 0.15) : Motion.bouncy, value: letterKey)
+    .animation(reduceMotion ? .easeOut(duration: 0.15) : Motion.snappy, value: typed)
+  }
+
+  /// Basılı harfin animasyon anahtarı (harf + tür).
+  private var letterKey: String? {
+    letter.map { "\($0.0)\($0.1)" }
+  }
+
+  /// Harfin beliriş geçişi; Hareketi Azalt açıksa sadece saydamlık.
+  private func appear(from scale: CGFloat) -> AnyTransition {
+    reduceMotion ? .opacity : .scale(scale: scale).combined(with: .opacity)
+  }
+}
+
+/// Klavyeyle yazılan harf: el yazısı görünümlü, kalem renginde.
+private struct TypedMark: View {
+  let char: Character
+  let ink: Color
+  let size: CGFloat
+
+  var body: some View {
+    Text(String(char))
+      .font(AppFont.hand(size: size * 0.6))
+      .foregroundStyle(ink)
+      .minimumScaleFactor(0.5)
+      .lineLimit(1)
+      .accessibilityLabel(String(char))
+  }
+}
+
 /// Kutuya basılı harf (ipucu harfi ya da cevap anahtarı).
 private struct LetterMark: View {
   let char: Character
@@ -213,9 +283,10 @@ private struct LetterMark: View {
       Text(String(char))
         .font(.system(size: max(8, size * 0.26), weight: .black, design: .rounded))
         .foregroundStyle(theme.keyInk)
-        .frame(width: size, height: size, alignment: .bottomTrailing)
+        // Boşluk kutunun içinde kalır; dışarıda olursa kutu büyür ve ızgara kayar.
         .padding(.trailing, size * 0.1)
         .padding(.bottom, size * 0.04)
+        .frame(width: size, height: size, alignment: .bottomTrailing)
     case .filled:
       EmptyView()
     }

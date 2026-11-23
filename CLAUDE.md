@@ -1,6 +1,6 @@
 # Cengelish iOS
 
-Çengelish — Türkçe ipuçlu, İngilizce cevaplı çengel bulmaca; kutular kalemle (parmak / Apple Pencil) doldurulur, kullanıcı cevap anahtarıyla kendini kontrol eder. Hesap yok: veriler cihazda (SwiftData), isteğe bağlı iCloud; içerik gömülü + Firebase.
+Çengelish — Türkçe ipuçlu, İngilizce cevaplı çengel bulmaca; kutular kalemle (parmak / Apple Pencil) doldurulur, kullanıcı cevap anahtarıyla kendini kontrol eder. Hesap yok: veriler cihazda (SwiftData), isteğe bağlı iCloud; tüm içerik gömülü (ağsız). Firebase'den yalnızca Crashlytics (çökme raporu).
 
 Built on the Jarvis modular SPM architecture. Full spec:
 `~/.claude/skills/jarvis/references/architecture.md`.
@@ -22,8 +22,9 @@ Built on the Jarvis modular SPM architecture. Full spec:
 - **Coordinator** — each Kit/Module exposes `XxxInterface` (InterfaceSources target) implemented by `XxxCoordinator`; consumers depend on the Interface product only
 - **MVVM** — `XxxView` (`@StateObject`) + `XxxViewModel` (`@MainActor ObservableObject`) + `Model` structs
 - **Services (DI singletons)** — `ContentProviding` (ContentStore), `UserDataStoring` (UserDataStore), `EntitlementProviding` (EntitlementStore), `Pronouncing` (Pronouncer); registered in `DependencyRegistration.registerKits()`
-- **Shell** — `Composition/Sources/Shell/AppShellView.swift`: onboarding vs. 4-tab `TabView` (Liquid Glass), appearance
-- **Content** — `tools/content/words.psv` (10 sütun: TR ipucu, US/UK IPA, örnek + Türkçesi, etiketler) → `generate.py` → `ContentKit/Sources/Resources/starter.json` + `tools/content/out/firestore/` (Firebase); `upload_firebase.py` Firestore'a yükler (Storage yok)
+- **Shell** — `Composition/Sources/Shell/AppShellView.swift`: her açılışta animasyonlu splash (`SplashView`), sonra onboarding vs. 4-tab `TabView` (Liquid Glass), appearance; "Tüm verileri sil" sonrası splash yeniden oynar ve onboarding başlar
+- **Bottom sheets** — DesignKit `appBottomSheet(isPresented:/item:)` (kenarlara yapışık özel panel); sistem `.sheet` yalnızca tam ekran seviye testi için
+- **Content** — `tools/content/words.psv` (10 sütun: TR ipucu, US/UK IPA, örnek + Türkçesi, etiketler) → `generate.py` → `ContentKit/Sources/Resources/starter.json` (tek çıktı; içerik için ağ ve sunucu yok)
 - **Widgets** — `CengelishWidgets/` eklenti hedefi (sadece `WidgetBundle`); her şey `AppCore/WidgetBridgeKit`'te; App Group `group.com.hasangurbuz.cengelish`
 - **Platforms** — packages `.iOS(.v18)`; app target iOS 18
 - **Navigation** — `RouterKit` stack; deep links `cengelish://<path>` registered in `App/DeepLinkRegistration.swift`
@@ -47,9 +48,9 @@ deliberately — every app that links it is affected.
 |-----|---------|-----------|
 | DesignKit | Renk/yazı tokenları (açık+koyu), ortak bileşenler, Kalemo avatarı, rozetler | [reference.md](Cengelish/AppCore/DesignKit/reference.md) |
 | UserDataKit | SwiftData ile cihazda profil, ilerleme, defter, seri, rozet; isteğe bağlı iCloud | [reference.md](Cengelish/AppCore/UserDataKit/reference.md) |
-| PurchaseKit | StoreKit 2 abonelik ve paket yetkileri | [reference.md](Cengelish/AppCore/PurchaseKit/reference.md) |
-| ContentKit | Kelime/bulmaca/paket modelleri, gömülü başlangıç içeriği, Firebase'den paket indirme ve önbellek | [reference.md](Cengelish/AppCore/ContentKit/reference.md) |
-| FirebaseContentKit | Firebase (Firestore + App Check) ile uzak içerik kaynağı (paket içerikleri `packContents` belgelerinde); GoogleService-Info.plist yoksa devre dışı | [reference.md](Cengelish/AppCore/FirebaseContentKit/reference.md) |
+| PurchaseKit | StoreKit 2 tek seferlik satın almalar: ömür boyu Plus ve ayrı sınav paketleri (abonelik yok) | [reference.md](Cengelish/AppCore/PurchaseKit/reference.md) |
+| ContentKit | Kelime/bulmaca/paket modelleri, gömülü içerik (24 paket / 1.250 bulmaca + 365 günlük bulmaca, 5.222 kelimelik havuz; 14 tema paketi), takvim bitince cihazda üretilen Günün Bulmacası; içerik bütünlüğü testi; ağ kullanmaz | [reference.md](Cengelish/AppCore/ContentKit/reference.md) |
+| CrashReportingKit | Firebase Crashlytics ile çökme raporlama (Firebase'in tek kullanımı); GoogleService-Info.plist yoksa ya da DEBUG'da kapalı; dSYM'ler Release'te Run Script ile yüklenir | [reference.md](Cengelish/AppCore/CrashReportingKit/reference.md) |
 | WidgetBridgeKit | Widget anlık görüntüsü (App Group) ve widget görünümleri; uygulama yazar, widget okur | [reference.md](Cengelish/AppCore/WidgetBridgeKit/reference.md) |
 
 ---
@@ -67,14 +68,14 @@ deliberately — every app that links it is affected.
 
 | Module | Purpose | Reference |
 |--------|---------|-----------|
-| HomeModule | Ana Sayfa: selamlama, seri kartı (seri dondurma ipucu), Günün Bulmacası, kaldığın yerden devam, günün kelimesi, hatırlatıcı paneli. | [reference.md](Cengelish/Modules/HomeModule/reference.md) |
-| OnboardingModule | Karşılama, profil oluşturma (avatar + takma ad), seviye (2 dk seviye testi), amaç/hatırlatıcı, veri tercihi (cihaz / iCloud), sonda bir kez paywall. | [reference.md](Cengelish/Modules/OnboardingModule/reference.md) |
-| ExploreModule | Keşfet (seviye, sınav ve tema paketleri, bölüm filtresi, arama), tema listesi, paket detayı (bulmaca kareleri, kilit, paywall). | [reference.md](Cengelish/Modules/ExploreModule/reference.md) |
-| PuzzleModule | Bulmaca çözme: PencilKit ile kalem/kurşun/silgi, iki parmakla zoom, odak modu, ipucu ve tema panelleri, cevap anahtarı (✓/✗), bitiş ve paylaşım kartı. | [reference.md](Cengelish/Modules/PuzzleModule/reference.md) |
-| NotebookModule | Kelime Defterim: özet, Tümü / Tekrar / Öğrendim, elle kelime ekleme, tekrar bulmacası (Çengelish+), kartla tekrar, kelime detayı. | [reference.md](Cengelish/Modules/NotebookModule/reference.md) |
-| ProfileModule | Profil (kapak, avatar, unvan, istatistik, seviye ilerlemesi, seri takvimi, paylaşım kartı), profili düzenle, rozetler (15) ve vitrin. | [reference.md](Cengelish/Modules/ProfileModule/reference.md) |
-| SettingsModule | Ayarlar, uygulama görünümü, Bulmaca teması ekranı, veri ve yedekleme (iCloud, dışa/içe aktarma, silme). | [reference.md](Cengelish/Modules/SettingsModule/reference.md) |
-| PaywallModule | Çengelish+ paywall: yıllık / aylık / açılan sınav paketi (YDS, YÖKDİL, LGS, IELTS, TOEFL), geri yükleme. | [reference.md](Cengelish/Modules/PaywallModule/reference.md) |
+| HomeModule | Ana Sayfa: selamlama (profil fotoğrafı ya da maskot), sağ üstte Plus butonu (üye / üye değil), seri kartı (seri dondurma, hatırlatıcı kısayolu), Günün Bulmacası, Plus tanıtım kartı, kaldığın yerden devam, günün kelimesi, hatırlatıcı paneli. | [reference.md](Cengelish/Modules/HomeModule/reference.md) |
+| OnboardingModule | Karşılama, takma ad (avatar: kalem maskotu, boşsa "User" + 6 rakam), seviye (2 dk seviye testi), amaç/hatırlatıcı, veri tercihi (cihaz / iCloud), sonda bir kez paywall. | [reference.md](Cengelish/Modules/OnboardingModule/reference.md) |
+| ExploreModule | Keşfet (renkli seviye kartları / kaydırmalı şerit, sınav ve tema paketleri, bölüm filtresi, arama, Plus tanıtım kartı), tema listesi, paket detayı (büyük bulmaca kareleri, sırayla oynama: önceki bitmeden sonraki kilitli; seviye paketleri herkese açık, sınav/tema paketlerinde köşede Plus sekmesi, paywall). | [reference.md](Cengelish/Modules/ExploreModule/reference.md) |
+| PuzzleModule | Bulmaca çözme: PencilKit ile kalem/kurşun/silgi ve klavye, iki parmakla zoom, odak modu, ipucu ve tema panelleri; "Bitirdim" tüm kutular dolunca açılır, her kelime ✓/✗ işaretlenmeden sonuç ekranına geçilmez; çözerken cevap anahtarına göz atma; bitmiş bulmaca salt okunur (yalnızca cevaplar); bitiş ve paylaşım kartı. | [reference.md](Cengelish/Modules/PuzzleModule/reference.md) |
+| NotebookModule | Kelime Defterim: sadece bulmacalarda yanlış/bilinmeyen kelimeler; özet, Tümü / Tekrar / Öğrendim, tekrar bulmacası (Çengelish Plus), kelime detayı (alttan panel). | [reference.md](Cengelish/Modules/NotebookModule/reference.md) |
+| ProfileModule | Sade profil (sayaçlı kimlik kartı, İngilizce seviyesi kartı, "Rozetler" kartında 15 rozetin tamamı ve ipucu balonu), fotoğraf + takma ad paneli (avatarda kalem). | [reference.md](Cengelish/Modules/ProfileModule/reference.md) |
+| SettingsModule | Ayarlar (başlığa dokununca açıklama balonu), Plus tanıtımı/ömür boyu Plus satırı, uygulama görünümü, Bulmaca teması ekranı, veri ve yedekleme (iCloud, alan, "Tüm verileri sil" onay paneli). | [reference.md](Cengelish/Modules/SettingsModule/reference.md) |
+| PaywallModule | Çengelish Plus paywall (GolBil sırası, her yerden tam ekran modal): kısa kahraman, seçime göre değişen avantaj listesi, Plus / Sınav paketleri sekmeleri (ömür boyu Plus, 5 tek seferlik sınav paketi; abonelik yok), sabit satın alma + geri yükleme; Plus üyesine üyelik durumu (plan, satın alma tarihi), satın alma sonrası kutlama. | [reference.md](Cengelish/Modules/PaywallModule/reference.md) |
 
 ---
 

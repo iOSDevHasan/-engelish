@@ -17,6 +17,7 @@ struct ShareView: View {
           .frame(maxWidth: .infinity)
       }
       .scrollBounceBehavior(.basedOnSize)
+      .scrollIndicators(.hidden)
       options
         .padding(.horizontal, Metrics.gutter)
         .padding(.vertical, 12)

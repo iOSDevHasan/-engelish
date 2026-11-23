@@ -5,6 +5,9 @@ import PuzzleKit
 import SwiftUI
 
 /// Odak modu: seçili kelime büyük kutularda, rahat yazmak için.
+///
+/// Klavye açıkken mini harita, açıklama ve kelime butonları gizlenir, kutular küçülür; böylece
+/// kutular ve araç çubuğu klavyenin üstünde kalır.
 struct FocusView: View {
   @ObservedObject var viewModel: PuzzleViewModel
   let theme: PuzzleTheme
@@ -12,7 +15,8 @@ struct FocusView: View {
   @StateObject private var bridge = CanvasBridge()
 
   var body: some View {
-    VStack(spacing: 14) {
+    let keyboardUp = viewModel.isKeyboardShown
+    return VStack(spacing: 14) {
       HStack {
         Button {
           viewModel.closeFocus()
@@ -35,31 +39,52 @@ struct FocusView: View {
       if let entry = viewModel.selected, let layout = viewModel.layout {
         FocusClueHeader(
           entry: entry, layout: layout, theme: theme, active: viewModel.activeCell,
-          showsMap: true)
+          showsMap: !keyboardUp)
         VStack(spacing: 14) {
           FocusWritingCanvas(
             viewModel: viewModel, entry: entry, theme: theme, penColor: penColor, bridge: bridge
           )
           .frame(maxWidth: .infinity)
-          .frame(height: 240)
-          FocusHint(autoAdvance: viewModel.settings.autoAdvance)
+          .frame(height: keyboardUp ? 150 : 240)
+          if !keyboardUp {
+            FocusHint(
+              autoAdvance: viewModel.settings.autoAdvance, isKeyboard: viewModel.tool == .keyboard)
+          }
         }
         .card(padding: 10)
         PuzzleToolbar(
           tool: $viewModel.tool, hintsLeft: viewModel.hintsLeft,
-          leftHanded: viewModel.settings.leftHanded, onUndo: bridge.undo, onRedo: bridge.redo,
+          leftHanded: viewModel.settings.leftHanded, canUndo: viewModel.canUndo,
+          canRedo: viewModel.canRedo, onUndo: viewModel.undo, onRedo: viewModel.redo,
           onFocus: { viewModel.closeFocus() },
           onHint: { viewModel.isHintSheetPresented = true },
           onClear: viewModel.clearFocus, compact: true)
         Spacer(minLength: 0)
-        FocusStepButtons(labels: viewModel.neighbourLabels) { viewModel.closeFocus(moveTo: $0) }
+        if !keyboardUp {
+          FocusStepButtons(labels: viewModel.neighbourLabels) {
+            viewModel.closeFocus(moveTo: $0)
+          }
+        }
       }
     }
+    .animation(Motion.snappy, value: keyboardUp)
     .padding(Metrics.gutter)
     .frame(maxWidth: 680)
     .frame(maxWidth: .infinity)
+    .background {
+      KeyboardInput(
+        isActive: viewModel.wantsKeyboard, request: viewModel.keyboardRequest,
+        onInsert: viewModel.typeText, onDelete: viewModel.deleteBackward,
+        onReturn: { viewModel.closeFocus(moveTo: 1) },
+        onFocusChange: viewModel.keyboardFocusChanged
+      )
+      .frame(width: 1, height: 1)
+      .opacity(0)
+      .accessibilityHidden(true)
+    }
+    .ignoresSafeArea(.keyboard)
     .screenBackground()
-    .sheet(isPresented: hintBinding) {
+    .appBottomSheet(isPresented: hintBinding) {
       HintSheet(viewModel: viewModel)
     }
   }
@@ -96,7 +121,8 @@ struct FoldFocusPanel: View {
           )
           .frame(maxWidth: .infinity)
           .frame(height: 200)
-          FocusHint(autoAdvance: viewModel.settings.autoAdvance)
+          FocusHint(
+            autoAdvance: viewModel.settings.autoAdvance, isKeyboard: viewModel.tool == .keyboard)
         }
         .card(padding: 10)
         FocusStepButtons(labels: viewModel.neighbourLabels) { viewModel.step($0) }
@@ -145,15 +171,20 @@ struct FocusClueHeader: View {
 /// Odak kutularının altındaki açıklama.
 struct FocusHint: View {
   let autoAdvance: Bool
+  /// Klavye modu açık mı.
+  var isKeyboard = false
 
   var body: some View {
-    Text(
-      autoAdvance
-        ? "Kutunun içine rahatça yaz · bitince sonraki kutuya geçer"
-        : "Kutunun içine rahatça yaz · yazdıkların ızgaraya geçer"
-    )
-    .font(AppFont.tiny).foregroundStyle(Palette.muted)
-    .multilineTextAlignment(.center)
+    Text(text)
+      .font(AppFont.tiny).foregroundStyle(Palette.muted)
+      .multilineTextAlignment(.center)
+  }
+
+  private var text: String {
+    if isKeyboard { return "Kutuya dokun ve klavyeyle yaz · harf yazınca sonraki kutuya geçer" }
+    return autoAdvance
+      ? "Kutunun içine rahatça yaz · bitince sonraki kutuya geçer"
+      : "Kutunun içine rahatça yaz · yazdıkların ızgaraya geçer"
   }
 }
 
@@ -198,11 +229,13 @@ struct FocusWritingCanvas: View {
       drawing: viewModel.focusDrawing,
       drawingRevision: viewModel.focusRevision,
       contentSize: CanvasMetrics.focusSize(count: entry.cells.count),
+      inkRects: viewModel.focusInkRects(for: entry),
       underlay: { scale in
         AnyView(
           FocusBoxes(
-            entry: entry, revealed: viewModel.revealed,
-            activeIndex: viewModel.focusActiveIndex, theme: theme, scale: scale))
+            entry: entry, revealed: viewModel.revealed, typed: viewModel.typed,
+            typedInk: penColor, activeIndex: viewModel.focusActiveIndex, theme: theme,
+            scale: scale))
       },
       tool: viewModel.tool,
       penColor: UIColor(penColor),
@@ -214,19 +247,26 @@ struct FocusWritingCanvas: View {
       bridge: bridge,
       onChange: viewModel.focusChanged,
       onTap: viewModel.focusTap(at:),
-      onStroke: viewModel.focusStrokeEnded(at:)
+      onStroke: viewModel.focusStrokeEnded(at:),
+      onErase: viewModel.focusErase(at:)
     )
     .accessibilityLabel("Odak kutuları. \(entry.clue), \(entry.answer.count) harf.")
   }
 }
 
-/// Büyük yazma kutuları; etkin kutu vurgulanır.
+/// Büyük yazma kutuları; etkin kutu vurgulanır. İpucu harfi zıplayarak, klavye harfi büyüyerek
+/// belirir (Hareketi Azalt'ta sadece saydamlık).
 struct FocusBoxes: View {
   let entry: PuzzleEntry
   let revealed: Set<GridPoint>
+  /// Klavyeyle yazılan harfler.
+  var typed: [GridPoint: Character] = [:]
+  /// Klavye harflerinin rengi.
+  var typedInk: Color = .primary
   let activeIndex: Int?
   let theme: PuzzleTheme
   let scale: CGFloat
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
     let count = entry.cells.count
@@ -261,10 +301,22 @@ struct FocusBoxes: View {
           .padding(.bottom, 18 * scale)
       }
       .overlay {
-        if revealed.contains(cell), let char = entry.letter(at: cell) {
-          Text(String(char)).font(.system(size: 54 * scale, weight: .heavy, design: .rounded))
-            .foregroundStyle(theme.keyInk.opacity(0.85))
+        ZStack {
+          if revealed.contains(cell), let char = entry.letter(at: cell) {
+            Text(String(char)).font(.system(size: 54 * scale, weight: .heavy, design: .rounded))
+              .foregroundStyle(theme.keyInk.opacity(0.85))
+              .transition(appear(from: 0.3))
+          } else if let char = typed[cell] {
+            Text(String(char)).font(AppFont.hand(size: 58 * scale))
+              .foregroundStyle(typedInk)
+              .id(char)
+              .transition(appear(from: 0.55))
+          }
         }
+        .animation(
+          reduceMotion ? .easeOut(duration: 0.15) : Motion.bouncy, value: revealed.contains(cell)
+        )
+        .animation(reduceMotion ? .easeOut(duration: 0.15) : Motion.snappy, value: typed[cell])
       }
       .overlay(alignment: .topLeading) {
         Text("\(index + 1)").font(.system(size: 13 * scale, weight: .bold, design: .rounded))
@@ -272,6 +324,13 @@ struct FocusBoxes: View {
       }
       .frame(width: rect.width * scale, height: rect.height * scale)
       .offset(x: rect.minX * scale, y: rect.minY * scale)
+  }
+}
+
+extension FocusBoxes {
+  /// Harfin beliriş geçişi; Hareketi Azalt açıksa sadece saydamlık.
+  fileprivate func appear(from scale: CGFloat) -> AnyTransition {
+    reduceMotion ? .opacity : .scale(scale: scale).combined(with: .opacity)
   }
 }
 

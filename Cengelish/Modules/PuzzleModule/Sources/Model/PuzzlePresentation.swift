@@ -67,6 +67,67 @@ enum EntryNavigation {
   }
 }
 
+// MARK: - Keyboard
+
+/// Klavye girişi ve kutu ilerleme hesapları.
+enum TypedInput {
+  /// Yazılan metnin son karakterini İngilizce büyük harfe çevirir (ı/i → I); harf değilse nil.
+  static func letter(from text: String) -> Character? {
+    guard let last = text.last else { return nil }
+    let mapped: Character =
+      switch last {
+      case "ı", "i", "İ": "I"
+      default: Character(String(last).uppercased(with: Locale(identifier: "en_US_POSIX")))
+      }
+    guard mapped.isASCII, mapped.isLetter else { return nil }
+    return mapped
+  }
+
+  /// Kelimede `from` kutusundan (dahil) başlayıp ileri doğru ilk açılmamış kutu.
+  static func writableCell(
+    in entry: PuzzleEntry, from cell: GridPoint?, revealed: Set<GridPoint>
+  ) -> GridPoint? {
+    let start = cell.flatMap { entry.cells.firstIndex(of: $0) } ?? 0
+    return entry.cells[start...].first { !revealed.contains($0) }
+  }
+
+  /// `cell` kutusundan sonraki ilk açılmamış kutu; yoksa nil.
+  static func nextCell(
+    in entry: PuzzleEntry, after cell: GridPoint, revealed: Set<GridPoint>
+  ) -> GridPoint? {
+    guard let index = entry.cells.firstIndex(of: cell) else { return nil }
+    return entry.cells[(index + 1)...].first { !revealed.contains($0) }
+  }
+
+  /// `cell` kutusundan önceki ilk açılmamış kutu; yoksa nil.
+  static func previousCell(
+    in entry: PuzzleEntry, before cell: GridPoint, revealed: Set<GridPoint>
+  ) -> GridPoint? {
+    guard let index = entry.cells.firstIndex(of: cell) else { return nil }
+    return entry.cells[..<index].last { !revealed.contains($0) }
+  }
+}
+
+// MARK: - Hints
+
+/// İpucuyla açılacak kutuların seçimi.
+enum HintPicker {
+  /// "Bir harf aç" için kutu: seçili kutu açılmamışsa o; değilse önce boş, sonra herhangi bir
+  /// açılmamış kutu. Kelimenin tamamı açıksa nil (hak harcanmaz).
+  static func letterTarget(
+    in entry: PuzzleEntry, active: GridPoint?, revealed: Set<GridPoint>, filled: Set<GridPoint>
+  ) -> GridPoint? {
+    if let active, entry.cells.contains(active), !revealed.contains(active) { return active }
+    let hidden = entry.cells.filter { !revealed.contains($0) }
+    return hidden.first { !filled.contains($0) } ?? hidden.first
+  }
+
+  /// "Kelimeyi göster" için açılmamış kutular.
+  static func wordTargets(in entry: PuzzleEntry, revealed: Set<GridPoint>) -> [GridPoint] {
+    entry.cells.filter { !revealed.contains($0) }
+  }
+}
+
 // MARK: - Answer key
 
 /// Cevap anahtarındaki işaret özeti.

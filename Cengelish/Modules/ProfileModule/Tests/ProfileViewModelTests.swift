@@ -1,8 +1,11 @@
 import Combine
+import CoreGraphics
 import DesignKit
 import Foundation
+import ImageIO
 import PurchaseKit
 import Testing
+import UniformTypeIdentifiers
 import UserDataKit
 
 @testable import ProfileModule
@@ -22,25 +25,12 @@ struct ProfileViewModelTests {
     utc.date(from: DateComponents(year: 2026, month: month, day: day, hour: hour)) ?? .now
   }
 
-  private func makeViewModel(
-    store: UserDataStore, premium: Bool = false, now: Date = ProfileViewModelTests.date(day: 9)
-  ) -> ProfileViewModel {
+  private func makeViewModel(store: UserDataStore, premium: Bool = false) -> ProfileViewModel {
     let entitlements = EntitlementStub()
     entitlements.isPremium = premium
     return ProfileViewModel(
       coordinator: ProfileCoordinator(), userData: store, entitlements: entitlements,
-      calendar: Self.utc, now: { now })
-  }
-
-  // MARK: - Unlocks
-
-  @Test("Kilitli aksesuarlar kural tablosuna göre açılır")
-  func unlocks() {
-    var stats = UserStats()
-    #expect(!UnlockRules.isUnlocked(.headphones, stats: stats, isPremium: false))
-    stats.wordsSeen = 100
-    #expect(UnlockRules.isUnlocked(.headphones, stats: stats, isPremium: false))
-    #expect(UnlockRules.isUnlocked(.crown, stats: UserStats(), isPremium: true))
+      calendar: Self.utc)
   }
 
   // MARK: - Level progress
@@ -79,55 +69,9 @@ struct ProfileViewModelTests {
         == "Ekim 2026'dan beri")
   }
 
-  @Test("Göreli zaman: dk / sa / gün")
-  func relative() {
-    let now = Self.date(day: 9)
-    #expect(ProfileDateText.relative(now.addingTimeInterval(-20), now: now) == "az önce")
-    #expect(ProfileDateText.relative(now.addingTimeInterval(-120), now: now) == "2 dk önce")
-    #expect(ProfileDateText.relative(now.addingTimeInterval(-7_200), now: now) == "2 sa önce")
-    #expect(ProfileDateText.relative(now.addingTimeInterval(-86_400 * 3), now: now) == "3 gün önce")
-  }
-
-  // MARK: - Calendar
-
-  @Test("Takvim: pazartesi başlar, çözülen, bugün ve dondurulan günler işaretlenir")
-  func streakMonth() {
-    let solved: Set = ["2026-11-02", "2026-11-04", "2026-11-09"]
-    let month = StreakMonth.make(
-      containing: Self.date(day: 15), solvedDays: solved, today: Self.date(day: 9),
-      canFreeze: true, calendar: Self.utc)
-    #expect(month.title == "Kasım 2026")
-    #expect(month.leadingBlanks == 6)  // 1 Kasım 2026 pazar.
-    #expect(month.days.count == 30)
-    #expect(month.solvedCount == 3)
-    #expect(month.days[2].state == .frozen)
-    #expect(month.days[8].isToday)
-    #expect(month.days[9].state == .future)
-    let free = StreakMonth.make(
-      containing: Self.date(day: 15), solvedDays: solved, today: Self.date(day: 9),
-      canFreeze: false, calendar: Self.utc)
-    #expect(free.frozenCount == 0)
-  }
-
-  @Test("Takvim gezinmesi gelecek aya ve profil öncesine gitmez")
-  func monthNavigation() {
-    let store = UserDataStore(inMemory: true, calendar: Self.utc)
-    store.createProfile(
-      UserProfile(
-        nickname: "Deniz", avatar: AvatarConfig(), createdAt: Self.date(month: 10, day: 5)))
-    let viewModel = makeViewModel(store: store)
-    #expect(!viewModel.canShowNextMonth)
-    viewModel.shiftMonth(by: 1)
-    #expect(viewModel.month.title == "Kasım 2026")
-    viewModel.shiftMonth(by: -1)
-    #expect(viewModel.month.title == "Ekim 2026")
-    #expect(!viewModel.canShowPreviousMonth)
-    #expect(viewModel.canShowNextMonth)
-  }
-
   // MARK: - Profile
 
-  @Test("Profil satırı: Türkçe ay, rozet sayısı, eski unvan eşlemesi")
+  @Test("Profil satırı: Türkçe ay, rozet sayısı, açılmış en yüksek unvan")
   func profileTexts() {
     let store = UserDataStore(inMemory: true, calendar: Self.utc)
     store.createProfile(
@@ -138,11 +82,11 @@ struct ProfileViewModelTests {
       puzzleId: "a1_01", marks: ["e1": true], wordIdsByEntry: ["e1": "w_a"], isPremium: false,
       now: Self.date(day: 9))
     let viewModel = makeViewModel(store: store)
-    #expect(viewModel.title == .bulmacaKurdu)
-    #expect(viewModel.draftTitle == .bulmacaKurdu)
+    #expect(viewModel.title == .yeniKalem)
     let count = store.badges.count
-    #expect(viewModel.memberSinceText == "Ekim 2026'dan beri · \(count) rozet")
-    #expect(viewModel.dataTimestamp == "Yedek yok")
+    #expect(count > 0)
+    #expect(viewModel.memberSinceText == "Ekim 2026'dan beri")
+    #expect(viewModel.badgeCountText == "\(count)/15")
   }
 
   @Test("Takma ad 16 karakterle sınırlanır ve sayaç gösterilir")
@@ -151,42 +95,161 @@ struct ProfileViewModelTests {
     store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
     let viewModel = makeViewModel(store: store)
     #expect(viewModel.nicknameCounter == "5/16")
-    viewModel.draft.nickname = String(repeating: "a", count: 20)
+    viewModel.beginEditing()
+    viewModel.draftNickname = String(repeating: "a", count: 20)
     viewModel.limitNickname()
     #expect(viewModel.nicknameCounter == "16/16")
   }
 
-  @Test("Vitrin en fazla 3 rozet tutar ve dokununca açılıp kapanır")
-  func showcaseToggle() {
-    let store = UserDataStore(inMemory: true, calendar: Self.utc)
+  @Test("Düzenleme takma adı kırpar; boş ad kayıtlı adı korur, o da yoksa User + 6 rakam")
+  func saveDraft() {
+    let store = UserDataStore(inMemory: true)
     store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
-    // Gece, hızlı ve hatasız bitiriş: İlk Bulmaca, Hatasız, Gece Kuşu, Hız Ustası.
-    store.saveDraft(puzzleId: "a1_01", drawing: nil, durationSec: 60)
+    let viewModel = makeViewModel(store: store)
+    viewModel.beginEditing()
+    #expect(viewModel.draftNickname == "Deniz")
+    viewModel.draftNickname = "  Ada  "
+    viewModel.saveDraft()
+    #expect(store.profile?.nickname == "Ada")
+    viewModel.beginEditing()
+    viewModel.draftNickname = "   "
+    #expect(viewModel.draftDisplayName == "Ada")
+    viewModel.saveDraft()
+    #expect(store.profile?.nickname == "Ada")
+    #expect(
+      ProfileViewModel.resolveNickname(" ", current: "", makeDefault: { "User123456" })
+        == "User123456")
+    let generated = ProfileViewModel.makeDefaultNickname()
+    #expect(generated.hasPrefix("User") && generated.count == 10)
+    #expect(Int(generated.dropFirst(4)) != nil)
+  }
+
+  @Test("Unvan, açılmış unvanların en yükseğidir")
+  func automaticTitle() {
+    let store = UserDataStore(inMemory: true, calendar: Self.utc)
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig(), titleId: "usta"))
+    #expect(makeViewModel(store: store).title == .yeniKalem)
     _ = store.finish(
       puzzleId: "a1_01", marks: ["e1": true], wordIdsByEntry: ["e1": "w_a"], isPremium: false,
       now: Self.date(day: 9, hour: 23))
-    let viewModel = makeViewModel(store: store)
-    #expect(viewModel.earned.count >= 4)
-    let first = viewModel.showcase[0]
-    viewModel.toggleShowcase(first)
-    #expect(!viewModel.showcase.contains(first))
-    #expect(viewModel.showcase.count == 2)
-    viewModel.toggleShowcase(first)
-    #expect(viewModel.showcase.count == 3)
-    #expect(viewModel.showcase.contains(first))
+    #expect(makeViewModel(store: store).title == .geceKusu)
   }
 
-  @Test("Çengelish+ kullanıcısı için bu ayki dondurmalar sayılır")
-  func freezes() {
+  // MARK: - Photo
+
+  @Test("Seçilen fotoğraf küçültülür, Kaydet ile saklanır; Vazgeç kaydetmez")
+  func photoDraft() async throws {
+    let store = UserDataStore(inMemory: true)
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
+    let viewModel = makeViewModel(store: store)
+    #expect(viewModel.photo == nil)
+    viewModel.beginEditing()
+    await viewModel.pickPhoto(try Self.png(width: 1_600, height: 1_200))
+    let preview = try #require(viewModel.draftPhoto)
+    #expect(max(preview.size.width * preview.scale, preview.size.height * preview.scale) == 512)
+    #expect(store.profilePhoto == nil)
+    viewModel.saveDraft()
+    #expect(store.profilePhoto != nil)
+    #expect(viewModel.photo != nil)
+
+    viewModel.beginEditing()
+    viewModel.removeDraftPhoto()
+    #expect(viewModel.draftPhoto == nil)
+    viewModel.beginEditing()
+    #expect(viewModel.draftPhoto != nil)
+    viewModel.removeDraftPhoto()
+    viewModel.saveDraft()
+    #expect(store.profilePhoto == nil)
+    #expect(viewModel.photo == nil)
+  }
+
+  @Test("Okunamayan fotoğraf hata gösterir ve taslağı değiştirmez")
+  func photoError() async {
+    let store = UserDataStore(inMemory: true)
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
+    let viewModel = makeViewModel(store: store)
+    viewModel.beginEditing()
+    await viewModel.pickPhoto(Data("foto değil".utf8))
+    #expect(viewModel.photoError != nil)
+    #expect(viewModel.draftPhoto == nil)
+    #expect(!viewModel.isPreparingPhoto)
+  }
+
+  // MARK: - Badges
+
+  @Test("Rozet: sayaçlı ilerleme metni, halka %93'te durur, kazanılan tam dolar")
+  func badgeItem() {
+    var stats = UserStats()
+    stats.puzzlesSolved = 7
+    let snapshot = AchievementSnapshot(stats: stats)
+    let ten = BadgeItem.make(.puzzles10, earnedAt: nil, snapshot: snapshot)
+    #expect(ten.progressText == "7/10")
+    #expect(abs(ten.progress - 0.7) < 0.0001)
+    #expect(!ten.isEarned)
+    stats.puzzlesSolved = 10
+    let full = BadgeItem.make(
+      .puzzles10, earnedAt: nil, snapshot: AchievementSnapshot(stats: stats))
+    #expect(full.ringFraction == BadgeItem.maxRingFraction)
+    let earned = BadgeItem.make(.puzzles10, earnedAt: .now, snapshot: snapshot)
+    #expect(earned.ringFraction == 1)
+    let owl = BadgeItem.make(.nightOwl, earnedAt: nil, snapshot: snapshot)
+    #expect(owl.counter == nil)
+    #expect(owl.progress == 0)
+    #expect(owl.progressText == "Tek bulmacada kazanılır")
+    #expect(BadgeKind.allCases.allSatisfy { !$0.meaning.isEmpty })
+  }
+
+  @Test("Rozet sırası: kazanılanlar tarih sırasıyla, sonra hedefe en yakınlar, anlıklar sonda")
+  func badgeOrder() {
+    var stats = UserStats()
+    stats.puzzlesSolved = 1
+    stats.longestStreak = 6
+    let earnedAt: [BadgeKind: Date] = [
+      .speed: Self.date(day: 2), .firstPuzzle: Self.date(day: 1),
+    ]
+    let items = BadgeItem.all(badges: earnedAt, snapshot: AchievementSnapshot(stats: stats))
+    #expect(items.count == BadgeKind.allCases.count)
+    #expect(items.prefix(2).map(\.kind) == [.firstPuzzle, .speed])
+    #expect(items[2].kind == .streak7)
+    #expect(items.last?.counter == nil)
+  }
+
+  @Test("Profil tüm rozetleri listeler; sayaç ve ilerleme kazanılanlardan hesaplanır")
+  func allBadgesListed() {
     let store = UserDataStore(inMemory: true, calendar: Self.utc)
-    for day in [6, 8] {
-      _ = store.finish(
-        puzzleId: "a1_0\(day)", marks: ["e1": true], wordIdsByEntry: [:], isPremium: true,
-        now: Self.date(day: day))
-    }
-    let viewModel = makeViewModel(store: store, premium: true)
-    #expect(viewModel.freezesUsedThisMonth == 1)
-    #expect(viewModel.freezeText == "Seri dondurma · bu ay 1/2 kullanıldı")
+    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
+    let empty = makeViewModel(store: store)
+    #expect(empty.badgeItems.count == BadgeKind.allCases.count)
+    #expect(empty.badgeProgress == 0)
+    #expect(empty.badgeCountText == "0/\(BadgeKind.allCases.count)")
+    _ = store.finish(
+      puzzleId: "a1_01", marks: ["e1": true], wordIdsByEntry: ["e1": "w_a"], isPremium: false,
+      now: Self.date(day: 9))
+    let viewModel = makeViewModel(store: store)
+    #expect(viewModel.badgeItems.count == BadgeKind.allCases.count)
+    #expect(viewModel.badgeItems.first?.isEarned == true)
+    #expect(viewModel.badgeProgress > 0)
+    #expect(Set(viewModel.badgeItems.map(\.id)).count == viewModel.badgeItems.count)
+  }
+}
+
+extension ProfileViewModelTests {
+  /// Verilen boyutta düz renkli PNG üretir.
+  fileprivate static func png(width: Int, height: Int) throws -> Data {
+    let context = try #require(
+      CGContext(
+        data: nil, width: width, height: height, bitsPerComponent: 8, bytesPerRow: 0,
+        space: CGColorSpaceCreateDeviceRGB(),
+        bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue))
+    context.setFillColor(CGColor(red: 1, green: 0.8, blue: 0.2, alpha: 1))
+    context.fill(CGRect(x: 0, y: 0, width: width, height: height))
+    let image = try #require(context.makeImage())
+    let output = NSMutableData()
+    let destination = try #require(
+      CGImageDestinationCreateWithData(output, UTType.png.identifier as CFString, 1, nil))
+    CGImageDestinationAddImage(destination, image, nil)
+    _ = CGImageDestinationFinalize(destination)
+    return output as Data
   }
 }
 

@@ -16,6 +16,8 @@
   func registerDeepLink<V: View>(_ path: DeepLinkPath, handler: () -> V)       // sets root
   func registerDeepLink(_ path: DeepLinkPath, urlHandler: (URL) -> Void)       // custom handling
   func handleDeepLink(_ url: URL) -> Bool                                      // matches host, then path
+  func present<V: View>(_ view: V)      // full-screen modal over the stack (default: push)
+  func dismissModal()                   // closes it (default: pop)
 
 struct DeepLinkPath: RawRepresentable, ExpressibleByStringLiteral   // extend: static let home: Self = "home"
 
@@ -27,7 +29,8 @@ EnvironmentValues.requestFlowExit: (@MainActor () -> Void)?        // non-nil wh
 @MainActor final class AppRouter: ObservableObject, Routing
   @Published var navigationPath: [RouteView]
   @Published var isFlowExitDialogPresented: Bool
-struct RouterStack<Content: View>: View   // init(navigator:rootView:)
+  @Published var modal: RouteView?          // shown by RouterStack as .fullScreenCover
+struct RouterStack<Content: View>: View   // init(navigator:rootView:); each route is drawn with .id(route.id)
 ```
 
 Flow exit: a multi-step flow sets `nav.flowExitContext = { … }`; back buttons call

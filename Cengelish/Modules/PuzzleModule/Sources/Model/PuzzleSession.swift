@@ -14,6 +14,8 @@ struct PuzzleSession {
   let drawingData: Data
   /// İpucuyla açılan kutular.
   let revealed: Set<GridPoint>
+  /// Klavyeyle yazılan harfler.
+  var typed: [GridPoint: Character] = [:]
   /// Kayıtlı işaretler.
   let marks: [String: Bool]
   /// Geçen süre.

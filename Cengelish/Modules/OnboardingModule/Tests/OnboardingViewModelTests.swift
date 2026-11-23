@@ -14,8 +14,48 @@ struct OnboardingViewModelTests {
     let sut = makeSUT()
     sut.next()
     #expect(sut.step == .profile)
+    #expect(sut.isMovingForward)
     sut.back()
     #expect(sut.step == .welcome)
+    #expect(!sut.isMovingForward)
+  }
+
+  @Test("Akışta avatar seçimi yok: profil adımı kalır, avatar her zaman maskottur")
+  func mascotAvatar() {
+    let sut = makeSUT()
+    #expect(OnboardingStep.allCases == [.welcome, .profile, .level, .goal, .data])
+    #expect(sut.avatar == AvatarConfig.mascot)
+  }
+
+  @Test("Varsayılan takma ad \"User\" + 6 rakamdır")
+  func defaultNicknameFormat() {
+    var generator = SeededGenerator(seed: 42)
+    for _ in 0..<50 {
+      let name = OnboardingViewModel.makeDefaultNickname(using: &generator)
+      #expect(name.hasPrefix("User"))
+      let digits = name.dropFirst(4)
+      #expect(digits.count == 6)
+      #expect(digits.allSatisfy { $0.isASCII && $0.isNumber })
+      #expect(digits.first != "0")
+    }
+    #expect(OnboardingViewModel.makeDefaultNickname().count == 10)
+    var first = SeededGenerator(seed: 7)
+    var second = SeededGenerator(seed: 7)
+    #expect(
+      OnboardingViewModel.makeDefaultNickname(using: &first)
+        == OnboardingViewModel.makeDefaultNickname(using: &second))
+  }
+
+  @Test("Boş ya da yalnızca boşluk olan takma ad varsayılan adla değişir")
+  func resolvedNickname() {
+    let sut = OnboardingViewModel(
+      userData: UserDataStore(inMemory: true), content: LevelContent(),
+      defaultNickname: "User482913", onFinish: {})
+    #expect(sut.resolvedNickname == "User482913")
+    sut.setNickname("   ")
+    #expect(sut.resolvedNickname == "User482913")
+    sut.setNickname("  Deniz ")
+    #expect(sut.resolvedNickname == "Deniz")
   }
 
   @Test("Takma ad 16 karakterle sınırlanır")
@@ -69,14 +109,26 @@ struct OnboardingViewModelTests {
     #expect(finished)
     #expect(paywallCount == 1)
     #expect(store.profile?.nickname == "Deniz")
+    #expect(store.profile?.avatar == AvatarConfig.mascot)
     #expect(store.settings.reminderHour == 21)
   }
 
-  @Test("Çengelish+ kullanıcısına onboarding sonunda paywall gösterilmez")
-  func completePremium() async {
+  @Test("Takma ad boş bırakılırsa varsayılan ad profile kaydedilir")
+  func completeWithDefaultNickname() async {
+    let store = UserDataStore(inMemory: true)
+    let sut = OnboardingViewModel(
+      userData: store, content: LevelContent(), defaultNickname: "User482913", onFinish: {})
+    sut.reminderOn = false
+    sut.useICloud = false
+    await sut.complete()
+    #expect(store.profile?.nickname == "User482913")
+  }
+
+  @Test("Çengelish Plus kullanıcısına onboarding sonunda paywall gösterilmez")
+  func completePlus() async {
     var paywallCount = 0
     let sut = OnboardingViewModel(
-      userData: UserDataStore(inMemory: true), content: LevelContent(), isPremium: { true },
+      userData: UserDataStore(inMemory: true), content: LevelContent(), hasPlus: { true },
       onFinish: {}, showPaywall: { paywallCount += 1 })
     sut.reminderOn = false
     sut.useICloud = false
@@ -234,7 +286,6 @@ private struct LevelContent: ContentProviding {
   }
 
   func dailyPuzzle(for date: Date) async -> Puzzle? { nil }
-  func refreshFromRemote(entitledPackIds: Set<String>) async {}
 }
 
 /// Testlerde tekrarlanabilir karıştırma için basit üreteç (SplitMix64).

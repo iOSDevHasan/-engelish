@@ -7,7 +7,7 @@ import RouterKitInterface
 import SwiftUI
 import UserDataKit
 
-/// Onboarding ekranlarını kurar; bitişte Çengelish+ paywall'unu bir kez açar.
+/// Onboarding ekranlarını kurar; bitişte Çengelish Plus paywall'unu bir kez açar.
 @MainActor
 public final class OnboardingCoordinator: OnboardingModuleInterface {
   @Inject private var nav: Routing
@@ -21,7 +21,7 @@ public final class OnboardingCoordinator: OnboardingModuleInterface {
   public func createOnboardingView(onFinish: @escaping @MainActor () -> Void) -> AnyView {
     let viewModel = OnboardingViewModel(
       userData: userData, content: content,
-      isPremium: { [weak self] in self?.entitlements.isPremium ?? false },
+      hasPlus: { [weak self] in self?.entitlements.isPremium ?? false },
       onFinish: onFinish,
       showPaywall: { [weak self] in self?.showPaywall() })
     return AnyView(OnboardingView(viewModel: viewModel))
@@ -29,6 +29,6 @@ public final class OnboardingCoordinator: OnboardingModuleInterface {
 
   /// Paywall'u (kapatılabilir) açar.
   func showPaywall() {
-    nav.push(paywall.createPaywallView(highlightProductId: nil))
+    nav.present(paywall.createPaywallView(highlightProductId: nil))
   }
 }

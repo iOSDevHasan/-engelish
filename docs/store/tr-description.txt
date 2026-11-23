@@ -10,19 +10,21 @@ NELER VAR
 • Her gün yeni bir Günün Bulmacası ve günün kelimesi
 • A1'den C1'e seviye paketleri
 • Sınav paketleri: YDS, YÖKDİL, LGS, IELTS ve TOEFL
-• Tema paketleri: Mutfak, Seyahat, İş, Futbol, Doğa, Teknoloji
+• 14 tema paketi: Mutfak, Seyahat, İş, Futbol, Spor, Bilim ve Uzay, Film ve Dizi ve daha fazlası
 • Amerikan ve İngiliz telaffuzuyla sesli okuma, IPA ve örnek cümleler
 • Seri, rozetler, unvanlar ve kendi Kalemo avatarın
 • Ana Ekran ve Kilit Ekranı widget'ları
-• iPad'de yan panel, açık ve koyu mod, altı bulmaca teması
+• iPad'de yan panel, açık ve koyu mod, 18 bulmaca teması (6'sı ücretsiz)
 
 HESAP YOK, VERİLERİN SENDE
 Çengelish hesap istemez. İlerlemen cihazında durur; istersen kendi iCloud hesabına yedeklersin. Reklam yok, izleme yok.
 
-ÇENGELISH+
-Abonelikle tüm bulmacalar, tüm sınav ve tema paketleri, sınırsız ipucu, tekrar bulmacası, seri dondurma ve premium temalar açılır. Yıllık planda 7 gün ücretsiz deneme vardır. Sınav paketlerini abonelik olmadan tek seferlik satın alıp ömür boyu kullanabilirsin.
+ÇENGELISH PLUS
+Tek seferlik ödemeyle ömür boyu: tüm bulmacalar, tüm sınav ve tema paketleri, sınırsız ipucu, tekrar bulmacası, seri dondurma ve premium temalar açılır. Abonelik yok, yenileme yok.
 
-Abonelik, deneme süresi bitmeden en az 24 saat önce iptal edilmezse otomatik yenilenir ve ücret Apple Kimliği hesabından alınır. Aboneliği App Store hesap ayarlarından yönetebilir ve iptal edebilirsin.
+Yalnızca bir sınava mı hazırlanıyorsun? YDS, YÖKDİL, LGS, IELTS ve TOEFL paketlerini ayrı ayrı, tek seferlik satın alıp ömür boyu kullanabilirsin.
+
+Tüm satın alımlar Apple Kimliğine bağlıdır ve "Satın alımları geri yükle" ile diğer cihazlarına geri yüklenir.
 
 Gizlilik: https://iosdevhasan.github.io/-engelish/gizlilik.html
 Kullanım Koşulları: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/

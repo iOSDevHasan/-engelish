@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B6BF0"/><stop offset="0.55" stop-color="#5443D6"/><stop offset="1" stop-color="#2E2378"/></linearGradient>
+  <radialGradient id="glow" cx="0.3" cy="0.25" r="0.5"><stop offset="0" stop-color="#FF8DB3" stop-opacity="0.45"/><stop offset="1" stop-color="#FF8DB3" stop-opacity="0"/></radialGradient>
+  <radialGradient id="glow2" cx="0.72" cy="0.7" r="0.45"><stop offset="0" stop-color="#FFC93C" stop-opacity="0.3"/><stop offset="1" stop-color="#FFC93C" stop-opacity="0"/></radialGradient>
+  <linearGradient id="hot" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF9F4A"/><stop offset="0.55" stop-color="#FF7A7A"/><stop offset="1" stop-color="#FF5C99"/></linearGradient>
+  <linearGradient id="cream" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFF1DC"/></linearGradient>
+  <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE07A"/><stop offset="1" stop-color="#FFB524"/></linearGradient>
+  <linearGradient id="ink" gradientUnits="userSpaceOnUse" x1="600" y1="560" x2="800" y2="800"><stop offset="0" stop-color="#8E7CF8"/><stop offset="1" stop-color="#4E3DD0"/></linearGradient>
+  <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0.5"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>
+  <filter id="sh" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="26" stdDeviation="26" flood-color="#140C4A" flood-opacity="0.55"/></filter>
+  <clipPath id="ca"><path d="M 224 118 H 412 Q 508 118 508 214 V 402 Q 508 498 412 498 L 320 498 L 172 572 L 210 494 Q 128 498 128 402 V 214 Q 128 118 224 118 Z"/></clipPath><clipPath id="cb"><path d="M 594 470 H 796 Q 900 470 900 574 V 776 Q 900 880 796 880 L 810 876 L 856 954 L 700 880 H 594 Q 490 880 490 776 V 574 Q 490 470 594 470 Z"/></clipPath>
+</defs>
+<rect width="1024" height="1024" fill="url(#bg)"/>
+<rect width="1024" height="1024" fill="url(#glow)"/>
+<rect width="1024" height="1024" fill="url(#glow2)"/>
+<g transform="translate(512 520) scale(0.95) translate(-512 -520)">
+<!-- bubble A (Turkish) -->
+<g filter="url(#sh)"><path d="M 224 118 H 412 Q 508 118 508 214 V 402 Q 508 498 412 498 L 320 498 L 172 572 L 210 494 Q 128 498 128 402 V 214 Q 128 118 224 118 Z" fill="#D9437A" transform="translate(0,16)"/><path d="M 224 118 H 412 Q 508 118 508 214 V 402 Q 508 498 412 498 L 320 498 L 172 572 L 210 494 Q 128 498 128 402 V 214 Q 128 118 224 118 Z" fill="url(#hot)"/></g>
+<rect x="128" y="118" width="380" height="150" fill="url(#gloss)" clip-path="url(#ca)" opacity="0.6"/>
+<g fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" transform="translate(318,304) scale(0.9) translate(-318,-332)">
+  <path d="M 390 230 C 360 198 308 192 274 214 C 232 242 224 294 228 322 C 236 374 278 398 322 396 C 354 394 380 380 396 360" stroke-width="45"/><path d="M 320 408 C 319 418 317 426 314 432 C 342 430 356 444 349 460 C 342 476 316 480 296 472" stroke-width="28"/>
+</g>
+<!-- bubble B (English) -->
+<g filter="url(#sh)"><path d="M 594 470 H 796 Q 900 470 900 574 V 776 Q 900 880 796 880 L 810 876 L 856 954 L 700 880 H 594 Q 490 880 490 776 V 574 Q 490 470 594 470 Z" fill="#BBAEF5" transform="translate(0,16)"/><path d="M 594 470 H 796 Q 900 470 900 574 V 776 Q 900 880 796 880 L 810 876 L 856 954 L 700 880 H 594 Q 490 880 490 776 V 574 Q 490 470 594 470 Z" fill="url(#cream)"/></g>
+<rect x="490" y="470" width="410" height="150" fill="url(#gloss)" clip-path="url(#cb)" opacity="0.7"/>
+<g fill="none" stroke="url(#ink)" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 764 578 Q 702 566 638 576 Q 630 674 634 774 Q 702 784 770 772" stroke-width="40"/><path d="M 638 674 Q 682 668 730 672" stroke-width="40"/>
+</g>
+<!-- the çengel arrow -->
+<g fill="none" stroke-linecap="round" stroke-linejoin="round" filter="url(#sh)">
+  <path d="M 318 556 V 690 Q 318 718 346 718 H 420" stroke="url(#gold)" stroke-width="34"/>
+  <path d="M 404 682 L 450 718 L 404 754" stroke="url(#gold)" stroke-width="34"/>
+</g>
+</g>
+</svg>

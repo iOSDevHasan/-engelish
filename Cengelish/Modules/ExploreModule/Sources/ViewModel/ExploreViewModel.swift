@@ -19,6 +19,8 @@ struct PackCard: Identifiable, Equatable {
   var progress: Double { Double(solved) / Double(max(puzzleCount, 1)) }
   /// Tamamlanma yüzdesi (0–100).
   var percent: Int { Int((progress * 100).rounded()) }
+  /// Kartta gösterilen ilerleme ("3/12").
+  var progressText: String { "\(solved)/\(puzzleCount)" }
   /// Kısa başlık ("YDS").
   var shortTitle: String { PackRules.shortTitle(for: pack) }
   /// Tema simgesi.
@@ -50,6 +52,8 @@ final class ExploreViewModel: ObservableObject {
   @Published private(set) var themes: [PackCard] = []
   /// Kullanıcının seviyesi ("B1"); profil yoksa nil.
   @Published private(set) var profileLevel: String?
+  /// Çengelish Plus yoksa tanıtım kartı ve sınav başlığındaki Plus rozeti gösterilir.
+  @Published private(set) var showsPlusPromo = false
   private let coordinator: ExploreCoordinator
   private let content: any ContentProviding
   private let userData: any UserDataStoring
@@ -81,6 +85,10 @@ final class ExploreViewModel: ObservableObject {
   var showsExams: Bool { (segment == .all || segment == .exams) && !exams.isEmpty }
   /// Tema paketleri bölümü görünsün mü.
   var showsThemes: Bool { (segment == .all || segment == .themes) && !themes.isEmpty }
+  /// Seviyeler "Tümü"de yatay kayan şeritte, "Seviyeler" bölümünde ızgarada gösterilir.
+  var showsLevelCarousel: Bool { segment == .all }
+  /// Yatay şeridin açılışta kaydırılacağı seviye (kullanıcının seviyesi); yoksa nil.
+  var currentLevelId: String? { levels.first(where: isCurrentLevel)?.id }
   /// Izgarada gösterilen temalar: "Tümü"de ilk altı, "Temalar"da hepsi.
   var visibleThemes: [PackCard] {
     segment == .all ? Array(themes.prefix(Self.themePreviewCount)) : themes
@@ -98,6 +106,7 @@ final class ExploreViewModel: ObservableObject {
   /// Paketleri ve ilerlemeyi yükler. Bulmacası olmayan paketler gizlenir.
   func load() async {
     profileLevel = userData.profile?.level
+    showsPlusPromo = !entitlements.canAccess(productId: nil)
     let progress = userData.allProgress()
     let packs = await content.packs().filter { !$0.puzzleIds.isEmpty }
     var cards: [PackCard] = []
@@ -128,6 +137,11 @@ final class ExploreViewModel: ObservableObject {
   /// Tüm tema paketleri listesini açar.
   func openAllThemes() {
     coordinator.showThemes(viewModel: self)
+  }
+
+  /// Çengelish Plus paywall'unu açar.
+  func openPaywall() {
+    coordinator.showPaywall(productId: nil)
   }
 
   /// Tema listesinden geri döner.

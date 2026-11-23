@@ -1,15 +1,13 @@
 import Foundation
 import OSLog
 
-/// Gömülü başlangıç içeriğini ve indirilen paketleri birleştirip sunan içerik deposu.
-///
-/// İndirilen paketler Application Support altında kalıcı saklanır, böylece oyun
-/// internetsiz de çalışır.
+/// Uygulamaya gömülü içeriği (tüm paketler, bulmacalar ve günlük bulmaca takvimi) sunan içerik
+/// deposu. Ağ kullanmaz; takvimde olmayan günlerin bulmacası cihazda üretilir ve Application
+/// Support altında saklanır.
 public actor ContentStore: ContentProviding {
 
   // MARK: - Properties
 
-  private let remote: RemoteContentSource?
   private let cacheDirectory: URL
   private let logger = Logger(subsystem: "com.hasangurbuz.cengelish", category: "content")
   private var packsById: [String: Pack] = [:]
@@ -18,13 +16,19 @@ public actor ContentStore: ContentProviding {
   private var dailies: [String: String] = [:]
   private var transientPuzzles: [String: Puzzle] = [:]
   private var transientWords: [String: Word] = [:]
+  /// Takvimde olmayan günlerin bulmacasını üretir; herkeste aynı sonuç için yalnızca gömülü
+  /// kelimelerle kurulur.
+  private var dailyBuilder: DailyPuzzleBuilder?
+  /// Cihazda üretilen günlük bulmacası olan günler (`yyyy-MM-dd`).
+  private var generatedDailyDates: Set<String> = []
   private var isLoaded = false
+  /// Cihazda üretilip önbelleğe yazılan günlük bulmaca dosyalarının ön eki.
+  static let generatedDailyPrefix = "gendaily-"
 
   // MARK: - Init
 
-  /// Depoyu isteğe bağlı uzak kaynak ve önbellek klasörüyle oluşturur.
-  public init(remote: RemoteContentSource? = nil, cacheDirectory: URL? = nil) {
-    self.remote = remote
+  /// Depoyu isteğe bağlı önbellek klasörüyle oluşturur (cihazda üretilen günlük bulmacalar).
+  public init(cacheDirectory: URL? = nil) {
     self.cacheDirectory =
       cacheDirectory
       ?? URL.applicationSupportDirectory.appending(path: "Content", directoryHint: .isDirectory)
@@ -68,34 +72,15 @@ public actor ContentStore: ContentProviding {
     if let id = dailies[key], let puzzle = puzzlesById[id] {
       return puzzle
     }
-    // Takvimde gün yoksa gömülü günlük bulmacalardan tarihe göre sabit bir tanesi seçilir.
+    // Takvimde gün yoksa bulmaca cihazda, gün anahtarından belirlenimci olarak üretilir.
+    if let puzzle = generateDaily(dayKey: key) {
+      return puzzle
+    }
+    // Üretilemezse (havuz yok) gömülü günlük bulmacalardan tarihe göre sabit bir tanesi seçilir.
     let all = dailies.keys.sorted().compactMap { dailies[$0] }.compactMap { puzzlesById[$0] }
     guard !all.isEmpty else { return nil }
     let dayNumber = Int(date.timeIntervalSince1970 / 86_400)
     return all[((dayNumber % all.count) + all.count) % all.count]
-  }
-
-  public func refreshFromRemote(entitledPackIds: Set<String>) async {
-    loadIfNeeded()
-    guard let remote else { return }
-    do {
-      for pack in try await remote.fetchManifest() {
-        let current = packsById[pack.id]
-        let isNewer = (pack.contentVersion ?? 0) > (current?.contentVersion ?? 0)
-        let allowed = pack.freeCount > 0 || entitledPackIds.contains(pack.id)
-        guard isNewer, allowed, pack.contentPath != nil else { continue }
-        let payload = try await remote.downloadPack(pack)
-        try save(payload, name: "pack-\(pack.id).json")
-        merge(payload)
-      }
-      let dailyPayloads = try await remote.fetchDailies(from: DayKey.string(from: .now), limit: 7)
-      for daily in dailyPayloads {
-        try save(daily, name: "daily-\(daily.date).json")
-        merge(daily)
-      }
-    } catch {
-      logger.error("Uzak içerik yenilenemedi: \(error.localizedDescription)")
-    }
   }
 
   public func wordPool() async -> [Word] {
@@ -109,6 +94,35 @@ public actor ContentStore: ContentProviding {
     words.forEach { transientWords[$0.id] = $0 }
   }
 
+  // MARK: - On-device dailies
+
+  /// Gün için cihazda günlük bulmaca üretip kaydeder; üretilemezse nil döner.
+  ///
+  /// Bugün ve geçmiş günlerin bulmacası önbelleğe yazılır; böylece yeni bir uygulama sürümü
+  /// (farklı gömülü içerik) gelse de oynanan bulmaca ve ilerlemesi değişmez. Gelecek günler
+  /// (widget önizlemesi) sadece bellekte tutulur; yeni bir sürümün gömülü takvimi onların yerini
+  /// alabilir.
+  private func generateDaily(dayKey: String) -> Puzzle? {
+    guard let puzzle = dailyBuilder?.build(dayKey: dayKey) else {
+      logger.error("Günlük bulmaca üretilemedi: \(dayKey)")
+      return nil
+    }
+    puzzlesById[puzzle.id] = puzzle
+    dailies[dayKey] = puzzle.id
+    generatedDailyDates.insert(dayKey)
+    if dayKey <= DayKey.string(from: .now) {
+      let words = Set(puzzle.wordIds).sorted().compactMap { wordsById[$0] }
+      do {
+        try save(
+          DailyPayload(date: dayKey, puzzle: puzzle, words: words),
+          name: "\(Self.generatedDailyPrefix)\(dayKey).json")
+      } catch {
+        logger.error("Üretilen günlük bulmaca kaydedilemedi: \(error.localizedDescription)")
+      }
+    }
+    return puzzle
+  }
+
   // MARK: - Loading
 
   /// Gömülü içeriği ve önbellekteki dosyaları belleğe yükler.
@@ -117,6 +131,7 @@ public actor ContentStore: ContentProviding {
     isLoaded = true
     do {
       let bundle = try Self.loadStarterBundle()
+      dailyBuilder = DailyPuzzleBuilder(words: bundle.words)
       bundle.words.forEach { wordsById[$0.id] = $0 }
       bundle.packs.forEach { packsById[$0.id] = $0 }
       bundle.puzzles.forEach { puzzlesById[$0.id] = $0 }
@@ -127,31 +142,45 @@ public actor ContentStore: ContentProviding {
     loadCache()
   }
 
-  /// Önbellek klasöründeki paket ve günlük bulmaca dosyalarını okur.
+  /// Önbellek klasöründeki dosyaları okur: cihazda üretilen günlük bulmacalar ve eski
+  /// sürümlerin indirdiği paket / günlük bulmaca dosyaları (oynanmış ilerleme bozulmasın diye).
   private func loadCache() {
     let files =
       (try? FileManager.default.contentsOfDirectory(
         at: cacheDirectory, includingPropertiesForKeys: nil)) ?? []
     let decoder = JSONDecoder()
-    for file in files where file.pathExtension == "json" {
+    for file in files.sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
+    where file.pathExtension == "json" {
       guard let data = try? Data(contentsOf: file) else { continue }
-      if file.lastPathComponent.hasPrefix("pack-"),
-        let payload = try? decoder.decode(PackPayload.self, from: data)
-      {
-        merge(payload)
-      } else if file.lastPathComponent.hasPrefix("daily-"),
+      if file.lastPathComponent.hasPrefix(Self.generatedDailyPrefix),
         let payload = try? decoder.decode(DailyPayload.self, from: data)
       {
         merge(payload)
+        generatedDailyDates.insert(payload.date)
+      } else if file.lastPathComponent.hasPrefix("pack-"),
+        let payload = try? decoder.decode(PackPayload.self, from: data)
+      {
+        mergeLegacy(payload)
+      } else if file.lastPathComponent.hasPrefix("daily-"),
+        let payload = try? decoder.decode(DailyPayload.self, from: data)
+      {
+        mergeLegacy(payload)
       }
     }
   }
 
-  /// Paket dosyasını belleğe ekler; aynı kimlikli kayıtların yerini alır.
-  private func merge(_ payload: PackPayload) {
-    payload.words.forEach { wordsById[$0.id] = $0 }
-    payload.puzzles.forEach { puzzlesById[$0.id] = $0 }
-    packsById[payload.pack.id] = payload.pack
+  /// Eski sürümün indirdiği paket dosyasından yalnızca gömülü içerikte olmayan kayıtları ekler;
+  /// gömülü paketler (daha çok bulmacalı güncel sürüm) eskisiyle ezilmez.
+  private func mergeLegacy(_ payload: PackPayload) {
+    payload.words.forEach { wordsById[$0.id] = wordsById[$0.id] ?? $0 }
+    payload.puzzles.forEach { puzzlesById[$0.id] = puzzlesById[$0.id] ?? $0 }
+    packsById[payload.pack.id] = packsById[payload.pack.id] ?? payload.pack
+  }
+
+  /// Eski sürümün indirdiği günlük bulmacayı, o gün için gömülü bulmaca yoksa ekler.
+  private func mergeLegacy(_ payload: DailyPayload) {
+    guard dailies[payload.date] == nil else { return }
+    merge(payload)
   }
 
   /// Günlük bulmaca belgesini belleğe ekler.

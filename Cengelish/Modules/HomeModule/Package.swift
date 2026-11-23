@@ -19,6 +19,7 @@ let package = Package(
     .package(path: "../../Kits/WordKit"),
     .package(path: "../PuzzleModule"),
     .package(path: "../ExploreModule"),
+    .package(path: "../PaywallModule"),
     // jarvis:packages
   ],
   targets: [
@@ -40,6 +41,7 @@ let package = Package(
         .product(name: "WordKit", package: "WordKit"),
         .product(name: "PuzzleModuleInterface", package: "PuzzleModule"),
         .product(name: "ExploreModuleInterface", package: "ExploreModule"),
+        .product(name: "PaywallModuleInterface", package: "PaywallModule"),
         // jarvis:products
       ],
       path: "Sources",

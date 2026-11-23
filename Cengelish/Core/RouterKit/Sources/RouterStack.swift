@@ -14,9 +14,12 @@ public struct RouterStack<Content: View>: View {
   public var body: some View {
     NBNavigationStack(path: $navigator.navigationPath) {
       rootView
-        .nbNavigationDestination(for: RouteView.self) { $0.view }
+        // Her rota kendi kimliğiyle çizilir: yığında aynı konuma aynı türde yeni bir ekran gelince
+        // (ör. bitiş ekranından "sonraki bulmaca") eski ekranın durumu yeni ekrana taşınmaz.
+        .nbNavigationDestination(for: RouteView.self) { $0.view.id($0.id) }
     }
     .environment(\.requestFlowExit, exitRequestClosure)
+    .fullScreenCover(item: $navigator.modal) { $0.view }
   }
 
   private var exitRequestClosure: (@MainActor () -> Void)? {

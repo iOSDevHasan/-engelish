@@ -3,93 +3,156 @@ import DesignKit
 import SwiftUI
 
 /// Kısa seviye testi: İngilizce kelime, dört Türkçe anlam; sonunda önerilen seviye.
+///
+/// Alt panel olarak açılır; kökte `.appSheet(detents: [.large])` uygulanır.
 struct LevelTestView: View {
   @ObservedObject var viewModel: LevelTestViewModel
   let onAccept: (CEFRLevel) -> Void
   let onClose: () -> Void
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
-    VStack(spacing: 0) {
-      NavHeader("Seviye testi", leadingSymbol: "xmark", onLeading: onClose)
-      content
-        .padding(.horizontal, Metrics.gutter)
-        .padding(.bottom, 16)
-        .frame(maxWidth: 560, maxHeight: .infinity, alignment: .top)
-        .frame(maxWidth: .infinity)
-    }
-    .screenBackground()
-    .task { await viewModel.start() }
-    .animation(.snappy, value: viewModel.askedCount)
-    .animation(.snappy, value: viewModel.selectedIndex)
+    content
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .safeAreaInset(edge: .top, spacing: 0) {
+        NavHeader("Seviye testi", leadingSymbol: "xmark", onLeading: onClose)
+          .frame(maxWidth: OnboardingLayout.maxContentWidth)
+          .padding(.top, 16)
+          .frame(maxWidth: .infinity)
+          .background(Palette.background)
+      }
+      .screenBackground()
+      .task { await viewModel.start() }
+      .animation(reduceMotion ? .easeInOut(duration: 0.2) : Motion.gentle, value: viewModel.phase)
+      .animation(
+        reduceMotion ? .easeInOut(duration: 0.2) : Motion.gentle, value: viewModel.askedCount
+      )
+      .animation(Motion.snappy, value: viewModel.selectedIndex)
   }
 
   @ViewBuilder
   private var content: some View {
     switch viewModel.phase {
     case .loading:
-      ProgressView().tint(Palette.accent).frame(maxHeight: .infinity)
+      ProgressView().tint(Palette.accent)
     case .asking:
       if let question = viewModel.question {
         QuestionPanel(viewModel: viewModel, question: question)
+          .transition(.opacity)
       }
     case .finished(let level):
       ResultPanel(
         level: level, correct: viewModel.correctCount, total: viewModel.askedCount,
-        onAccept: { onAccept(level) }, onClose: onClose)
+        onAccept: { onAccept(level) }, onClose: onClose
+      )
+      .transition(.opacity)
     case .unavailable:
-      VStack(spacing: 14) {
-        Spacer()
+      CenteredPanel {
+        Image(systemName: "exclamationmark.magnifyingglass")
+          .font(.system(size: 40, weight: .bold))
+          .foregroundStyle(Palette.muted)
         Text("Test şu an hazırlanamadı. Seviyeni listeden seçebilirsin.")
           .font(AppFont.body).foregroundStyle(Palette.muted)
           .multilineTextAlignment(.center)
+          .fixedSize(horizontal: false, vertical: true)
+      } footer: {
         Button("Seviye listesine dön", action: onClose).buttonStyle(.chunky)
       }
     }
   }
 }
 
-/// Soru, şıklar ve devam butonu.
+/// İçeriği dikeyde ortalayan, sığmazsa kaydırılan ve butonları altta sabit tutan panel.
+private struct CenteredPanel<Content: View, Footer: View>: View {
+  @ViewBuilder let content: Content
+  @ViewBuilder let footer: Footer
+
+  var body: some View {
+    ScrollView {
+      VStack(spacing: 14) { content }
+        .readableWidth()
+        .padding(.vertical, 24)
+    }
+    .scrollIndicators(.hidden)
+    .scrollBounceBehavior(.basedOnSize)
+    .defaultScrollAnchor(.center, for: .alignment)
+    .safeAreaInset(edge: .bottom, spacing: 0) {
+      PinnedFooter { footer }
+    }
+  }
+}
+
+/// Soru, şıklar ve devam butonu; uzun içerik kaydırılır, buton altta sabit kalır.
 private struct QuestionPanel: View {
   @ObservedObject var viewModel: LevelTestViewModel
   let question: LevelQuestion
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
   var body: some View {
-    VStack(alignment: .leading, spacing: 16) {
-      HStack {
-        Text("Soru \(viewModel.askedCount) / \(viewModel.totalQuestions)")
-          .font(AppFont.caption).foregroundStyle(Palette.muted)
-        Spacer()
-        Pill(question.level.rawValue, tone: .accent)
-      }
-      ProgressBar(value: viewModel.progress, height: 6)
-      VStack(alignment: .leading, spacing: 6) {
-        Eyebrow("Bu kelimenin anlamı ne?")
-        Text(question.word.en).font(AppFont.display).foregroundStyle(Palette.ink)
-          .minimumScaleFactor(0.6)
-          .lineLimit(1)
-      }
-      .padding(.top, 6)
-      VStack(spacing: 10) {
-        ForEach(Array(question.options.enumerated()), id: \.offset) { index, option in
-          Button {
-            viewModel.answer(index)
-          } label: {
-            optionRow(index: index, text: option)
+    ScrollView {
+      VStack(alignment: .leading, spacing: 16) {
+        HStack {
+          Text("Soru \(viewModel.askedCount) / \(viewModel.totalQuestions)")
+            .font(AppFont.caption)
+            .monospacedDigit()
+            .foregroundStyle(Palette.muted)
+            .contentTransition(.numericText(value: Double(viewModel.askedCount)))
+          Spacer()
+          Pill(question.level.rawValue, tone: .accent)
+        }
+        ProgressBar(value: viewModel.progress, height: 6)
+        VStack(alignment: .leading, spacing: 16) {
+          VStack(alignment: .leading, spacing: 6) {
+            Eyebrow("Bu kelimenin anlamı ne?")
+            Text(question.word.en).font(AppFont.display).foregroundStyle(Palette.ink)
+              .minimumScaleFactor(0.6)
+              .lineLimit(1)
           }
-          .buttonStyle(.plain)
-          .disabled(viewModel.selectedIndex != nil)
+          .padding(.top, 6)
+          VStack(spacing: 10) {
+            ForEach(Array(question.options.enumerated()), id: \.offset) { index, option in
+              Button {
+                viewModel.answer(index)
+              } label: {
+                optionRow(index: index, text: option)
+              }
+              .buttonStyle(PressScaleButtonStyle())
+              .disabled(viewModel.selectedIndex != nil)
+            }
+          }
         }
+        .id(question.id)
+        .transition(questionTransition)
       }
-      Spacer(minLength: 0)
+      .readableWidth()
+      .padding(.top, 8)
+      .padding(.bottom, 24)
+    }
+    .scrollIndicators(.hidden)
+    .scrollBounceBehavior(.basedOnSize)
+    .safeAreaInset(edge: .bottom, spacing: 0) {
       if viewModel.selectedIndex != nil {
-        Button(viewModel.askedCount >= viewModel.totalQuestions ? "Sonucu gör" : "Devam") {
-          viewModel.next()
+        PinnedFooter {
+          Button(viewModel.askedCount >= viewModel.totalQuestions ? "Sonucu gör" : "Devam") {
+            viewModel.next()
+          }
+          .buttonStyle(.chunky)
         }
-        .buttonStyle(.chunky)
         .transition(.move(edge: .bottom).combined(with: .opacity))
       }
     }
-    .padding(.top, 4)
+    .sensoryFeedback(trigger: viewModel.selectedIndex) { _, newValue in
+      guard newValue != nil else { return nil }
+      return viewModel.lastAnswerCorrect == true ? .success : .error
+    }
+  }
+
+  /// Yeni soru sağdan kayarak gelir; Hareketi Azalt açıksa yalnızca solar.
+  private var questionTransition: AnyTransition {
+    guard !reduceMotion else { return .opacity }
+    return .asymmetric(
+      insertion: .offset(x: 48).combined(with: .opacity),
+      removal: .opacity)
   }
 
   /// Şık satırı; cevaptan sonra doğru şık yeşil, yanlış seçim kırmızı görünür.
@@ -135,23 +198,35 @@ private struct ResultPanel: View {
   let total: Int
   let onAccept: () -> Void
   let onClose: () -> Void
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+  @State private var isShown = false
 
   var body: some View {
-    VStack(spacing: 14) {
-      Spacer()
+    CenteredPanel {
       Text(level.rawValue)
         .font(AppFont.rounded(34, weight: .black))
         .foregroundStyle(.white)
         .frame(width: 92, height: 92)
         .background(RoundedRectangle(cornerRadius: 28, style: .continuous).fill(Palette.accent))
+        .scaleEffect(isShown || reduceMotion ? 1 : 0.5)
+        .opacity(isShown ? 1 : 0)
+        .padding(.bottom, 4)
       Text("Önerilen seviye: \(level.title)").font(AppFont.title).foregroundStyle(Palette.ink)
         .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
       Text("\(total) sorudan \(correct) doğru · \(level.topics)")
         .font(AppFont.body).foregroundStyle(Palette.muted)
         .multilineTextAlignment(.center)
-      Spacer()
+        .fixedSize(horizontal: false, vertical: true)
+    } footer: {
       Button("\(level.rawValue) ile devam et", action: onAccept).buttonStyle(.chunky)
       Button("Kendim seçeceğim", action: onClose).buttonStyle(ChunkyButtonStyle(.ghost))
+    }
+    .sensoryFeedback(.success, trigger: isShown)
+    .onAppear {
+      withAnimation(reduceMotion ? .easeOut(duration: 0.25) : Motion.bouncy.delay(0.1)) {
+        isShown = true
+      }
     }
   }
 }

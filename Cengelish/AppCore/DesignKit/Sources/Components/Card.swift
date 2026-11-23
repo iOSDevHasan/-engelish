@@ -17,6 +17,10 @@ public struct CardModifier: ViewModifier {
       .background(
         RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
           .fill(fill)
+          .overlay(
+            RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
+              .strokeBorder(Palette.cardBorder, lineWidth: 1)
+          )
           .shadow(color: Palette.cardShadow, radius: 0, y: 2)
           .shadow(color: Color.black.opacity(0.06), radius: 14, y: 10)
       )

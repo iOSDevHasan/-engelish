@@ -1,113 +1,108 @@
 {
-  "identifier" : "C3A1F0E2",
-  "nonRenewingSubscriptions" : [ ],
-  "products" : [
+  "identifier": "C3A1F0E2",
+  "nonRenewingSubscriptions": [],
+  "products": [
     {
-      "displayPrice" : "199.99",
-      "familyShareable" : false,
-      "internalID" : "6A0000001",
-      "localizations" : [
-        { "description" : "YDS'de sık çıkan akademik kelimelerle bulmacalar.", "displayName" : "YDS Paketi", "locale" : "tr" }
-      ],
-      "productID" : "com.hasangurbuz.cengelish.pack.yds",
-      "referenceName" : "YDS Paketi",
-      "type" : "NonConsumable"
-    },
-    {
-      "displayPrice" : "199.99",
-      "familyShareable" : false,
-      "internalID" : "6A0000005",
-      "localizations" : [
-        { "description" : "YÖKDİL'de sık çıkan akademik kelimelerle bulmacalar.", "displayName" : "YÖKDİL Paketi", "locale" : "tr" }
-      ],
-      "productID" : "com.hasangurbuz.cengelish.pack.yokdil",
-      "referenceName" : "YÖKDİL Paketi",
-      "type" : "NonConsumable"
-    },
-    {
-      "displayPrice" : "129.99",
-      "familyShareable" : false,
-      "internalID" : "6A0000006",
-      "localizations" : [
-        { "description" : "LGS'de sık çıkan kelimelerle bulmacalar.", "displayName" : "LGS Paketi", "locale" : "tr" }
-      ],
-      "productID" : "com.hasangurbuz.cengelish.pack.lgs",
-      "referenceName" : "LGS Paketi",
-      "type" : "NonConsumable"
-    },
-    {
-      "displayPrice" : "199.99",
-      "familyShareable" : false,
-      "internalID" : "6A0000007",
-      "localizations" : [
-        { "description" : "IELTS'te sık çıkan kelimelerle bulmacalar.", "displayName" : "IELTS Paketi", "locale" : "tr" }
-      ],
-      "productID" : "com.hasangurbuz.cengelish.pack.ielts",
-      "referenceName" : "IELTS Paketi",
-      "type" : "NonConsumable"
-    },
-    {
-      "displayPrice" : "199.99",
-      "familyShareable" : false,
-      "internalID" : "6A0000008",
-      "localizations" : [
-        { "description" : "TOEFL'da sık çıkan kelimelerle bulmacalar.", "displayName" : "TOEFL Paketi", "locale" : "tr" }
-      ],
-      "productID" : "com.hasangurbuz.cengelish.pack.toefl",
-      "referenceName" : "TOEFL Paketi",
-      "type" : "NonConsumable"
-    }
-  ],
-  "settings" : {
-    "_applicationInternalID" : "6700000000",
-    "_developerTeamID" : "D4VYL8Q23D",
-    "_locale" : "tr",
-    "_storefront" : "TUR",
-    "_storeKitErrors" : [ ]
-  },
-  "subscriptionGroups" : [
-    {
-      "id" : "2A000001",
-      "localizations" : [ ],
-      "name" : "Çengelish+",
-      "subscriptions" : [
+      "displayPrice": "999.99",
+      "familyShareable": false,
+      "internalID": "6A0000009",
+      "localizations": [
         {
-          "adHocOffers" : [ ],
-          "codeOffers" : [ ],
-          "displayPrice" : "449.99",
-          "familyShareable" : false,
-          "groupNumber" : 1,
-          "internalID" : "6A0000002",
-          "introductoryOffer" : { "internalID" : "6A0000004", "paymentMode" : "free", "subscriptionPeriod" : "P1W" },
-          "localizations" : [
-            { "description" : "Tüm bulmacalar ve sınav paketleri, yıllık.", "displayName" : "Çengelish+ Yıllık", "locale" : "tr" }
-          ],
-          "productID" : "com.hasangurbuz.cengelish.plus.yearly",
-          "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Çengelish+ Yıllık",
-          "subscriptionGroupID" : "2A000001",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [ ]
-        },
-        {
-          "adHocOffers" : [ ],
-          "codeOffers" : [ ],
-          "displayPrice" : "74.99",
-          "familyShareable" : false,
-          "groupNumber" : 2,
-          "internalID" : "6A0000003",
-          "localizations" : [
-            { "description" : "Tüm bulmacalar ve sınav paketleri, aylık.", "displayName" : "Çengelish+ Aylık", "locale" : "tr" }
-          ],
-          "productID" : "com.hasangurbuz.cengelish.plus.monthly",
-          "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Çengelish+ Aylık",
-          "subscriptionGroupID" : "2A000001",
-          "type" : "RecurringSubscription",
-          "winbackOffers" : [ ]
+          "description": "Tüm bulmacalar, sınav ve tema paketleri; tek ödeme, ömür boyu.",
+          "displayName": "Çengelish Plus Ömür Boyu",
+          "locale": "tr"
         }
-      ]
+      ],
+      "productID": "com.hasangurbuz.cengelish.plus.lifetime",
+      "referenceName": "Çengelish Plus Ömür Boyu",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "199.99",
+      "familyShareable": false,
+      "internalID": "6A0000001",
+      "localizations": [
+        {
+          "description": "YDS'de sık çıkan akademik kelimelerle bulmacalar.",
+          "displayName": "YDS Paketi",
+          "locale": "tr"
+        }
+      ],
+      "productID": "com.hasangurbuz.cengelish.pack.yds",
+      "referenceName": "YDS Paketi",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "199.99",
+      "familyShareable": false,
+      "internalID": "6A0000005",
+      "localizations": [
+        {
+          "description": "YÖKDİL'de sık çıkan akademik kelimelerle bulmacalar.",
+          "displayName": "YÖKDİL Paketi",
+          "locale": "tr"
+        }
+      ],
+      "productID": "com.hasangurbuz.cengelish.pack.yokdil",
+      "referenceName": "YÖKDİL Paketi",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "199.99",
+      "familyShareable": false,
+      "internalID": "6A0000006",
+      "localizations": [
+        {
+          "description": "LGS'de sık çıkan kelimelerle bulmacalar.",
+          "displayName": "LGS Paketi",
+          "locale": "tr"
+        }
+      ],
+      "productID": "com.hasangurbuz.cengelish.pack.lgs",
+      "referenceName": "LGS Paketi",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "199.99",
+      "familyShareable": false,
+      "internalID": "6A0000007",
+      "localizations": [
+        {
+          "description": "IELTS'te sık çıkan kelimelerle bulmacalar.",
+          "displayName": "IELTS Paketi",
+          "locale": "tr"
+        }
+      ],
+      "productID": "com.hasangurbuz.cengelish.pack.ielts",
+      "referenceName": "IELTS Paketi",
+      "type": "NonConsumable"
+    },
+    {
+      "displayPrice": "199.99",
+      "familyShareable": false,
+      "internalID": "6A0000008",
+      "localizations": [
+        {
+          "description": "TOEFL'da sık çıkan kelimelerle bulmacalar.",
+          "displayName": "TOEFL Paketi",
+          "locale": "tr"
+        }
+      ],
+      "productID": "com.hasangurbuz.cengelish.pack.toefl",
+      "referenceName": "TOEFL Paketi",
+      "type": "NonConsumable"
     }
   ],
-  "version" : { "major" : 4, "minor" : 0 }
+  "settings": {
+    "_applicationInternalID": "6700000000",
+    "_developerTeamID": "D4VYL8Q23D",
+    "_locale": "tr",
+    "_storefront": "TUR",
+    "_storeKitErrors": []
+  },
+  "subscriptionGroups": [],
+  "version": {
+    "major": 4,
+    "minor": 0
+  }
 }

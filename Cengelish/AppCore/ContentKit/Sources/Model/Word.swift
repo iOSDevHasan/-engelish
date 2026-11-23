@@ -88,7 +88,12 @@ public struct Word: Codable, Identifiable, Hashable, Sendable {
     case "noun": "isim"
     case "verb": "fiil"
     case "adj": "sıfat"
+    case "adv": "zarf"
     case "num": "sayı"
+    case "prep": "edat"
+    case "conj": "bağlaç"
+    case "pron": "zamir"
+    case "det": "belirleyici"
     default: pos
     }
   }

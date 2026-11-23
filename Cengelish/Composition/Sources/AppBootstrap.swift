@@ -1,4 +1,5 @@
-import FirebaseContentKit
+import CrashReportingKit
+import UIKit
 // jarvis:bootstrap-imports
 
 /// Process-wide setup that must run before the first view renders
@@ -7,7 +8,11 @@ import FirebaseContentKit
 public enum AppBootstrap {
 
   public static func configure() {
-    FirebaseBootstrap.configureIfAvailable()
+    // Firebase'den yalnızca Crashlytics kullanılır (çökme raporları).
+    CrashReporting.start()
+    // Uygulamanın hiçbir yerinde kaydırma çubuğu gösterilmez.
+    UIScrollView.appearance().showsVerticalScrollIndicator = false
+    UIScrollView.appearance().showsHorizontalScrollIndicator = false
     // jarvis:bootstrap
   }
 }

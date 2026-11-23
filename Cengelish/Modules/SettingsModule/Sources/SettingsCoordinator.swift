@@ -18,11 +18,7 @@ public final class SettingsCoordinator: SettingsModuleInterface {
   public init() {}
 
   public func createSettingsView() -> AnyView {
-    createSettingsView(onEditProfile: nil)
-  }
-
-  public func createSettingsView(onEditProfile: (@MainActor () -> Void)?) -> AnyView {
-    AnyView(SettingsView(viewModel: self.makeViewModel(onEditProfile: onEditProfile)).chromeless())
+    AnyView(SettingsView(viewModel: self.makeViewModel()).chromeless())
   }
 
   public func createPuzzleThemeView() -> AnyView {
@@ -46,7 +42,7 @@ public final class SettingsCoordinator: SettingsModuleInterface {
 
   /// Paywall'u açar.
   func showPaywall() {
-    nav.push(paywall.createPaywallView(highlightProductId: nil))
+    nav.present(paywall.createPaywallView(highlightProductId: nil))
   }
 
   /// Geri gider.
@@ -54,9 +50,8 @@ public final class SettingsCoordinator: SettingsModuleInterface {
     nav.pop()
   }
 
-  private func makeViewModel(onEditProfile: (@MainActor () -> Void)? = nil) -> SettingsViewModel {
-    SettingsViewModel(
-      coordinator: self, userData: userData, entitlements: entitlements,
-      onEditProfile: onEditProfile)
+  /// Ortak görünüm modelini kurar.
+  private func makeViewModel() -> SettingsViewModel {
+    SettingsViewModel(coordinator: self, userData: userData, entitlements: entitlements)
   }
 }

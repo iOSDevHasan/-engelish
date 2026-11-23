@@ -1,13 +1,12 @@
 import DesignKit
 import SwiftUI
-import UniformTypeIdentifiers
 
-/// Veri ve yedekleme ekranı.
+/// Veri ve yedekleme ekranı: iCloud tercihi, cihazdaki alan ve en altta tüm verileri silme.
 struct DataView: View {
   @StateObject var viewModel: SettingsViewModel
-  @State private var exportURL: URL?
-  @State private var isImporting = false
   @State private var confirmDelete = false
+  /// Panel onaylandı; silme, panelin kapanış animasyonu bitince yapılır.
+  @State private var eraseConfirmed = false
 
   var body: some View {
     VStack(spacing: 0) {
@@ -38,31 +37,6 @@ struct DataView: View {
               }
             }
             .tint(Palette.good)
-            HStack {
-              Text("Son yedek").foregroundStyle(Palette.muted)
-              Spacer()
-              if let text = viewModel.lastBackupText() {
-                HStack(spacing: 4) {
-                  Text(text).foregroundStyle(Palette.ink)
-                  Image(systemName: "checkmark").font(.system(size: 11, weight: .black))
-                    .foregroundStyle(Palette.good)
-                }
-                .accessibilityElement(children: .combine)
-              } else {
-                Text("Henüz yok").foregroundStyle(Palette.muted)
-              }
-            }
-            .font(AppFont.caption)
-            Button {
-              if let url = viewModel.backupNow() { exportURL = url }
-            } label: {
-              Label("Şimdi yedekle", systemImage: "arrow.clockwise")
-            }
-            .buttonStyle(ChunkyButtonStyle(.secondary, compact: true))
-            .overlay(
-              RoundedRectangle(cornerRadius: Metrics.buttonRadius, style: .continuous)
-                .strokeBorder(Palette.line, lineWidth: 2)
-                .allowsHitTesting(false))
             if viewModel.iCloudOn && !viewModel.iCloudAvailable {
               Label(
                 "Bu cihazda iCloud'a giriş yapılmamış. Veriler şimdilik sadece cihazda.",
@@ -76,26 +50,6 @@ struct DataView: View {
           .card(padding: 14)
           storage
           SettingsGroup {
-            if let exportURL {
-              ShareLink(item: exportURL) {
-                SettingsRow("square.and.arrow.up", "Verilerimi dışa aktar") {
-                  DisclosureValue(".cengelish")
-                }
-              }
-              .buttonStyle(.plain)
-            }
-            Button {
-              isImporting = true
-            } label: {
-              SettingsRow("square.and.arrow.down", "Yedekten geri yükle") { DisclosureValue() }
-            }
-            .buttonStyle(.plain)
-            Button(action: viewModel.clearDrawings) {
-              SettingsRow("scribble", "Eski çizimleri temizle") {
-                Text("son 50 kalır").font(AppFont.caption).foregroundStyle(Palette.muted)
-              }
-            }
-            .buttonStyle(.plain)
             Button {
               confirmDelete = true
             } label: {
@@ -103,28 +57,22 @@ struct DataView: View {
             }
             .buttonStyle(.plain)
           }
-          Text(
-            "Satın alımların Apple Kimliğine bağlıdır. Yedek olmasa da \"Satın alımları geri yükle\" ile geri gelir."
-          )
-          .font(AppFont.tiny).foregroundStyle(Palette.muted)
         }
         .padding(.horizontal, Metrics.gutter)
         .padding(.bottom, 30)
         .frame(maxWidth: 640)
         .frame(maxWidth: .infinity)
       }
+      .scrollIndicators(.hidden)
     }
     .screenBackground()
-    .onAppear { exportURL = viewModel.makeExportFile() }
-    .fileImporter(isPresented: $isImporting, allowedContentTypes: [.data, .json]) { result in
-      if case .success(let url) = result { viewModel.importFile(url) }
+    .appBottomSheet(isPresented: $confirmDelete) {
+      DeleteDataSheet { eraseConfirmed = true }
     }
-    .confirmationDialog(
-      "Profilin, ilerlemen, defterin ve rozetlerin bu cihazdan silinsin mi? Bu işlem geri alınamaz.",
-      isPresented: $confirmDelete, titleVisibility: .visible
-    ) {
-      Button("Tüm verileri sil", role: .destructive, action: viewModel.deleteAll)
-      Button("Vazgeç", role: .cancel) {}
+    .onChange(of: confirmDelete) { _, isOn in
+      guard !isOn, eraseConfirmed else { return }
+      eraseConfirmed = false
+      viewModel.eraseAllData()
     }
     .noticeAlert($viewModel.notice)
   }

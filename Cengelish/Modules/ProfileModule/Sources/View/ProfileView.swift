@@ -2,267 +2,272 @@ import DesignKit
 import SwiftUI
 import UserDataKit
 
-/// Profil sekmesi.
+/// Profil sekmesi: kimlik kartı (sayaçlarla), İngilizce seviyesi ve tüm rozetler.
 struct ProfileView: View {
   @StateObject var viewModel: ProfileViewModel
-  @State private var isCoverPickerShown = false
-  @State private var shareImage: Image?
+  @State private var isEditing = false
 
   var body: some View {
     ScrollView {
-      VStack(spacing: 12) {
+      VStack(spacing: 14) {
         header
-        profileCard
-        tiles
-        showcase
-        level
-        StreakCalendarCard(viewModel: viewModel)
-        dataRow
+        identityCard.appearAnimation(index: 0)
+        level.appearAnimation(index: 1)
+        badgeSection.appearAnimation(index: 2)
       }
       .padding(.horizontal, Metrics.gutter)
-      .padding(.bottom, 24)
+      .padding(.bottom, 32)
       .frame(maxWidth: 680)
       .frame(maxWidth: .infinity)
+      // Rozet balonu komşu kartların üstüne taşar; tamamı dokunulabilir kalsın diye burada çizilir.
+      .badgeTooltipHost()
     }
+    .scrollIndicators(.hidden)
+    .coordinateSpace(name: Self.space)
+    .statusBarScrim()
     .screenBackground()
-    .sheet(isPresented: $isCoverPickerShown) {
-      CoverPickerSheet(
-        selection: viewModel.profile.avatar.background, isLocked: viewModel.isLocked,
-        onSelect: viewModel.setBackground,
-        onPremium: {
-          isCoverPickerShown = false
-          viewModel.openPaywall()
-        })
-    }
-    .task(id: shareKey) { renderShareCard() }
+    .appBottomSheet(isPresented: $isEditing) { EditProfileSheet(viewModel: viewModel) }
   }
+
+  /// Rozet balonlarının yönünü ölçmek için kaydırma alanının adı.
+  private static let space = "profileScroll"
+  /// Kimlik kartının üstündeki renkli kapağın yüksekliği.
+  private static let coverHeight: CGFloat = 92
+  /// Avatar boyutu.
+  private static let avatarSize: CGFloat = 96
+  /// Avatarın kapağın içine taştığı yükseklik.
+  private static let avatarOverlap: CGFloat = 52
 
   // MARK: - Header
 
   private var header: some View {
-    HStack {
+    HStack(spacing: 10) {
       Text("Profil").font(AppFont.rounded(28, weight: .black)).foregroundStyle(Palette.ink)
       Spacer()
       Button(action: viewModel.openSettings) { IconCircle("gearshape.fill") }
-        .buttonStyle(.plain)
+        .buttonStyle(PressScaleButtonStyle())
         .accessibilityLabel("Ayarlar")
     }
     .frame(minHeight: 44)
   }
 
-  // MARK: - Profile card
+  // MARK: - Identity card
 
-  private var profileCard: some View {
+  /// Kapak, ortada kalemli avatar, ad, unvan ve seviye, üyelik tarihi ve sayaçlar.
+  private var identityCard: some View {
     VStack(spacing: 0) {
-      ProfileCover.gradient(viewModel.profile.avatar.background).frame(height: 66)
-      VStack(alignment: .leading, spacing: 10) {
-        HStack(alignment: .bottom, spacing: 12) {
-          avatarButton
-          VStack(alignment: .leading, spacing: 4) {
-            Text(viewModel.profile.displayName)
-              .font(AppFont.rounded(22, weight: .black))
-              .foregroundStyle(Palette.ink)
-              .lineLimit(1)
-            HStack(spacing: 6) {
-              Pill(viewModel.title.title, systemImage: "trophy.fill", tone: .accent)
-              Pill(viewModel.profile.level)
-              if viewModel.isPremium { Pill("Çengelish+", systemImage: "crown.fill", tone: .gold) }
-            }
-          }
-          .padding(.bottom, 4)
-          Spacer(minLength: 0)
+      cover
+      VStack(spacing: 8) {
+        editableAvatar
+          .padding(.top, -Self.avatarOverlap)
+        Text(viewModel.profile.displayName)
+          .font(AppFont.rounded(24, weight: .black))
+          .foregroundStyle(Palette.ink)
+          .lineLimit(1)
+          .minimumScaleFactor(0.7)
+        HStack(spacing: 6) {
+          Pill(viewModel.title.title, systemImage: "trophy.fill", tone: .accent)
+          Pill(viewModel.profile.level)
         }
-        Text(viewModel.memberSinceText).font(AppFont.caption).foregroundStyle(Palette.muted)
-        HStack(spacing: 8) {
-          Button(action: viewModel.edit) {
-            Label("Profili düzenle", systemImage: "pencil")
-          }
-          .buttonStyle(ChunkyButtonStyle(.secondary, compact: true))
-          shareButton
-        }
+        Text(viewModel.memberSinceText)
+          .font(AppFont.caption)
+          .foregroundStyle(Palette.muted)
       }
       .padding(.horizontal, 16)
       .padding(.bottom, 14)
-      .padding(.top, -44)
+      Rectangle().fill(Palette.line).frame(height: 1)
+      statsRow
     }
-    .overlay(alignment: .topTrailing) { paletteButton }
+    .background(Palette.surface)
+    .clipShape(RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous))
+    .overlay(
+      RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
+        .strokeBorder(Palette.cardBorder, lineWidth: 1)
+    )
     .background(
-      RoundedRectangle(cornerRadius: 26, style: .continuous)
+      RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous)
         .fill(Palette.surface)
         .shadow(color: Palette.cardShadow, radius: 0, y: 2)
         .shadow(color: Color.black.opacity(0.06), radius: 14, y: 10)
     )
-    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
   }
 
-  private var paletteButton: some View {
-    Button {
-      isCoverPickerShown = true
-    } label: {
-      Image(systemName: "paintpalette.fill")
-        .font(.system(size: 15, weight: .bold))
-        .foregroundStyle(Color(hex: 0x24204D))
-        .frame(width: 34, height: 34)
-        .background(Circle().fill(Color.white.opacity(0.55)))
-    }
-    .buttonStyle(.plain)
-    .padding(10)
-    .accessibilityLabel("Kapak rengini değiştir")
-  }
-
-  private var avatarButton: some View {
-    Button(action: viewModel.edit) {
-      AvatarView(viewModel.profile.avatar, size: 88)
-        .overlay(Circle().strokeBorder(Palette.surface, lineWidth: 4))
-        .overlay(alignment: .bottomTrailing) {
-          Image(systemName: "pencil").font(.system(size: 13, weight: .black))
-            .foregroundStyle(.white)
-            .frame(width: 30, height: 30)
-            .background(Circle().fill(Palette.buttonFill))
-            .overlay(Circle().strokeBorder(Palette.surface, lineWidth: 3))
-            .offset(x: 2, y: 2)
-        }
-    }
-    .buttonStyle(.plain)
-    .accessibilityLabel("Avatarı düzenle")
-  }
-
-  @ViewBuilder
-  private var shareButton: some View {
-    if let shareImage {
-      ShareLink(
-        item: shareImage, preview: SharePreview("Çengelish profilim", image: shareImage)
-      ) {
-        Image(systemName: "square.and.arrow.up")
+  /// Avatarın arka plan rengindeki kapak; köşede Plus rozeti, zeminde soluk bulmaca kareleri.
+  private var cover: some View {
+    ProfileCover.gradient(viewModel.profile.avatar.background)
+      .frame(height: Self.coverHeight)
+      .overlay(alignment: .trailing) {
+        ProfileCoverPattern()
+          .padding(.trailing, 14)
+          .accessibilityHidden(true)
       }
-      .buttonStyle(ChunkyButtonStyle(.secondary, fullWidth: false, compact: true))
-      .accessibilityLabel("Profili paylaş")
-    }
+      .overlay(alignment: .topLeading) {
+        if viewModel.isPremium {
+          PlusBadge(compact: true).padding(12)
+        }
+      }
   }
 
-  // MARK: - Tiles
-
-  private var tiles: some View {
-    HStack(spacing: 8) {
-      tile("flame.fill", "\(viewModel.stats.streak)", "gün seri", Palette.pastels[0])
-      tile(
-        "square.grid.3x3.fill", "\(viewModel.stats.puzzlesSolved)", "bulmaca", Palette.pastels[2])
-      tile("book.fill", "\(viewModel.stats.wordsSeen)", "kelime", Palette.pastels[3])
-      tile("trophy.fill", "\(viewModel.badges.count)", "rozet", Palette.pastels[1])
+  /// Sağ altında kalem düğmesi olan avatar; dokununca düzenleme paneli açılır.
+  private var editableAvatar: some View {
+    Button(action: startEditing) {
+      UserAvatarView(
+        photo: viewModel.photo, avatar: viewModel.profile.avatar, size: Self.avatarSize
+      )
+      .overlay(Circle().strokeBorder(Palette.surface, lineWidth: 4))
+      .overlay(alignment: .bottomTrailing) {
+        Image(systemName: "pencil")
+          .font(.system(size: 12, weight: .black))
+          .foregroundStyle(.white)
+          .frame(width: 30, height: 30)
+          .background(Circle().fill(Palette.buttonFill))
+          .overlay(Circle().strokeBorder(Palette.surface, lineWidth: 3))
+          .offset(x: 1, y: 1)
+      }
     }
+    .buttonStyle(PressScaleButtonStyle())
+    .accessibilityLabel("Profili düzenle")
+    .accessibilityHint("Fotoğrafını ve takma adını değiştir")
   }
 
-  private func tile(_ icon: String, _ value: String, _ label: String, _ fill: Color) -> some View {
-    VStack(spacing: 2) {
-      Image(systemName: icon).font(.system(size: 16, weight: .bold)).foregroundStyle(
-        Palette.accent)
-      Text(value).font(AppFont.rounded(19, weight: .black)).foregroundStyle(Palette.ink)
-        .lineLimit(1)
-        .minimumScaleFactor(0.6)
-      Text(label).font(AppFont.rounded(10, weight: .heavy)).foregroundStyle(Palette.muted)
+  /// Taslağı hazırlayıp düzenleme panelini açar.
+  private func startEditing() {
+    viewModel.beginEditing()
+    isEditing = true
+  }
+
+  // MARK: - Stats
+
+  private var statsRow: some View {
+    HStack(spacing: 0) {
+      stat("flame.fill", Palette.streak, viewModel.stats.streak, "gün seri")
+      divider
+      stat("square.grid.3x3.fill", Palette.accent, viewModel.stats.puzzlesSolved, "bulmaca")
+      divider
+      stat("book.fill", Palette.good, viewModel.stats.wordsSeen, "kelime")
+      divider
+      stat("medal.fill", BadgeColors.sealDark, viewModel.badges.count, "rozet")
+    }
+    .padding(.vertical, 12)
+  }
+
+  private var divider: some View {
+    Rectangle().fill(Palette.line).frame(width: 1, height: 34)
+  }
+
+  private func stat(_ icon: String, _ tint: Color, _ value: Int, _ label: String) -> some View {
+    VStack(spacing: 3) {
+      HStack(spacing: 4) {
+        Image(systemName: icon).font(.system(size: 13, weight: .bold)).foregroundStyle(tint)
+        Text("\(value)")
+          .font(AppFont.rounded(18, weight: .black))
+          .foregroundStyle(Palette.ink)
+          .lineLimit(1)
+          .minimumScaleFactor(0.6)
+          .contentTransition(.numericText(value: Double(value)))
+      }
+      Text(label).font(AppFont.rounded(11, weight: .heavy)).foregroundStyle(Palette.muted)
     }
     .frame(maxWidth: .infinity)
-    .padding(.vertical, 10)
-    .padding(.horizontal, 4)
-    .background(RoundedRectangle(cornerRadius: Metrics.radius, style: .continuous).fill(fill))
     .accessibilityElement(children: .combine)
   }
 
-  // MARK: - Showcase
+  // MARK: - Badges
 
-  private var showcase: some View {
-    VStack(alignment: .leading, spacing: 10) {
-      HStack {
-        Text("Rozet vitrini").font(AppFont.bodyBold).foregroundStyle(Palette.ink)
+  /// Tüm rozetler: kazanılan sayısı, ilerleme çubuğu ve madalya ızgarası (dokununca balon).
+  private var badgeSection: some View {
+    VStack(alignment: .leading, spacing: 12) {
+      HStack(spacing: 8) {
+        Text("Rozetler")
+          .font(AppFont.bodyBold)
+          .foregroundStyle(Palette.ink)
+          .accessibilityAddTraits(.isHeader)
         Spacer()
-        Button(action: viewModel.openBadges) {
-          Label("Tümü", systemImage: "chevron.right").labelStyle(TrailingIconLabelStyle())
-        }
-        .font(AppFont.caption)
-        .foregroundStyle(Palette.accent)
+        Pill(viewModel.badgeCountText, tone: .accent)
+          .contentTransition(.numericText(value: viewModel.badgeProgress))
       }
-      if viewModel.showcase.isEmpty {
-        Text("İlk bulmacanı bitirince ilk rozetin burada görünür.")
-          .font(AppFont.caption).foregroundStyle(Palette.muted)
-      } else {
-        HStack(spacing: 8) {
-          ForEach(viewModel.showcase, id: \.self) { badge in
-            VStack(spacing: 6) {
-              MedalView(systemImage: badge.symbol, color: badge.color, size: 56)
-              Text(badge.title).font(AppFont.rounded(11.5, weight: .black))
-                .foregroundStyle(Palette.ink)
-                .multilineTextAlignment(.center)
-            }
-            .frame(maxWidth: .infinity)
-          }
-        }
-      }
+      ProgressBar(value: viewModel.badgeProgress, tint: BadgeColors.sealDark)
+        .accessibilityHidden(true)
+      Text(
+        viewModel.badges.isEmpty
+          ? "İlk bulmacanı bitirince ilk rozetin parlar. Dokun, nasıl kazanılacağını gör."
+          : "Bir rozete dokun: anlamını, nasıl kazanıldığını ve ilerlemeni gör."
+      )
+      .font(AppFont.tiny)
+      .foregroundStyle(Palette.muted)
+      .fixedSize(horizontal: false, vertical: true)
+      BadgeGrid(
+        items: viewModel.badgeItems, space: Self.space, medalSize: 76,
+        dateText: viewModel.dateText
+      )
+      .padding(.top, 8)
     }
-    .padding(.vertical, 14)
-    .padding(.horizontal, 16)
+    .padding(.vertical, 16)
+    .padding(.horizontal, 14)
     .card(padding: 0)
   }
 
   // MARK: - Level
 
+  /// İngilizce seviyesi: seviye renginde kabartmalı rozet, sonraki seviyeye kalan ve çubuk.
   private var level: some View {
     let progress = viewModel.levelProgress
-    return VStack(alignment: .leading, spacing: 8) {
-      HStack {
-        Text(progress.headline).font(AppFont.bodyBold).foregroundStyle(Palette.ink)
-        Spacer()
-        Text(progress.detail).font(AppFont.caption).foregroundStyle(Palette.muted)
+    let code = progress.code
+    return HStack(spacing: 14) {
+      Text(code)
+        .font(AppFont.rounded(20, weight: .black))
+        .foregroundStyle(.white)
+        .frame(width: 56, height: 52)
+        .background(
+          RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .fill(LevelTint.color(code: code))
+            .shadow(color: LevelTint.ledge(code: code), radius: 0, y: 4)
+        )
+        .padding(.bottom, 4)
+      VStack(alignment: .leading, spacing: 7) {
+        Text("İngilizce seviyen")
+          .font(AppFont.rounded(11, weight: .heavy))
+          .foregroundStyle(Palette.muted)
+        HStack(alignment: .firstTextBaseline) {
+          Text(progress.headline).font(AppFont.bodyBold).foregroundStyle(Palette.ink)
+          Spacer(minLength: 8)
+          Text(progress.detail)
+            .font(AppFont.caption)
+            .foregroundStyle(Palette.muted)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+        }
+        ProgressBar(value: progress.fraction, tint: LevelTint.color(code: code))
       }
-      ProgressBar(value: progress.fraction)
     }
     .padding(.vertical, 14)
     .padding(.horizontal, 16)
     .card(padding: 0)
     .accessibilityElement(children: .combine)
   }
+}
 
-  // MARK: - Data row
+/// Kapağın sağında soluk, eğik bulmaca kareleri (süs).
+private struct ProfileCoverPattern: View {
+  /// Kare dizilimi: dolu kareler harf kutusu, boşlar boşluk.
+  private static let cells: [[Bool]] = [
+    [true, true, true, false],
+    [false, true, false, false],
+    [true, true, true, true],
+  ]
 
-  private var dataRow: some View {
-    HStack(spacing: 10) {
-      Image(systemName: viewModel.iCloudOn ? "icloud.fill" : "iphone")
-        .foregroundStyle(Palette.good)
-      Text(viewModel.dataText).foregroundStyle(Palette.ink)
-      Spacer(minLength: 6)
-      Text(viewModel.dataTimestamp).foregroundStyle(Palette.muted)
+  var body: some View {
+    VStack(spacing: 4) {
+      ForEach(Self.cells.indices, id: \.self) { row in
+        HStack(spacing: 4) {
+          ForEach(Self.cells[row].indices, id: \.self) { column in
+            RoundedRectangle(cornerRadius: 4, style: .continuous)
+              .fill(.white.opacity(Self.cells[row][column] ? 0.45 : 0))
+              .frame(width: 16, height: 16)
+          }
+        }
+      }
     }
-    .font(AppFont.rounded(12.5, weight: .heavy))
-    .padding(.horizontal, 14)
-    .padding(.vertical, 10)
-    .background(RoundedRectangle(cornerRadius: 18, style: .continuous).fill(Palette.surface2))
-    .accessibilityElement(children: .combine)
-  }
-
-  // MARK: - Share
-
-  /// Paylaşım kartını yeniden çizdiren anahtar.
-  private var shareKey: String {
-    let stats = viewModel.stats
-    return [
-      viewModel.profile.displayName, viewModel.title.id, viewModel.profile.level,
-      "\(viewModel.profile.avatar)", "\(stats.streak)", "\(stats.puzzlesSolved)",
-      "\(stats.wordsSeen)", "\(viewModel.badges.count)",
-      viewModel.showcase.map(\.rawValue).joined(),
-    ].joined(separator: "|")
-  }
-
-  /// Profil kartını resme çevirir.
-  @MainActor
-  private func renderShareCard() {
-    let card = ProfileShareCard(
-      profile: viewModel.profile, title: viewModel.title.title, stats: viewModel.stats,
-      badgeCount: viewModel.badges.count, showcase: viewModel.showcase
-    )
-    .environment(\.colorScheme, .light)
-    let renderer = ImageRenderer(content: card)
-    renderer.scale = 3
-    if let image = renderer.uiImage {
-      shareImage = Image(uiImage: image)
-    }
+    .rotationEffect(.degrees(-8))
   }
 }

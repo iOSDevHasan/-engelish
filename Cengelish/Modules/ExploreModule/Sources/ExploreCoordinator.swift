@@ -66,7 +66,7 @@ public final class ExploreCoordinator: ExploreModuleInterface {
 
   /// Paywall'u (isteğe bağlı ürün seçili) açar.
   func showPaywall(productId: String?) {
-    nav.push(paywall.createPaywallView(highlightProductId: productId))
+    nav.present(paywall.createPaywallView(highlightProductId: productId))
   }
 
   /// Geri gider.

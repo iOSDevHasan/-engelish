@@ -28,11 +28,17 @@ enum NotebookFilter: String, CaseIterable, Identifiable {
 protocol NotebookRouting: AnyObject {
   /// Bulmacayı açar.
   func showPuzzle(_ puzzleId: String)
-  /// Çengelish+ paywall'unu açar.
+  /// Çengelish Plus paywall'unu açar.
   func showPaywall()
 }
 
-/// Kelime Defterim durumu, elle kelime ekleme, kart ve bulmaca tekrarı.
+/// Kelime Defterim durumu ve bulmacayla tekrar.
+///
+/// Defter yalnızca bulmacalarda yanlış yapılan ya da bilinmeyen kelimelerle dolar
+/// (`UserDataStoring.finish`); elle ekleme yoktur. Eski `manual` kayıtlar görünmeye devam eder.
+///
+/// Yönlendiriciyi (koordinatör) güçlü tutar: koordinatör DI'da `factory` olarak kaydedildiği ve
+/// sekme görünümü yeniden kurulunca yenisi çözüldüğü için başka kimse onu canlı tutmaz.
 @MainActor
 final class NotebookViewModel: ObservableObject {
 
@@ -41,16 +47,13 @@ final class NotebookViewModel: ObservableObject {
   @Published var filter: NotebookFilter = .due
   @Published private(set) var rows: [NotebookRow] = []
   @Published var detail: NotebookRow?
-  @Published var isReviewing = false
-  @Published private(set) var reviewQueue: [NotebookRow] = []
-  @Published var isRevealed = false
-  @Published var isAddingWord = false
-  @Published var query = ""
-  @Published private(set) var pool: [Word] = []
+  /// Kullanıcının Çengelish Plus'ı var mı (bulmacayla tekrar kilidi).
+  @Published private(set) var isPlus = false
   @Published private(set) var isBuildingPuzzle = false
+  /// Tekrar bulmacası kurulamayınca gösterilen açıklama.
   @Published var notice: String?
   @Published private(set) var sourceTitles: [String: String] = [:]
-  private weak var router: NotebookRouting?
+  private let router: any NotebookRouting
   private let content: any ContentProviding
   private let userData: any UserDataStoring
   private let pronouncer: any Pronouncing
@@ -63,7 +66,7 @@ final class NotebookViewModel: ObservableObject {
 
   /// Görünüm modelini servislerle oluşturur; `puzzleSeed` testlerde bulmacayı sabitler.
   init(
-    router: NotebookRouting?, content: any ContentProviding, userData: any UserDataStoring,
+    router: any NotebookRouting, content: any ContentProviding, userData: any UserDataStoring,
     pronouncer: any Pronouncing, entitlements: any EntitlementProviding,
     puzzleSeed: UInt64? = nil
   ) {
@@ -73,7 +76,8 @@ final class NotebookViewModel: ObservableObject {
     self.pronouncer = pronouncer
     self.entitlements = entitlements
     self.puzzleSeed = puzzleSeed
-    userData.changes
+    self.isPlus = entitlements.isPremium
+    userData.changes.merge(with: entitlements.changes)
       .sink { [weak self] in Task { await self?.load() } }
       .store(in: &cancellables)
   }
@@ -91,9 +95,6 @@ final class NotebookViewModel: ObservableObject {
 
   /// Öğrenilen kelime sayısı.
   var learnedCount: Int { rows(for: .learned).count }
-
-  /// Tekrar kartındaki kelime.
-  var currentCard: NotebookRow? { reviewQueue.first }
 
   /// Kullanıcının seçtiği telaffuz aksanı.
   var accent: WordAccent { WordAccent(languageCode: userData.settings.accent.languageCode) }
@@ -141,28 +142,11 @@ final class NotebookViewModel: ObservableObject {
     return "\(title) · \(DateText.dayMonth(item.addedAt))"
   }
 
-  /// Elle ekleme aramasının sonuçları; önce baştan eşleşenler.
-  var searchResults: [Word] {
-    let text = query.trimmingCharacters(in: .whitespaces)
-    guard !text.isEmpty else { return Array(pool.prefix(Self.searchLimit)) }
-    let matches = pool.filter {
-      $0.en.localizedStandardContains(text) || $0.meaning.localizedStandardContains(text)
-    }
-    let lower = text.lowercased()
-    let prefix = matches.filter { $0.en.lowercased().hasPrefix(lower) }
-    let rest = matches.filter { !$0.en.lowercased().hasPrefix(lower) }
-    return Array((prefix + rest).prefix(Self.searchLimit))
-  }
-
-  /// Kelime defterde mi.
-  func isInNotebook(_ word: Word) -> Bool {
-    rows.contains { $0.word.id == word.id }
-  }
-
   // MARK: - Loading
 
   /// Defteri ve kaynak bulmaca adlarını yükler.
   func load() async {
+    isPlus = entitlements.isPremium
     let items = userData.notebook
     let words = await content.words(ids: items.map(\.wordId))
     let byId = Dictionary(words.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
@@ -200,59 +184,23 @@ final class NotebookViewModel: ObservableObject {
     return source
   }
 
-  // MARK: - Adding
-
-  /// Elle ekleme panelini açar ve kelime havuzunu yükler.
-  func startAdding() async {
-    query = ""
-    isAddingWord = true
-    if pool.isEmpty {
-      pool = await content.wordPool().sorted {
-        $0.en.localizedCaseInsensitiveCompare($1.en) == .orderedAscending
-      }
-    }
-  }
-
-  /// Kelimeyi elle deftere ekler.
-  func add(_ word: Word) {
-    guard !isInNotebook(word) else { return }
-    userData.addToNotebook(wordId: word.id, source: "manual")
-  }
-
-  // MARK: - Card review
-
-  /// Bugünün tekrarlarını kartlarla başlatır.
-  func startReview() {
-    reviewQueue = rows(for: .due).shuffled()
-    isRevealed = false
-    isReviewing = !reviewQueue.isEmpty
-  }
-
-  /// Kartın cevabını gösterir.
-  func reveal() {
-    isRevealed = true
-    if let word = currentCard?.word { speak(word) }
-  }
-
-  /// Kartı bildi/bilmedi olarak işaretler ve sonrakine geçer.
-  func answer(knew: Bool) {
-    guard let card = reviewQueue.first else { return }
-    userData.review(wordId: card.word.id, knew: knew)
-    reviewQueue.removeFirst()
-    isRevealed = false
-    if reviewQueue.isEmpty { isReviewing = false }
-  }
-
   // MARK: - Puzzle review
 
-  /// Bugünün kelimelerinden tekrar bulmacası kurup açar (Çengelish+); değilse paywall açılır.
+  /// Bugünün kelimelerinden tekrar bulmacası kurup açar (Çengelish Plus); değilse paywall açılır.
+  ///
+  /// Kalan kutular cihazdaki kelime havuzuyla doldurulur. Bulmaca kurulamazsa ya da tekrar
+  /// kelimelerinin hiçbiri ızgaraya sığmazsa `notice` ile nedeni gösterilir.
   func startPuzzleReview() async {
     guard entitlements.isPremium else {
-      router?.showPaywall()
+      router.showPaywall()
       return
     }
+    guard !isBuildingPuzzle else { return }
     let due = rows(for: .due).map(\.word)
-    guard !due.isEmpty, !isBuildingPuzzle else { return }
+    guard !due.isEmpty else {
+      notice = Notice.nothingDue
+      return
+    }
     isBuildingPuzzle = true
     defer { isBuildingPuzzle = false }
     let pool = await content.wordPool()
@@ -261,11 +209,28 @@ final class NotebookViewModel: ObservableObject {
       builder.build(dueWords: due, pool: pool)
     }.value
     guard let puzzle else {
-      notice = "Bu kelimelerle bulmaca kurulamadı. Kartla tekrar edebilirsin."
+      notice = Notice.notBuilt
+      return
+    }
+    // Tekrar kelimelerinin hiçbiri sığmadıysa (ör. hepsi 3–7 harf dışında) bulmaca açılmaz.
+    guard !Set(puzzle.wordIds).isDisjoint(with: due.map(\.id)) else {
+      notice = Notice.noFit
       return
     }
     await content.registerTransient(puzzle)
-    router?.showPuzzle(puzzle.id)
+    router.showPuzzle(puzzle.id)
+  }
+
+  /// Tekrar bulmacası açıklamaları.
+  enum Notice {
+    /// Bugün tekrar edilecek kelime yok.
+    static let nothingDue = "Bugün tekrar edilecek kelimen yok. Yarın yeniden bak."
+    /// Üretici bulmaca kuramadı.
+    static let notBuilt = "Bu kelimelerle bulmaca kurulamadı. Biraz sonra yeniden dene."
+    /// Tekrar kelimelerinin hiçbiri ızgaraya sığmadı.
+    static let noFit =
+      "Tekrar kelimelerin bulmacaya sığmadı. Bulmacada 3–7 harfli, tek sözcüklük kelimeler "
+      + "kullanılabiliyor."
   }
 
   // MARK: - Word actions
@@ -293,9 +258,6 @@ final class NotebookViewModel: ObservableObject {
   }
 
   // MARK: - Helpers
-
-  /// Arama sonucu sınırı.
-  private static let searchLimit = 80
 
   /// Satır sırası: tekrarı yakın olanlar önce, öğrenilenler en sonda.
   private static func order(_ lhs: NotebookRow, _ rhs: NotebookRow) -> Bool {

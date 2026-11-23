@@ -45,6 +45,6 @@ public final class NotebookCoordinator: NotebookModuleInterface, NotebookRouting
 
   /// Paywall'u açar.
   func showPaywall() {
-    nav.push(paywall.createPaywallView(highlightProductId: nil))
+    nav.present(paywall.createPaywallView(highlightProductId: nil))
   }
 }

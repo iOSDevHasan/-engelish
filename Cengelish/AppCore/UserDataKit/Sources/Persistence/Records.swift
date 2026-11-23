@@ -16,6 +16,8 @@ final class ProfileRecord {
   var dailyGoal: Int = 2
   var isPremiumHint: Bool = false
   var createdAt: Date = Date.now
+  /// Profil fotoğrafı (JPEG, en uzun kenar 512 px); eski kayıtlarda nil.
+  @Attribute(.externalStorage) var photoData: Data?
 
   init() {}
 }
@@ -27,7 +29,7 @@ final class SettingsRecord {
   var puzzleTheme: String = "canli"
   var penColor: String = "auto"
   var penWidth: Double = 1
-  var autoNightTheme: Bool = true
+  var autoNightTheme: Bool = false
   var highContrast: Bool = false
   var accent: String = "us"
   var leftHanded: Bool = false
@@ -36,6 +38,7 @@ final class SettingsRecord {
   var reminderEnabled: Bool = false
   var reminderHour: Int = 20
   var reminderMinute: Int = 0
+  /// Eski dosyaya yedekleme özelliğinden kalan alan; kullanılmaz, şema uyumu için durur.
   var lastBackupAt: Date?
 
   init() {}
@@ -52,6 +55,8 @@ final class PuzzleProgressRecord {
   var hintsUsed: Int = 0
   var marksData: Data?
   var revealedData: Data?
+  /// Klavyeyle yazılan harfler (JSON `[String: String]`); eski kayıtlarda nil.
+  var typedData: Data?
   var stars: Int = 0
   @Attribute(.externalStorage) var drawing: Data?
   var updatedAt: Date = Date.now

@@ -11,6 +11,7 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
   // MARK: - Properties
 
   @Published private var revision = 0
+  private let erased = PassthroughSubject<Void, Never>()
   private let container: ModelContainer
   private let calendar: Calendar
   private let logger = Logger(subsystem: "com.hasangurbuz.cengelish", category: "data")
@@ -19,6 +20,8 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
   public var changes: AnyPublisher<Void, Never> {
     $revision.dropFirst().map { _ in () }.eraseToAnyPublisher()
   }
+
+  public var dataErased: AnyPublisher<Void, Never> { erased.eraseToAnyPublisher() }
 
   // MARK: - Init
 
@@ -58,6 +61,25 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     commit()
   }
 
+  public var profilePhoto: Data? { fetchFirst(ProfileRecord.self)?.photoData }
+
+  @discardableResult
+  public func setProfilePhoto(_ data: Data?) -> Bool {
+    guard let record = fetchFirst(ProfileRecord.self) else { return false }
+    if let data {
+      let prepared = ProfilePhoto.isNormalized(data) ? data : ProfilePhoto.normalize(data)
+      guard let prepared else {
+        logger.error("Profil fotoğrafı okunamadı.")
+        return false
+      }
+      record.photoData = prepared
+    } else {
+      record.photoData = nil
+    }
+    commit()
+    return true
+  }
+
   // MARK: - Settings
 
   public var settings: AppSettings {
@@ -76,7 +98,6 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     s.reminderEnabled = r.reminderEnabled
     s.reminderHour = r.reminderHour
     s.reminderMinute = r.reminderMinute
-    s.lastBackupAt = r.lastBackupAt
     return s
   }
 
@@ -97,7 +118,6 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     r.reminderEnabled = s.reminderEnabled
     r.reminderHour = s.reminderHour
     r.reminderMinute = s.reminderMinute
-    r.lastBackupAt = s.lastBackupAt
     commit()
   }
 
@@ -135,6 +155,17 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     let record = progressRecord(puzzleId) ?? insert(PuzzleProgressRecord(puzzleId: puzzleId))
     record.revealedData = try? JSONEncoder().encode(cells.sorted())
     record.hintsUsed = hintsUsed
+    record.updatedAt = .now
+    commit()
+  }
+
+  public func saveTyped(puzzleId: String, letters: [String: String]) {
+    let record = progressRecord(puzzleId) ?? insert(PuzzleProgressRecord(puzzleId: puzzleId))
+    record.typedData = letters.isEmpty ? nil : try? JSONEncoder().encode(letters)
+    if record.status == PuzzleStatus.notStarted.rawValue, !letters.isEmpty {
+      record.status = PuzzleStatus.inProgress.rawValue
+      record.startedAt = .now
+    }
     record.updatedAt = .now
     commit()
   }
@@ -305,15 +336,6 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
     return StorageUsage(drawings: drawings, progress: progress, profile: 2_048)
   }
 
-  public func exportData() throws -> Data {
-    try BackupCoder.encode(from: context)
-  }
-
-  public func importData(_ data: Data) throws {
-    try BackupCoder.restore(data, into: context)
-    commit()
-  }
-
   public func clearOldDrawings(keep: Int) -> Int {
     var descriptor = FetchDescriptor<PuzzleProgressRecord>(
       predicate: #Predicate { $0.status == "finished" },
@@ -330,10 +352,18 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
   }
 
   public func deleteAll() {
+    // Toplu silme yerine kayıt kayıt silinir: bağlamdaki kayıtlar ve harici depodaki veriler
+    // (fotoğraf, çizimler) de güvenle kalkar, CloudKit silmeleri eşitler.
     for model in UserSchema.models {
-      try? context.delete(model: model)
+      deleteRecords(model)
     }
-    commit()
+    do {
+      try context.save()
+    } catch {
+      logger.error("Silme kaydedilemedi: \(error.localizedDescription)")
+    }
+    erased.send()
+    revision += 1
   }
 
   // MARK: - Private helpers
@@ -346,6 +376,15 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
       logger.error("Kayıt başarısız: \(error.localizedDescription)")
     }
     revision += 1
+  }
+
+  /// Verilen türdeki tüm kayıtları siler.
+  private func deleteRecords<T: PersistentModel>(_ type: T.Type) {
+    var descriptor = FetchDescriptor<T>()
+    descriptor.includePendingChanges = true
+    for record in (try? context.fetch(descriptor)) ?? [] {
+      context.delete(record)
+    }
   }
 
   private func fetchFirst<T: PersistentModel>(_ type: T.Type) -> T? {
@@ -431,6 +470,9 @@ public final class UserDataStore: ObservableObject, UserDataStoring {
       record.marksData.flatMap { try? JSONDecoder().decode([String: Bool].self, from: $0) } ?? [:]
     p.revealedCells = Set(
       record.revealedData.flatMap { try? JSONDecoder().decode([String].self, from: $0) } ?? [])
+    p.typedLetters =
+      record.typedData.flatMap { try? JSONDecoder().decode([String: String].self, from: $0) }
+      ?? [:]
     p.stars = record.stars
     p.finishedAt = record.finishedAt
     p.drawing = record.drawing

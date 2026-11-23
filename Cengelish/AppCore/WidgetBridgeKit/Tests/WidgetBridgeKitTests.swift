@@ -35,6 +35,29 @@ struct WidgetSnapshotTests {
     #expect(snapshot.content(for: "2026-11-12")?.word?.en == "b")
   }
 
+  @Test("Bulmacanın bitmesi durum değişikliğidir; yalnızca ilerleme yüzdesi değildir")
+  func statusChanges() throws {
+    let before = WidgetSnapshot.sample()
+    var progressed = before
+    progressed.days[0].puzzle?.progress = 0.8
+    progressed.days[0].puzzle?.grid = ["#xxxx"]
+    #expect(before.hasSameStatus(as: progressed))
+    var finished = progressed
+    finished.days[0].puzzle?.isFinished = true
+    #expect(!before.hasSameStatus(as: finished))
+    var counted = before
+    counted.solvedToday.count += 1
+    #expect(!before.hasSameStatus(as: counted))
+  }
+
+  @Test("Boş görüntüde sahte seri ya da bulmaca yoktur")
+  func emptySnapshot() {
+    let entry = CengelishEntry(date: .now, snapshot: .empty())
+    #expect(entry.streak == 0)
+    #expect(entry.puzzle == nil)
+    #expect(entry.word == nil)
+  }
+
   @Test("Depo yazar, okur ve değişmeyen içeriği yeniden yazmaz")
   func storeRoundTrip() throws {
     let url = FileManager.default.temporaryDirectory

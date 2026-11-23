@@ -273,39 +273,3 @@ public enum UserTitle: String, CaseIterable, Sendable {
     return badges.contains(badge) || badge.isEarned(snapshot, event: nil)
   }
 }
-
-// MARK: - Avatar unlocks
-
-/// Avatar parçalarının kilit kuralları.
-public enum UnlockRules {
-
-  /// Aksesuarın açık olup olmadığı.
-  public static func isUnlocked(
-    _ accessory: AvatarAccessory, stats: UserStats, isPremium: Bool
-  ) -> Bool {
-    switch accessory {
-    case .none, .glasses, .cap: true
-    case .headphones: stats.wordsSeen >= 100
-    case .bow: stats.longestStreak >= 7
-    case .crown: stats.longestStreak >= 30 || isPremium
-    }
-  }
-
-  /// Kilitli aksesuarın açılma koşulu.
-  public static func requirement(_ accessory: AvatarAccessory) -> String? {
-    switch accessory {
-    case .headphones: "100 kelime"
-    case .bow: "7 gün seri"
-    case .crown: "30 gün seri ya da Çengelish+"
-    default: nil
-    }
-  }
-
-  /// Arka plan "Gece" ve "Mercan" Çengelish+ ile açılır.
-  public static func isUnlocked(_ background: AvatarBackground, isPremium: Bool) -> Bool {
-    switch background {
-    case .night, .coral: isPremium
-    default: true
-    }
-  }
-}

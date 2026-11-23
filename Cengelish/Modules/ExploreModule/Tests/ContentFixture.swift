@@ -88,7 +88,6 @@ struct ContentStub: ContentProviding {
     ids.compactMap { id in ContentFixture.words.first { $0.id == id } }
   }
   func dailyPuzzle(for date: Date) async -> Puzzle? { nil }
-  func refreshFromRemote(entitledPackIds: Set<String>) async {}
 }
 
 /// Ayarlanabilir yetki servisi.

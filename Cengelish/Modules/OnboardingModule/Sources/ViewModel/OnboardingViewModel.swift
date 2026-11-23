@@ -60,7 +60,8 @@ final class OnboardingViewModel: ObservableObject {
   // MARK: - Properties
 
   @Published var step: OnboardingStep = .welcome
-  @Published var avatar = AvatarConfig(body: .mint, accessory: .glasses, background: .lilac)
+  /// Son adım değişikliği ileri mi (geçiş animasyonunun yönü için).
+  @Published private(set) var isMovingForward = true
   @Published var nickname = ""
   @Published var level: CEFRLevel? = .a2
   @Published var goals: Set<LearningGoal> = [.general]
@@ -74,11 +75,13 @@ final class OnboardingViewModel: ObservableObject {
 
   /// Takma ad için en fazla karakter.
   let nicknameLimit = 16
-  /// Onboarding'de seçilebilen aksesuarlar (kilitsiz olanlar).
-  let freeAccessories: [AvatarAccessory] = [.none, .glasses, .cap]
+  /// Takma ad boş bırakılırsa kullanılacak ad ("User482913"); alanda yer tutucu olarak görünür.
+  let defaultNickname: String
+  /// Profilin avatarı: her zaman varsayılan kalem maskotu.
+  let avatar = AvatarConfig.mascot
   private let userData: any UserDataStoring
   private let content: any ContentProviding
-  private let isPremium: @MainActor () -> Bool
+  private let hasPlus: @MainActor () -> Bool
   private let onFinish: @MainActor () -> Void
   private let showPaywall: @MainActor () -> Void
 
@@ -86,13 +89,15 @@ final class OnboardingViewModel: ObservableObject {
 
   init(
     userData: any UserDataStoring, content: any ContentProviding,
-    isPremium: @escaping @MainActor () -> Bool = { false },
+    hasPlus: @escaping @MainActor () -> Bool = { false },
+    defaultNickname: String = OnboardingViewModel.makeDefaultNickname(),
     onFinish: @escaping @MainActor () -> Void,
     showPaywall: @escaping @MainActor () -> Void = {}
   ) {
     self.userData = userData
     self.content = content
-    self.isPremium = isPremium
+    self.hasPlus = hasPlus
+    self.defaultNickname = defaultNickname
     self.onFinish = onFinish
     self.showPaywall = showPaywall
     reminderHour = userData.settings.reminderHour
@@ -107,12 +112,14 @@ final class OnboardingViewModel: ObservableObject {
       Task { await complete() }
       return
     }
+    isMovingForward = true
     step = following
   }
 
   /// Bir önceki adıma döner.
   func back() {
     guard let previous = OnboardingStep(rawValue: step.rawValue - 1) else { return }
+    isMovingForward = false
     step = previous
   }
 
@@ -146,11 +153,30 @@ final class OnboardingViewModel: ObservableObject {
     nickname = String(value.prefix(nicknameLimit))
   }
 
-  /// Profili, ayarları ve veri tercihini kaydedip akışı bitirir; ardından Çengelish+ paywall'unu
-  /// bir kez (kapatılabilir) gösterir.
+  /// Kaydedilecek takma ad: girilen ad, boşsa varsayılan ad.
+  var resolvedNickname: String {
+    let trimmed = nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+    return trimmed.isEmpty ? defaultNickname : trimmed
+  }
+
+  /// Rastgele varsayılan takma ad üretir: "User" + 6 rakam (ör. "User482913").
+  nonisolated static func makeDefaultNickname() -> String {
+    var generator = SystemRandomNumberGenerator()
+    return makeDefaultNickname(using: &generator)
+  }
+
+  /// Verilen üreteçle varsayılan takma ad üretir (testlerde tekrarlanabilir).
+  nonisolated static func makeDefaultNickname<Generator: RandomNumberGenerator>(
+    using generator: inout Generator
+  ) -> String {
+    "User\(Int.random(in: 100_000...999_999, using: &generator))"
+  }
+
+  /// Profili, ayarları ve veri tercihini kaydedip akışı bitirir; ardından Çengelish Plus
+  /// paywall'unu bir kez (kapatılabilir) gösterir.
   func complete() async {
     let profile = UserProfile(
-      nickname: nickname.trimmingCharacters(in: .whitespacesAndNewlines),
+      nickname: resolvedNickname,
       avatar: avatar,
       level: (level ?? .a1).rawValue,
       goals: goals.map(\.rawValue).sorted(),
@@ -168,6 +194,6 @@ final class OnboardingViewModel: ObservableObject {
     }
     userData.createProfile(profile)
     onFinish()
-    if !isPremium() { showPaywall() }
+    if !hasPlus() { showPaywall() }
   }
 }

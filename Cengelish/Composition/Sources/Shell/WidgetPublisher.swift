@@ -21,8 +21,13 @@ final class WidgetPublisher {
   /// Izgara çizim geometrisi (bulmaca ekranıyla aynı).
   private let geometry = GridGeometry(cell: 60)
 
-  /// Anlık görüntüyü yeniden üretir; değiştiyse widget'ları yeniler.
-  func publish(now: Date = .now) async {
+  /// Anlık görüntüyü yeniden üretip yazar.
+  ///
+  /// Widget'lar yalnızca görünen durum (bitti, seri, günlük sayaç, gün) değişince ya da
+  /// `forceReload` ile yenilenir. Çözerken her kalem kaydında yenilemek sistemin yenileme
+  /// isteklerini kısmasına, "bitti" gibi önemli bir yenilemenin düşmesine yol açıyordu; ilerleme
+  /// yüzdesi uygulama arka plana geçerken (`forceReload`) widget'a yansır.
+  func publish(now: Date = .now, forceReload: Bool = false) async {
     guard let profile = userData.profile else { return }
     let stats = userData.stats
     let progress = userData.allProgress()
@@ -40,7 +45,10 @@ final class WidgetPublisher {
       streak: stats.streak, lastPlayedDay: stats.lastPlayedDay,
       solvedDays: Array(stats.solvedDays.suffix(21)), dailyGoal: profile.dailyGoal,
       solvedToday: .init(day: today, count: solvedToday), days: days)
-    if store.save(snapshot) {
+    let previous = store.load()
+    let didSave = store.save(snapshot)
+    let statusChanged = previous.map { !$0.hasSameStatus(as: snapshot) } ?? true
+    if forceReload || (didSave && statusChanged) {
       WidgetCenter.shared.reloadAllTimelines()
     }
   }
@@ -93,10 +101,12 @@ final class WidgetPublisher {
       isFinished: isFinished, grid: grid)
   }
 
-  /// Üzerinde mürekkep (ya da açılmış harf) olan harf kutuları.
+  /// Üzerinde mürekkep, klavyeyle yazılmış ya da açılmış harf olan harf kutuları.
   private func inkedCells(_ layout: CrosswordLayout, progress: PuzzleProgress?) -> Set<GridPoint> {
     guard let progress else { return [] }
     var cells = Set(progress.revealedCells.compactMap(GridPoint.init(key:)))
+    // Klavyeyle yazılan harfler de dolu sayılır.
+    cells.formUnion(progress.typedLetters.keys.compactMap(GridPoint.init(key:)))
     guard let data = progress.drawing, let drawing = try? PKDrawing(data: data) else {
       return cells
     }

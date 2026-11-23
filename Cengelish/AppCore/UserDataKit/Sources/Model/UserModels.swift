@@ -74,8 +74,8 @@ public struct AppSettings: Equatable, Sendable {
   public var penColor: String = "auto"
   /// Kalem kalınlığı çarpanı (0.7 / 1 / 1.4).
   public var penWidth: Double = 1
-  /// Koyu modda ızgara otomatik Gece temasına geçer.
-  public var autoNightTheme: Bool = true
+  /// Koyu modda ızgara otomatik Gece temasına geçer (varsayılan kapalı: seçilen tema uygulanır).
+  public var autoNightTheme: Bool = false
   /// Yüksek kontrast ızgara.
   public var highContrast: Bool = false
   /// Telaffuz aksanı.
@@ -92,8 +92,6 @@ public struct AppSettings: Equatable, Sendable {
   public var reminderHour: Int = 20
   /// Hatırlatıcı dakikası.
   public var reminderMinute: Int = 0
-  /// Son yedekleme / dışa aktarma zamanı.
-  public var lastBackupAt: Date?
 
   /// Varsayılan ayarları oluşturur.
   public init() {}
@@ -118,6 +116,8 @@ public struct PuzzleProgress: Equatable, Sendable {
   public var marks: [String: Bool] = [:]
   /// İpucuyla açılan kutular (`satır,sütun`).
   public var revealedCells: Set<String> = []
+  /// Klavyeyle yazılan harfler (`satır,sütun` → büyük harf). Doluluk hesabında sayılır.
+  public var typedLetters: [String: String] = [:]
   /// Yıldız (0–3).
   public var stars: Int = 0
   /// Bitirildiği zaman.

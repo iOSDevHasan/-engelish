@@ -30,72 +30,89 @@ struct SettingsViewModelTests {
     #expect(store.settings.puzzleTheme == "okyanus")
   }
 
-  @Test("Abonelik satırı planı ve yenilenme tarihini gösterir")
-  func subscriptionRow() throws {
+  @Test("Elle seçilen tema yüksek kontrastı, gerekirse otomatik Gece temasını kapatır")
+  func explicitThemeWins() {
+    let store = UserDataStore(inMemory: true)
+    store.updateSettings {
+      $0.autoNightTheme = true
+      $0.highContrast = true
+    }
+    let sut = SettingsViewModel(
+      coordinator: SettingsCoordinator(), userData: store, entitlements: StoreStub(),
+      applyReminder: { _, _ in })
+    sut.selectTheme(id: "neon", isPremiumTheme: false, keepsInDarkMode: true)
+    #expect(store.settings.autoNightTheme)
+    #expect(!store.settings.highContrast)
+    sut.selectTheme(id: "okyanus", isPremiumTheme: false, keepsInDarkMode: false)
+    #expect(store.settings.puzzleTheme == "okyanus")
+    #expect(!store.settings.autoNightTheme)
+  }
+
+  @Test("Plus satırı ömür boyu planı ve satın alma tarihini gösterir")
+  func plusRow() throws {
     let entitlements = StoreStub()
     let free = makeSUT(entitlements: entitlements)
-    #expect(free.subscriptionTitle == "Çengelish+'a geç")
-    #expect(free.subscriptionDetail.isEmpty)
+    #expect(free.plusTitle == "Çengelish Plus'a geç")
+    #expect(free.plusDetail.isEmpty)
 
-    let renewal = try #require(
-      Calendar(identifier: .gregorian).date(from: DateComponents(year: 2027, month: 11, day: 8)))
     entitlements.isPremium = true
-    entitlements.activeSubscription = ActiveSubscription(
-      productId: ProductID.plusYearly, renewalDate: renewal)
+    #expect(makeSUT(entitlements: entitlements).plusDetail == "Aktif")
+
+    entitlements.plusPurchaseDate = try #require(
+      Calendar(identifier: .gregorian).date(from: DateComponents(year: 2026, month: 11, day: 8)))
     let premium = makeSUT(entitlements: entitlements)
-    #expect(premium.subscriptionTitle == "Çengelish+ · Yıllık")
-    #expect(premium.subscriptionDetail == "8 Kas 2027")
+    #expect(premium.plusTitle == "Çengelish Plus · Ömür boyu")
+    #expect(premium.plusDetail == "8 Kas 2026")
   }
 
-  @Test("Şimdi yedekle dosyayı yazar ve son yedek zamanını kaydeder")
-  func backupNow() throws {
+  @Test("Tüm verileri sil: depo boşalır, silme yayınlanır, hatırlatıcılar varsayılana döner")
+  func eraseAllData() {
     let store = UserDataStore(inMemory: true)
     store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
-    let directory = URL.temporaryDirectory.appending(path: UUID().uuidString)
-    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-    let sut = makeSUT(store: store, backupDirectory: directory)
-    #expect(sut.lastBackupText() == nil)
+    store.updateSettings { $0.reminderEnabled = true }
+    store.saveTyped(puzzleId: "a1_01", letters: ["1,1": "A"])
+    store.addToNotebook(wordId: "w_house", source: "manual")
+    var applied: [AppSettings] = []
+    var erasedCount = 0
+    let cancellable = store.dataErased.sink { erasedCount += 1 }
+    Injector.override(Routing.self, with: NavSpy())
+    Injector.override(PaywallModuleInterface.self, with: PaywallStub())
+    let sut = SettingsViewModel(
+      coordinator: SettingsCoordinator(), userData: store, entitlements: StoreStub(),
+      applyReminder: { settings, _ in applied.append(settings) })
 
-    let now = Date.now
-    let url = try #require(sut.backupNow(now: now))
-    #expect(FileManager.default.fileExists(atPath: url.path()))
-    #expect(store.settings.lastBackupAt == now)
-    #expect(sut.lastBackupText(now: now)?.hasPrefix("Bugün ") == true)
-    let tomorrow = now.addingTimeInterval(86_400)
-    #expect(sut.lastBackupText(now: tomorrow)?.hasPrefix("Dün ") == true)
+    sut.eraseAllData()
+
+    #expect(erasedCount == 1)
+    #expect(store.profile == nil)
+    #expect(store.allProgress().isEmpty)
+    #expect(store.notebook.isEmpty)
+    #expect(applied.last?.reminderEnabled == false)
+    #expect(!sut.settings.reminderEnabled)
+    cancellable.cancel()
   }
 
-  @Test("Profili düzenle kanca varsa onu açar, yoksa takma adı kaydeder")
-  func editProfile() {
-    let store = UserDataStore(inMemory: true)
-    store.createProfile(UserProfile(nickname: "Deniz", avatar: AvatarConfig()))
-    var opened = false
-    let hooked = makeSUT(store: store, onEditProfile: { opened = true })
-    hooked.openEditProfile()
-    #expect(opened)
-    #expect(!hooked.isEditingNickname)
-
-    let sut = makeSUT(store: store)
-    #expect(sut.nickname == "Deniz")
-    sut.openEditProfile()
-    #expect(sut.isEditingNickname)
-    #expect(sut.nicknameDraft == "Deniz")
-    sut.nicknameDraft = "  Ada  "
-    sut.saveNickname()
-    #expect(store.profile?.nickname == "Ada")
-    #expect(sut.nickname == "Ada")
+  @Test("Her ayar satırının Türkçe, kısa bir açıklaması var")
+  func settingInfoTexts() {
+    #expect(SettingInfo.all.count == 13)
+    for text in SettingInfo.all {
+      #expect(!text.isEmpty)
+      #expect(!text.contains("Çengelish+"))
+      let sentences = text.split(separator: ".").filter {
+        !$0.trimmingCharacters(in: .whitespaces).isEmpty
+      }
+      #expect((1...2).contains(sentences.count), "\(text)")
+    }
+    #expect(SettingInfo.puzzleTheme.contains(PlusBrand.name))
   }
 
   private func makeSUT(
-    store: UserDataStore = UserDataStore(inMemory: true), entitlements: StoreStub = StoreStub(),
-    backupDirectory: URL = .temporaryDirectory,
-    onEditProfile: (@MainActor () -> Void)? = nil
+    store: UserDataStore = UserDataStore(inMemory: true), entitlements: StoreStub = StoreStub()
   ) -> SettingsViewModel {
     Injector.override(Routing.self, with: NavSpy())
     Injector.override(PaywallModuleInterface.self, with: PaywallStub())
     return SettingsViewModel(
       coordinator: SettingsCoordinator(), userData: store, entitlements: entitlements,
-      onEditProfile: onEditProfile, backupDirectory: backupDirectory,
       applyReminder: { _, _ in })
   }
 }
@@ -106,7 +123,7 @@ private final class StoreStub: EntitlementProviding {
   var isPremium = false
   var ownedProductIds: Set<String> = []
   var products: [StoreProduct] = []
-  var activeSubscription: ActiveSubscription?
+  var plusPurchaseDate: Date?
   func loadProducts() async {}
   func purchase(_ productId: String) async -> PurchaseOutcome { .cancelled }
   func restore() async {}

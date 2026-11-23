@@ -67,6 +67,12 @@ final class FinishViewModel: ObservableObject {
     }
   }
 
+  /// Her kelime doğru olduğu hâlde ipucu yüzünden yıldız eksikse açıklama; değilse nil.
+  var starNote: String? {
+    guard result.total > 0, result.correct == result.total, result.stars < 3 else { return nil }
+    return "İpucu kullandığın için bir yıldız eksik"
+  }
+
   /// Süre metni.
   var durationText: String {
     String(format: "%d:%02d", session.durationSec / 60, session.durationSec % 60)
